@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:interns_talk_mobile/ui/pages/register_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:interns_talk_mobile/utils/dimens.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
@@ -22,17 +23,31 @@ class LoginPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: kMarginLarge, vertical: kMarginMedium1x),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Image.asset(kAppLogoImage),
-                  Image.asset(kAppName),
-                  Text(
-                    kWelcomeTitleText,
-                    style: Theme.of(context).textTheme.titleLarge,
+                  Column(
+                    children: [
+                      Image.asset(kAppLogoImage),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Image.asset(kAppName),
+                    ],
                   ),
-                  Text(
-                    kWelcomeBodyText,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  Column(
+                    children: [
+                      Text(
+                        kWelcomeTitleText,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      SizedBox(
+                        height: 48,
+                      ),
+                      Text(
+                        kWelcomeBodyText,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
                   ),
                   Form(
                     child: Column(
@@ -57,7 +72,7 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          height: 16,
+                          height: kMarginMedium1x,
                         ),
                         TextFormField(
                           decoration: InputDecoration(
@@ -69,7 +84,6 @@ class LoginPage extends StatelessWidget {
                             ),
                             hintStyle: TextStyle(color: kHintTextColor),
                             filled: true,
-                            focusColor: kIconColorGrey,
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             border: OutlineInputBorder(
@@ -77,16 +91,19 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: kMarginSmall1x,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            kForgotPasswordText,
+                            style: TextStyle(
+                                color: kTextColor,
+                                decoration: TextDecoration.underline),
+                          ),
+                        ),
                       ],
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      kForgotPasswordText,
-                      style: TextStyle(
-                          color: kTextColor,
-                          decoration: TextDecoration.underline),
                     ),
                   ),
                   FilledButton(
@@ -110,11 +127,18 @@ class LoginPage extends StatelessWidget {
                       SizedBox(
                         width: 8,
                       ),
-                      Text(
-                        kRegisterButtonText,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.primary,
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const RegisterPage()));
+                        },
+                        child: Text(
+                          kRegisterButtonText,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       )
                     ],

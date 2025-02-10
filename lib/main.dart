@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:interns_talk_mobile/ui/pages/login_page.dart';
+import 'package:interns_talk_mobile/ui/pages/register_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 
 void main() {
@@ -17,7 +17,6 @@ class MyApp extends StatelessWidget {
             titleLarge: TextStyle(
               fontSize: 32,
               color: kTextColor,
-              letterSpacing: 2,
               fontWeight: FontWeight.w500,
             ),
             bodyMedium: TextStyle(
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const RegisterPage(),
     );
   }
 }
