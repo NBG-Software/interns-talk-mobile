@@ -167,7 +167,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                     InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   const LoginPage()));
                         },

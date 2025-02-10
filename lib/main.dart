@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:interns_talk_mobile/ui/pages/login_page.dart';
 import 'package:interns_talk_mobile/ui/pages/register_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const RegisterPage(),
+      home: const LoginPage(),
     );
   }
 }
