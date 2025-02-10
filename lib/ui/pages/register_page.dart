@@ -37,14 +37,14 @@ class RegisterPage extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      'Get Started',
+                      kRegisterTitle,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     SizedBox(
-                      height: 48,
+                      height: 24,
                     ),
                     Text(
-                      'by creating a free account',
+                      kRegisterBodyText,
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   ],
@@ -55,89 +55,120 @@ class RegisterPage extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                  hintText: 'First Name',
-                                  hintStyle: TextStyle(color: kHintTextColor),
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10))),
-                            ),
+                            child: Container(
+                  decoration: BoxDecoration(
+                  color: kTextFieldContainer,
+                    borderRadius:  BorderRadius.circular(10.0),
+                  ),
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          hintText: kFirstName,
+                          hintStyle: TextStyle(color: kHintTextColor),
+                          border: InputBorder.none
+                      ),
+                    ),
+                  ),
+                ),
                           ),
                           SizedBox(
                             width: 8,
                           ),
                           Expanded(
-                              child: TextFormField(
-                            decoration: InputDecoration(
-                                hintText: 'Second Name',
-                                hintStyle: TextStyle(color: kHintTextColor),
-                                filled: true,
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                          )),
+                              child:Container(
+                                decoration: BoxDecoration(
+                                  color: kTextFieldContainer,
+                                  borderRadius:  BorderRadius.circular(10.0),
+                                ),
+                                height: 50,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                        hintText: kSecondName,
+                                        hintStyle: TextStyle(color: kHintTextColor),
+                                        border: InputBorder.none
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ),
                         ],
                       ),
                       SizedBox(
                         height: kMarginMedium1x,
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Valid Email',
-                          suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon: Icon(CupertinoIcons.mail),
-                            color: kIconColorGrey,
-                          ),
-                          hintStyle: TextStyle(color: kHintTextColor),
-                          filled: true,
-                          focusColor: kIconColorGrey,
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: kTextFieldContainer,
+                          borderRadius:  BorderRadius.circular(10.0),
+                        ),
+                        height: 50,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: kMarginSmall2x,top: 3),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                hintText:kValidEmailHint,
+                                suffixIcon: IconButton(
+                                  onPressed: () {},
+                                  icon: Image.asset(kEmailIcon),
+                                  color: kIconColorGrey,
+                                ),
+                                hintStyle: TextStyle(color: kHintTextColor),
+                                border: InputBorder.none
+                            ),
                           ),
                         ),
                       ),
                       SizedBox(
                         height: kMarginMedium1x,
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Strong Password',
-                          suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.lock_outline),
-                            color: kIconColorGrey,
-                          ),
-                          hintStyle: TextStyle(color: kHintTextColor),
-                          filled: true,
-                          focusColor: kIconColorGrey,
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: kTextFieldContainer,
+                          borderRadius:  BorderRadius.circular(10.0),
+                        ),
+                        height: 50,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: kMarginSmall2x,top: 3),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                hintText: kStrongPasswordHint,
+                                suffixIcon: IconButton(
+                                  onPressed: () {},
+                                  icon: Image.asset(kLockIcon),
+                                  color: kIconColorGrey,
+                                ),
+                                hintStyle: TextStyle(color: kHintTextColor),
+                                border: InputBorder.none
+                            ),
                           ),
                         ),
                       ),
                       SizedBox(
                         height: kMarginMedium1x,
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Confirm Password',
-                          suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.lock_outline),
-                            color: kIconColorGrey,
-                          ),
-                          hintStyle: TextStyle(color: kHintTextColor),
-                          filled: true,
-                          focusColor: kIconColorGrey,
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: kTextFieldContainer,
+                          borderRadius:  BorderRadius.circular(10.0),
+                        ),
+                        height: 50,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: kMarginSmall2x,top: 3),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                hintText: kConfirmPasswordHint,
+                                suffixIcon: IconButton(
+                                  onPressed: () {},
+                                  icon: Image.asset(kLockIcon),
+                                  color: kIconColorGrey,
+                                ),
+                                hintStyle: TextStyle(color: kHintTextColor),
+                                border: InputBorder.none
+                            ),
                           ),
                         ),
                       ),
@@ -161,7 +192,7 @@ class RegisterPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already have an account?'),
+                    Text(kHaveAccountText),
                     SizedBox(
                       width: 8,
                     ),
