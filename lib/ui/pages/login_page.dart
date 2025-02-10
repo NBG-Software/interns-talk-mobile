@@ -53,41 +53,50 @@ class LoginPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: kEmailHintText,
-                            suffixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(CupertinoIcons.mail),
-                              color: kIconColorGrey,
-                            ),
-                            hintStyle: TextStyle(color: kHintTextColor),
-                            filled: true,
-                            focusColor: kIconColorGrey,
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                        Container(
+                          decoration: BoxDecoration(
+                          color: kTextFieldContainer,
+                          borderRadius:  BorderRadius.circular(10.0),
+                        ),
+                          height: 50,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: kMarginSmall2x,top: 3),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: kEmailHintText,
+                                suffixIcon: IconButton(
+                                  onPressed: () {},
+                                  icon: Image.asset(kEmailIcon),
+                                  color: kIconColorGrey,
+                                ),
+                                hintStyle: TextStyle(color: kHintTextColor),
+                                border: InputBorder.none
+                              ),
                             ),
                           ),
                         ),
                         SizedBox(
                           height: kMarginMedium1x,
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: kPasswordHintText,
-                            suffixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.lock_outline),
-                              color: kIconColorGrey,
-                            ),
-                            hintStyle: TextStyle(color: kHintTextColor),
-                            filled: true,
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: kTextFieldContainer,
+                            borderRadius:  BorderRadius.circular(10.0),
+                          ),
+                          height: 50,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: kMarginSmall2x,top: 3),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                  hintText: kPasswordHintText,
+                                  suffixIcon: IconButton(
+                                    onPressed: () {},
+                                    icon: Image.asset(kLockIcon),
+                                    color: kIconColorGrey,
+                                  ),
+                                  hintStyle: TextStyle(color: kHintTextColor),
+                                  border: InputBorder.none
+                              ),
                             ),
                           ),
                         ),
