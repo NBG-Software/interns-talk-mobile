@@ -41,7 +41,7 @@ class LoginPage extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       SizedBox(
-                        height: 48,
+                        height: 24,
                       ),
                       Text(
                         kWelcomeBodyText,
