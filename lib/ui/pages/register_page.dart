@@ -23,7 +23,7 @@ class RegisterPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
                 horizontal: kMarginLarge, vertical: kMarginLarge),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
                   children: [
@@ -56,44 +56,44 @@ class RegisterPage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Container(
-                  decoration: BoxDecoration(
-                  color: kTextFieldContainer,
-                    borderRadius:  BorderRadius.circular(10.0),
-                  ),
-                  height: 50,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: kFirstName,
-                          hintStyle: TextStyle(color: kHintTextColor),
-                          border: InputBorder.none
-                      ),
-                    ),
-                  ),
-                ),
+                              decoration: BoxDecoration(
+                                color: kTextFieldContainer,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              height: 50,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                      hintText: kFirstName,
+                                      hintStyle:
+                                          TextStyle(color: kHintTextColor),
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                            ),
                           ),
                           SizedBox(
                             width: 8,
                           ),
                           Expanded(
-                              child:Container(
-                                decoration: BoxDecoration(
-                                  color: kTextFieldContainer,
-                                  borderRadius:  BorderRadius.circular(10.0),
-                                ),
-                                height: 50,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                        hintText: kSecondName,
-                                        hintStyle: TextStyle(color: kHintTextColor),
-                                        border: InputBorder.none
-                                    ),
-                                  ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: kTextFieldContainer,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              height: 50,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                      hintText: kSecondName,
+                                      hintStyle:
+                                          TextStyle(color: kHintTextColor),
+                                      border: InputBorder.none),
                                 ),
                               ),
+                            ),
                           ),
                         ],
                       ),
@@ -103,22 +103,22 @@ class RegisterPage extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                           color: kTextFieldContainer,
-                          borderRadius:  BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
                         height: 50,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: kMarginSmall2x,top: 3),
+                          padding: const EdgeInsets.only(
+                              left: kMarginSmall2x, top: 3),
                           child: TextFormField(
                             decoration: InputDecoration(
-                                hintText:kValidEmailHint,
+                                hintText: kValidEmailHint,
                                 suffixIcon: IconButton(
                                   onPressed: () {},
                                   icon: Image.asset(kEmailIcon),
                                   color: kIconColorGrey,
                                 ),
                                 hintStyle: TextStyle(color: kHintTextColor),
-                                border: InputBorder.none
-                            ),
+                                border: InputBorder.none),
                           ),
                         ),
                       ),
@@ -128,11 +128,12 @@ class RegisterPage extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                           color: kTextFieldContainer,
-                          borderRadius:  BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
                         height: 50,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: kMarginSmall2x,top: 3),
+                          padding: const EdgeInsets.only(
+                              left: kMarginSmall2x, top: 3),
                           child: TextFormField(
                             decoration: InputDecoration(
                                 hintText: kStrongPasswordHint,
@@ -142,8 +143,7 @@ class RegisterPage extends StatelessWidget {
                                   color: kIconColorGrey,
                                 ),
                                 hintStyle: TextStyle(color: kHintTextColor),
-                                border: InputBorder.none
-                            ),
+                                border: InputBorder.none),
                           ),
                         ),
                       ),
@@ -153,11 +153,12 @@ class RegisterPage extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                           color: kTextFieldContainer,
-                          borderRadius:  BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
                         height: 50,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: kMarginSmall2x,top: 3),
+                          padding: const EdgeInsets.only(
+                              left: kMarginSmall2x, top: 3),
                           child: TextFormField(
                             decoration: InputDecoration(
                                 hintText: kConfirmPasswordHint,
@@ -167,8 +168,7 @@ class RegisterPage extends StatelessWidget {
                                   color: kIconColorGrey,
                                 ),
                                 hintStyle: TextStyle(color: kHintTextColor),
-                                border: InputBorder.none
-                            ),
+                                border: InputBorder.none),
                           ),
                         ),
                       ),
@@ -198,9 +198,10 @@ class RegisterPage extends StatelessWidget {
                     ),
                     InkWell(
                         onTap: () {
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const LoginPage()));
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const LoginPage()));
                         },
                         child: Text(
                           kLoginButtonText,

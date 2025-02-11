@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:interns_talk_mobile/ui/pages/register_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
@@ -23,7 +22,7 @@ class LoginPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: kMarginLarge, vertical: kMarginMedium1x),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Column(
                     children: [
@@ -55,23 +54,23 @@ class LoginPage extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                          color: kTextFieldContainer,
-                          borderRadius:  BorderRadius.circular(10.0),
-                        ),
+                            color: kTextFieldContainer,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                           height: 50,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: kMarginSmall2x,top: 3),
+                            padding: const EdgeInsets.only(
+                                left: kMarginSmall2x, top: 3),
                             child: TextFormField(
                               decoration: InputDecoration(
-                                hintText: kEmailHintText,
-                                suffixIcon: IconButton(
-                                  onPressed: () {},
-                                  icon: Image.asset(kEmailIcon),
-                                  color: kIconColorGrey,
-                                ),
-                                hintStyle: TextStyle(color: kHintTextColor),
-                                border: InputBorder.none
-                              ),
+                                  hintText: kEmailHintText,
+                                  suffixIcon: IconButton(
+                                    onPressed: () {},
+                                    icon: Image.asset(kEmailIcon),
+                                    color: kIconColorGrey,
+                                  ),
+                                  hintStyle: TextStyle(color: kHintTextColor),
+                                  border: InputBorder.none),
                             ),
                           ),
                         ),
@@ -81,11 +80,12 @@ class LoginPage extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             color: kTextFieldContainer,
-                            borderRadius:  BorderRadius.circular(10.0),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                           height: 50,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: kMarginSmall2x,top: 3),
+                            padding: const EdgeInsets.only(
+                                left: kMarginSmall2x, top: 3),
                             child: TextFormField(
                               decoration: InputDecoration(
                                   hintText: kPasswordHintText,
@@ -95,8 +95,7 @@ class LoginPage extends StatelessWidget {
                                     color: kIconColorGrey,
                                   ),
                                   hintStyle: TextStyle(color: kHintTextColor),
-                                  border: InputBorder.none
-                              ),
+                                  border: InputBorder.none),
                             ),
                           ),
                         ),
