@@ -37,17 +37,23 @@ class _BodyView extends StatelessWidget {
                 scale: 1.0,
                 width: 148,
               ),
-              SizedBox(height: 8,),
+              SizedBox(
+                height: 8,
+              ),
               InkWell(
                 child: Row(
                   children: [
                     Image.asset(kUploadIcon),
-                    SizedBox(width: 8,),
+                    SizedBox(
+                      width: 8,
+                    ),
                     Text('Upload'),
                   ],
                 ),
               ),
-              SizedBox(height: 52,),
+              SizedBox(
+                height: 52,
+              ),
               ListTile(
                 leading: Icon(CupertinoIcons.person_circle),
                 title: Text('Edit Profile'),
@@ -63,33 +69,27 @@ class _BodyView extends StatelessWidget {
                 title: Text('Help Center'),
                 trailing: Icon(CupertinoIcons.forward),
               ),
-
             ],
           ),
           Expanded(child: SizedBox()),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 42,vertical: 64),
+            padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 64),
             child: OutlinedButton(
               style: OutlinedButton.styleFrom(
                 minimumSize: Size(double.infinity, 52),
-                shape:  RoundedRectangleBorder(
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8), // Rounded corners
                 ),
                 side: BorderSide(
                   color: Theme.of(context).colorScheme.primary,
                   width: 2,
                 ),
-
-
-
-
               ),
-              onPressed: (){},
-
-                child: Text('Log Out'),),
+              onPressed: () {},
+              child: Text('Log Out'),
+            ),
           )
         ],
-
       ),
     );
   }
