@@ -92,7 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _emailController,
                           suffixIconPath: kEmailIcon,
                           iconColor: kIconColorGrey,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          keyboardType: TextInputType.emailAddress,
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
                           hintText: kEmailHintText,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -124,8 +125,10 @@ class _LoginPageState extends State<LoginPage> {
                               horizontal: 20, vertical: 16),
                           iconColor: kIconColorGrey,
                           suffixPadding: EdgeInsets.only(right: 12),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
                           hintText: kPasswordHintText,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
                           fillColor: kTextFieldContainer,
                           hintTextColor: kHintTextColor,
                         ),

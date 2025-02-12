@@ -6,7 +6,14 @@ import 'package:interns_talk_mobile/utils/string.dart';
 
 class AuthRemoteDatasource {
   final Dio dio;
-  AuthRemoteDatasource() : dio = Dio(BaseOptions(baseUrl: kBaseUrl)) {
+
+  AuthRemoteDatasource()
+      : dio = Dio(
+      BaseOptions(
+          baseUrl: kBaseUrl,
+          connectTimeout: Duration(seconds: 60),
+          receiveTimeout: Duration(seconds: 60),
+        )) {
     _setupInterceptors();
   }
 
@@ -53,7 +60,7 @@ class AuthRemoteDatasource {
       if (e.type == DioExceptionType.connectionError) {
         return Result.error("Connection error");
       } else {
-        return Result.error(e.message);
+        return Result.error('Something went wrong');
       }
     } catch (e) {
       return Result.error('Unexpected error occurred');
@@ -79,7 +86,7 @@ class AuthRemoteDatasource {
       if (e.type == DioExceptionType.connectionError) {
         return Result.error("Connection error");
       } else {
-        return Result.error(e.message);
+        return Result.error('Something went wrong');
       }
     } catch (e) {
       return Result.error('Unexpected error occurred');

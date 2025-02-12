@@ -5,19 +5,26 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final String hintText;
   final String? suffixIconPath;
-  final AutovalidateMode? autovalidateMode;
+  final AutovalidateMode? autoValidateMode;
   final Color? iconColor;
   final Color hintTextColor;
   final Color? fillColor;
   final EdgeInsetsGeometry? contentPadding;
   final EdgeInsetsGeometry? suffixPadding;
+  final bool? obscureText;
+  final TextInputType? keyboardType;
+  final String? obscuringCharacter;
+
 
   const CustomTextFormField({
     Key? key,
     this.controller,
-    this.autovalidateMode,
+    this.keyboardType,
+    this.obscuringCharacter,
+    this.autoValidateMode,
     required this.hintText,
     this.fillColor,
+    this.obscureText,
     this.contentPadding,
     this.suffixPadding,
     this.suffixIconPath,
@@ -30,8 +37,11 @@ class CustomTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      autovalidateMode: autovalidateMode,
+      autovalidateMode: autoValidateMode,
       validator: validator,
+      obscureText : obscureText ?? false,
+      keyboardType: keyboardType,
+      obscuringCharacter: obscuringCharacter ?? '•',
       decoration: InputDecoration(
         contentPadding: contentPadding,
         hintText: hintText,

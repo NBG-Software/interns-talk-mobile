@@ -92,6 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           Expanded(
                             child: CustomTextFormField(
                               controller: _firstNameController,
+                              keyboardType: TextInputType.text,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return kFirstNameErrorText;
@@ -110,6 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           Expanded(
                             child: CustomTextFormField(
+                              keyboardType: TextInputType.text,
                               controller: _lastNameController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -132,8 +134,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       CustomTextFormField(
                         controller: _emailController,
                         suffixIconPath: kEmailIcon,
+                        keyboardType: TextInputType.emailAddress,
                         iconColor: kIconColorGrey,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        autoValidateMode: AutovalidateMode.onUserInteraction,
                         validator: Validators.emailValidator,
                         hintText: kValidEmailHint,
                         fillColor: kTextFieldContainer,
@@ -149,12 +152,14 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       CustomTextFormField(
                         controller: _strongPasswordController,
+                        keyboardType: TextInputType.visiblePassword,
                         suffixIconPath: kLockIcon,
+                        obscureText: true,
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                         iconColor: kIconColorGrey,
                         suffixPadding: EdgeInsets.only(right: 12),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        autoValidateMode: AutovalidateMode.onUserInteraction,
                         validator: Validators.passwordValidator,
                         hintText: kStrongPasswordHint,
                         fillColor: kTextFieldContainer,
@@ -165,12 +170,14 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       CustomTextFormField(
                         controller: _confirmPasswordController,
+                        keyboardType: TextInputType.visiblePassword,
                         suffixIconPath: kLockIcon,
+                        obscureText: true,
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                         iconColor: kIconColorGrey,
                         suffixPadding: EdgeInsets.only(right: 12),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        autoValidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return kPasswordNotMatchErrorText;
