@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:interns_talk_mobile/ui/pages/profile_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +24,12 @@ class ChatRoomPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext context)=>
+                  const ProfilePage())
+                );
+              },
               icon: Icon(CupertinoIcons.profile_circled),
             ),
           ),
