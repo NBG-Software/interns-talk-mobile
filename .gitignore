@@ -1,152 +1,93 @@
-# Do not remove or rename entries in this file, only add new ones
-# See https://github.com/flutter/flutter/issues/128635 for more context.
-
-# This is dynamic in a monorepo
-bin/internal/engine.version
-
-# Miscellaneous
-*.class
-*.lock
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# Visual Studio Code related
-.classpath
-.project
-.settings/
-.vscode/*
-.ccls-cache
-
-# Flutter repo-specific
-/bin/cache/
-/bin/internal/bootstrap.bat
-/bin/internal/bootstrap.sh
-/bin/mingit/
-/dev/benchmarks/mega_gallery/
-/dev/bots/.recipe_deps
-/dev/bots/android_tools/
-/dev/devicelab/ABresults*.json
-/dev/docs/doc/
-/dev/docs/api_docs.zip
-/dev/docs/flutter.docs.zip
-/dev/docs/lib/
-/dev/docs/pubspec.yaml
-/dev/integration_tests/**/xcuserdata
-/dev/integration_tests/**/Pods
-/packages/flutter/coverage/
-version
-analysis_benchmark.json
-
-# packages file containing multi-root paths
-.packages.generated
-
-# Flutter/Dart/Pub related
-**/doc/api/
+# Flutter & Dart
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
-**/generated_plugin_registrant.dart
 .packages
-.pub-preload-cache/
 .pub-cache/
 .pub/
-build/
-flutter_*.png
-linked_*.ds
-unlinked.ds
-unlinked_spec.ds
 
-# Android related
-**/android/**/gradle-wrapper.jar
-.gradle/
-**/android/captures/
-**/android/gradlew
-**/android/gradlew.bat
-**/android/local.properties
-**/android/**/GeneratedPluginRegistrant.java
-**/android/key.properties
-*.jks
+# Build outputs
+/build/
+.dart_tool/flutter_build/
+.generated_plugin_registrant.*
 
-# iOS/XCode related
-**/ios/**/*.mode1v3
-**/ios/**/*.mode2v3
-**/ios/**/*.moved-aside
-**/ios/**/*.pbxuser
-**/ios/**/*.perspectivev3
-**/ios/**/*sync/
-**/ios/**/.sconsign.dblite
-**/ios/**/.tags*
-**/ios/**/.vagrant/
-**/ios/**/DerivedData/
-**/ios/**/Icon?
-**/ios/**/Pods/
-**/ios/**/.symlinks/
-**/ios/**/profile
-**/ios/**/xcuserdata
-**/ios/.generated/
-**/ios/Flutter/.last_build_id
-**/ios/Flutter/App.framework
-**/ios/Flutter/Flutter.framework
-**/ios/Flutter/Flutter.podspec
-**/ios/Flutter/Generated.xcconfig
-**/ios/Flutter/ephemeral
-**/ios/Flutter/app.flx
-**/ios/Flutter/app.zip
-**/ios/Flutter/flutter_assets/
-**/ios/Flutter/flutter_export_environment.sh
-**/ios/ServiceDefinitions.json
-**/ios/Runner/GeneratedPluginRegistrant.*
+# Flutter ephemeral files
+**/ephemeral/
+**/generated_plugin_registrant.*
+
+# Android
+android/.gradle/
+android/key.properties
+android/app/debug/
+android/app/profile/
+android/app/release/
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/App.framework
+ios/Flutter/Generated.xcconfig
+ios/.generated/
+ios/Runner.xcworkspace/
+ios/Runner.xcodeproj/project.xcworkspace/
+
+# Web
+web/.dart_tool/
 
 # macOS
-**/Flutter/ephemeral/
-**/Pods/
-**/macos/Flutter/GeneratedPluginRegistrant.swift
-**/macos/Flutter/ephemeral
-**/xcuserdata/
+macos/.dart_tool/
+macos/Pods/
+macos/.symlinks/
+macos/Flutter/ephemeral/
 
 # Windows
-**/windows/flutter/ephemeral/
-**/windows/flutter/generated_plugin_registrant.cc
-**/windows/flutter/generated_plugin_registrant.h
-**/windows/flutter/generated_plugins.cmake
+windows/.dart_tool/
+windows/flutter/ephemeral/
+windows/generated_plugin_registrant.*
 
 # Linux
-**/linux/flutter/ephemeral/
-**/linux/flutter/generated_plugin_registrant.cc
-**/linux/flutter/generated_plugin_registrant.h
-**/linux/flutter/generated_plugins.cmake
+linux/.dart_tool/
+linux/flutter/ephemeral/
+linux/generated_plugin_registrant.*
 
-# Coverage
-coverage/
+# CMake Build Files (Common)
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CTestTestfile.cmake
+cmake_install.cmake
+Makefile
+compile_commands.json
 
-# Symbols
-app.*.symbols
+# CMake Output for Specific Platforms
+windows/flutter/ephemeral/CMakeCache.txt
+windows/flutter/ephemeral/CMakeFiles/
+windows/flutter/ephemeral/Makefile
+windows/flutter/ephemeral/cmake_install.cmake
 
-# Exceptions to above rules.
-!**/ios/**/default.mode1v3
-!**/ios/**/default.mode2v3
-!**/ios/**/default.pbxuser
-!**/ios/**/default.perspectivev3
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
-!/dev/ci/**/Gemfile.lock
-!.vscode/settings.json
+linux/flutter/ephemeral/CMakeCache.txt
+linux/flutter/ephemeral/CMakeFiles/
+linux/flutter/ephemeral/Makefile
+linux/flutter/ephemeral/cmake_install.cmake
 
-# Monorepo
-.cipd
-.gclient
-.gclient_entries
-.python-version
-.gclient_previous_custom_vars
-.gclient_previous_sync_commits
+# Xcode
+*.xcworkspace
+xcuserdata/
+*.xcodeproj/
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.iml
+
+# Logs & Temp Files
+*.log
+*.lock
+*.pyc
+*.pyo
+*.so
+
+# Firebase
+firebase.json

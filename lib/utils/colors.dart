@@ -14,3 +14,4 @@ const kSurfaceGrey = Color.fromRGBO(217, 217, 217, 1);
 const kProfileIconsColor = Color.fromRGBO(95, 99, 104, 1);
 const kErrorColor = Color.fromRGBO(255, 0, 0, 1);
 const kTextFieldContainer = Color.fromRGBO(196, 196, 196, 0.2);
+const kUserProfileBackground = Color.fromRGBO(198, 198, 198, 1);
