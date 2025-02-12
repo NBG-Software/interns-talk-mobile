@@ -5,3 +5,5 @@ const kEmailIcon = 'assets/images/ic_mail.png';
 const kLockIcon = 'assets/images/ic_lock.png';
 const kUserPlaceHolderImage = 'assets/images/user_placeholder_image.png';
 const kUploadIcon = 'assets/images/ic_upload.png';
+const kNoWifiImage = 'assets/images/no_wifi_image.png';
+const kSorryImage = 'assets/images/sorry_image.png';

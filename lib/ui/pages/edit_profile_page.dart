@@ -184,12 +184,13 @@ class ConfirmButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 42,vertical: 64),
+      padding: const EdgeInsets.symmetric(vertical: 64),
       child: FilledButton(
         style: FilledButton.styleFrom(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          minimumSize: Size(double.infinity, 52),
+          minimumSize: Size(screenWidth / 1.2, 52),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8), // Rounded corners
           ),
