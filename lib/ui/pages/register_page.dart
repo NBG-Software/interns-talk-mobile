@@ -1,13 +1,47 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:interns_talk_mobile/common/custom_text_form_field.dart';
+import 'package:interns_talk_mobile/common/validators.dart';
+import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
+import 'package:interns_talk_mobile/ui/pages/chat_room_page.dart';
 import 'package:interns_talk_mobile/ui/pages/login_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:interns_talk_mobile/utils/dimens.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
 import 'package:interns_talk_mobile/utils/string.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final authService = AuthRepository();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _strongPasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  Future<void> _summitForm() async {
+    final response = await authService.remoteDS.signUp(
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      email: _emailController.text,
+      password: _strongPasswordController.text,
+      passwordConfirmation: _confirmPasswordController.text,
+    );
+    if (response.isSuccess) {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const ChatRoomPage()));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(response.error.toString())));
+      print('Error: ${response.error}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,49 +84,44 @@ class RegisterPage extends StatelessWidget {
                   ],
                 ),
                 Form(
+                  key: _formKey,
                   child: Column(
                     children: [
                       Row(
                         children: [
                           Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: kTextFieldContainer,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              height: 50,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      hintText: kFirstName,
-                                      hintStyle:
-                                          TextStyle(color: kHintTextColor),
-                                      border: InputBorder.none),
-                                ),
-                              ),
+                            child: CustomTextFormField(
+                              controller: _firstNameController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return kFirstNameErrorText;
+                                }
+                                return null;
+                              },
+                              hintText: kFirstNameHint,
+                              hintTextColor: kHintTextColor,
+                              fillColor: kTextFieldContainer,
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 16),
                             ),
                           ),
                           SizedBox(
                             width: 8,
                           ),
                           Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: kTextFieldContainer,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              height: 50,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      hintText: kSecondName,
-                                      hintStyle:
-                                          TextStyle(color: kHintTextColor),
-                                      border: InputBorder.none),
-                                ),
-                              ),
+                            child: CustomTextFormField(
+                              controller: _lastNameController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return kLastNameErrorText;
+                                }
+                                return null;
+                              },
+                              hintText: kLastNameHint,
+                              hintTextColor: kHintTextColor,
+                              fillColor: kTextFieldContainer,
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 16),
                             ),
                           ),
                         ],
@@ -100,83 +129,70 @@ class RegisterPage extends StatelessWidget {
                       SizedBox(
                         height: kMarginMedium1x,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: kTextFieldContainer,
-                          borderRadius: BorderRadius.circular(10.0),
+                      CustomTextFormField(
+                        controller: _emailController,
+                        suffixIconPath: kEmailIcon,
+                        iconColor: kIconColorGrey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: Validators.emailValidator,
+                        hintText: kValidEmailHint,
+                        fillColor: kTextFieldContainer,
+                        hintTextColor: kHintTextColor,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 16,
                         ),
-                        height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: kMarginSmall2x, top: 3),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                hintText: kValidEmailHint,
-                                suffixIcon: IconButton(
-                                  onPressed: () {},
-                                  icon: Image.asset(kEmailIcon),
-                                  color: kIconColorGrey,
-                                ),
-                                hintStyle: TextStyle(color: kHintTextColor),
-                                border: InputBorder.none),
-                          ),
-                        ),
+                        suffixPadding: EdgeInsets.only(right: 12),
                       ),
                       SizedBox(
                         height: kMarginMedium1x,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: kTextFieldContainer,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: kMarginSmall2x, top: 3),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                hintText: kStrongPasswordHint,
-                                suffixIcon: IconButton(
-                                  onPressed: () {},
-                                  icon: Image.asset(kLockIcon),
-                                  color: kIconColorGrey,
-                                ),
-                                hintStyle: TextStyle(color: kHintTextColor),
-                                border: InputBorder.none),
-                          ),
-                        ),
+                      CustomTextFormField(
+                        controller: _strongPasswordController,
+                        suffixIconPath: kLockIcon,
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        iconColor: kIconColorGrey,
+                        suffixPadding: EdgeInsets.only(right: 12),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: Validators.passwordValidator,
+                        hintText: kStrongPasswordHint,
+                        fillColor: kTextFieldContainer,
+                        hintTextColor: kHintTextColor,
                       ),
                       SizedBox(
                         height: kMarginMedium1x,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: kTextFieldContainer,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: kMarginSmall2x, top: 3),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                hintText: kConfirmPasswordHint,
-                                suffixIcon: IconButton(
-                                  onPressed: () {},
-                                  icon: Image.asset(kLockIcon),
-                                  color: kIconColorGrey,
-                                ),
-                                hintStyle: TextStyle(color: kHintTextColor),
-                                border: InputBorder.none),
-                          ),
-                        ),
+                      CustomTextFormField(
+                        controller: _confirmPasswordController,
+                        suffixIconPath: kLockIcon,
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        iconColor: kIconColorGrey,
+                        suffixPadding: EdgeInsets.only(right: 12),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return kPasswordNotMatchErrorText;
+                          } else if (value.isNotEmpty &&
+                              value != _strongPasswordController.text) {
+                            return kPasswordNotMatchErrorText;
+                          }
+                          return null;
+                        },
+                        hintText: kConfirmPasswordHint,
+                        fillColor: kTextFieldContainer,
+                        hintTextColor: kHintTextColor,
                       ),
                       SizedBox(
                         height: kMarginMedium1x,
                       ),
                       FilledButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              await _summitForm();
+                            }
+                          },
                           style: ButtonStyle(
                               shape: WidgetStatePropertyAll(
                                 RoundedRectangleBorder(

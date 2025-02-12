@@ -1,12 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:interns_talk_mobile/common/custom_text_form_field.dart';
+import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
+import 'package:interns_talk_mobile/ui/pages/chat_room_page.dart';
 import 'package:interns_talk_mobile/ui/pages/register_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:interns_talk_mobile/utils/dimens.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
 import 'package:interns_talk_mobile/utils/string.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final authService = AuthRepository();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  Future<void> _summitForm({
+    required String email,
+    required String password,
+  }) async {
+    final response = await authService.logIn(
+      email: email,
+      password: password,
+    );
+    if (response.isSuccess) {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) {
+        return const ChatRoomPage();
+      }));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response.error.toString()),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,55 +84,50 @@ class LoginPage extends StatelessWidget {
                     ],
                   ),
                   Form(
+                    key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: kTextFieldContainer,
-                            borderRadius: BorderRadius.circular(10.0),
+                        CustomTextFormField(
+                          controller: _emailController,
+                          suffixIconPath: kEmailIcon,
+                          iconColor: kIconColorGrey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          hintText: kEmailHintText,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return kEmailEmptyErrorText;
+                            }
+                            return null;
+                          },
+                          fillColor: kTextFieldContainer,
+                          hintTextColor: kHintTextColor,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
                           ),
-                          height: 50,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: kMarginSmall2x, top: 3),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                  hintText: kEmailHintText,
-                                  suffixIcon: IconButton(
-                                    onPressed: () {},
-                                    icon: Image.asset(kEmailIcon),
-                                    color: kIconColorGrey,
-                                  ),
-                                  hintStyle: TextStyle(color: kHintTextColor),
-                                  border: InputBorder.none),
-                            ),
-                          ),
+                          suffixPadding: EdgeInsets.only(right: 12),
                         ),
                         SizedBox(
                           height: kMarginMedium1x,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: kTextFieldContainer,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          height: 50,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: kMarginSmall2x, top: 3),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                  hintText: kPasswordHintText,
-                                  suffixIcon: IconButton(
-                                    onPressed: () {},
-                                    icon: Image.asset(kLockIcon),
-                                    color: kIconColorGrey,
-                                  ),
-                                  hintStyle: TextStyle(color: kHintTextColor),
-                                  border: InputBorder.none),
-                            ),
-                          ),
+                        CustomTextFormField(
+                          controller: _passwordController,
+                          suffixIconPath: kLockIcon,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return kPasswordEmptyErrorText;
+                            }
+                            return null;
+                          },
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 16),
+                          iconColor: kIconColorGrey,
+                          suffixPadding: EdgeInsets.only(right: 12),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          hintText: kPasswordHintText,
+                          fillColor: kTextFieldContainer,
+                          hintTextColor: kHintTextColor,
                         ),
                         SizedBox(
                           height: kMarginSmall1x,
@@ -126,7 +156,13 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await _summitForm(
+                              email: _emailController.text,
+                              password: _passwordController.text);
+                        }
+                      },
                       child: Text(kLoginButtonText)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
