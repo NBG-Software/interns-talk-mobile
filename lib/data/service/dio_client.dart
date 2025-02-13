@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:interns_talk_mobile/data/datasources/api_constants.dart';
@@ -8,31 +9,52 @@ class DioClient {
 
   DioClient()
       : dio = Dio(BaseOptions(
-          baseUrl: kBaseUrl,
-          connectTimeout: Duration(seconds: 60),
-          receiveTimeout: Duration(seconds: 60),
-        )) {
+    baseUrl: kBaseUrl,
+    connectTimeout: Duration(seconds: 60),
+    receiveTimeout: Duration(seconds: 60),
+  )) {
     _setupInterceptors();
   }
 
   void _setupInterceptors() {
-    dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) async {
-          final storage = FlutterSecureStorage();
-          String? token = await storage.read(key: kAuthTokenKey);
-          if (token != null) {
-            options.headers['Authorization'] = 'Bearer $token';
-          }
-          return handler.next(options);
-        },
-        onResponse: (response, handler) {
-          return handler.next(response);
-        },
-        onError: (DioException e, handler) {
-          return handler.next(e);
-        },
-      ),
-    );
+    dio.interceptors.addAll([
+      _AuthInterceptor(),
+      ThrottleInterceptor(),
+    ]);
+  }
+}
+
+class _AuthInterceptor extends Interceptor {
+  final _storage = FlutterSecureStorage();
+
+  @override
+  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    String? token = await _storage.read(key: kAuthTokenKey);
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+    return handler.next(options);
+  }
+}
+
+class ThrottleInterceptor extends Interceptor {
+  static const int requestInterval = 1000; // 1 second
+  DateTime? _lastRequestTime;
+
+  @override
+  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    final now = DateTime.now();
+
+    if (_lastRequestTime != null) {
+      final timeSinceLastRequest = now.difference(_lastRequestTime!).inMilliseconds;
+
+      if (timeSinceLastRequest < requestInterval) {
+        final delay = requestInterval - timeSinceLastRequest;
+        await Future.delayed(Duration(milliseconds: delay));
+      }
+    }
+
+    _lastRequestTime = DateTime.now();
+    return handler.next(options);
   }
 }
