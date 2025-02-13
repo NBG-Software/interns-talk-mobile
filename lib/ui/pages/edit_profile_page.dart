@@ -29,31 +29,30 @@ class _BodyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Container(
-          width: screenWidth,
-          height: screenHeight,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TitleContent(),
-                    SizedBox(height: 20,),
-                    ProfileForm(),
-                  ],
-                ),
-                Spacer(),
-                ConfirmButton(),
-                SizedBox(height: 64)
-              ],
-            ),
+    return SingleChildScrollView(
+      child: Container(
+        width: screenWidth,
+        height: screenHeight,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TitleContent(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ProfileForm(),
+                ],
+              ),
+              Spacer(),
+              ConfirmButton(),
+              SizedBox(height: 64)
+            ],
           ),
         ),
       ),
@@ -73,7 +72,9 @@ class TitleContent extends StatelessWidget {
           'Edit Profile Here',
           style: Theme.of(context).textTheme.titleLarge,
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         Text('Please enter the new profile detail')
       ],
     );
@@ -85,7 +86,6 @@ class ProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final firstNameController = TextEditingController();
     final lastNameController = TextEditingController();
     return Column(
@@ -106,7 +106,7 @@ class ProfileForm extends StatelessWidget {
                 hintTextColor: kHintTextColor,
                 fillColor: kTextFieldContainer,
                 contentPadding:
-                EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 16),
               ),
             ),
             SizedBox(
@@ -126,7 +126,7 @@ class ProfileForm extends StatelessWidget {
                 hintTextColor: kHintTextColor,
                 fillColor: kTextFieldContainer,
                 contentPadding:
-                EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 16),
               ),
             ),
           ],
@@ -152,8 +152,7 @@ class ProfileForm extends StatelessWidget {
         CustomTextFormField(
           suffixIconPath: kLockIcon,
           readOnly: true,
-          contentPadding:
-          EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           iconColor: kIconColorGrey,
           suffixPadding: EdgeInsets.only(right: 12),
           hintText: '•',
@@ -166,8 +165,7 @@ class ProfileForm extends StatelessWidget {
         CustomTextFormField(
           suffixIconPath: kLockIcon,
           readOnly: true,
-          contentPadding:
-          EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           iconColor: kIconColorGrey,
           suffixPadding: EdgeInsets.only(right: 12),
           hintText: '•',
@@ -192,7 +190,7 @@ class ConfirmButton extends StatelessWidget {
           backgroundColor: Theme.of(context).colorScheme.primary,
           minimumSize: Size(screenWidth / 1.2, 52),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Rounded corners
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
         onPressed: () {},
@@ -201,5 +199,3 @@ class ConfirmButton extends StatelessWidget {
     );
   }
 }
-
-
