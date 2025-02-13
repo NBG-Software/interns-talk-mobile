@@ -25,7 +25,7 @@ class EditProfilePage extends StatelessWidget {
 }
 
 class _BodyView extends StatelessWidget {
-  const _BodyView({super.key});
+  const _BodyView();
 
   @override
   Widget build(BuildContext context) {

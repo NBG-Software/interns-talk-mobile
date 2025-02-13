@@ -3,8 +3,10 @@ import 'package:interns_talk_mobile/data/datasources/auth_local_datasource.dart'
 import 'package:interns_talk_mobile/data/datasources/auth_remote_datasource.dart';
 
 class AuthRepository {
-  final localDS = AuthLocalDatasource();
-  final remoteDS = AuthRemoteDatasource();
+  final AuthLocalDatasource localDS;
+  final AuthRemoteDatasource remoteDS;
+
+  AuthRepository({required this.localDS, required this.remoteDS});
 
   Future<Result<String>> logIn({
     required String email,
@@ -14,6 +16,14 @@ class AuthRepository {
       email: email,
       password: password,
     );
+  }
+
+  Future<void> saveToken({required String token}) async {
+    await localDS.saveToken(token: token);
+  }
+
+  Future<bool> isLoggedIn() async {
+    return await localDS.isLoggedIn();
   }
 
   Future<Result<String>> signUp(
@@ -33,6 +43,6 @@ class AuthRepository {
 
   Future<void> logOut() async {
     await remoteDS.logOut();
-    await localDS.storage.delete(key: 'authToken');
+    await localDS.deleteToken();
   }
 }

@@ -1,42 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:interns_talk_mobile/common/result.dart';
-import 'package:interns_talk_mobile/data/datasources/api_constants.dart';
-import 'package:interns_talk_mobile/utils/string.dart';
 
 class AuthRemoteDatasource {
   final Dio dio;
 
-  AuthRemoteDatasource()
-      : dio = Dio(
-      BaseOptions(
-          baseUrl: kBaseUrl,
-          connectTimeout: Duration(seconds: 60),
-          receiveTimeout: Duration(seconds: 60),
-        )) {
-    _setupInterceptors();
-  }
-
-  void _setupInterceptors() {
-    dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) async {
-          final storage = FlutterSecureStorage();
-          String? token = await storage.read(key: kAuthTokenKey);
-          if (token != null) {
-            options.headers['Authorization'] = 'Bearer $token';
-          }
-          return handler.next(options);
-        },
-        onResponse: (response, handler) {
-          return handler.next(response);
-        },
-        onError: (DioException e, handler) {
-          return handler.next(e);
-        },
-      ),
-    );
-  }
+  AuthRemoteDatasource(this.dio);
 
   Future<Result<String>> logIn({
     required String email,
@@ -52,7 +20,7 @@ class AuthRemoteDatasource {
       );
       String? token = response.data['data']['token'];
       if (token != null) {
-        return Result.success(response.data['message']);
+        return Result.success(token);
       } else {
         return Result.error("Token not found");
       }
@@ -60,10 +28,10 @@ class AuthRemoteDatasource {
       if (e.type == DioExceptionType.connectionError) {
         return Result.error("Connection error");
       } else {
-        return Result.error('Something went wrong');
+        return Result.error(e.error.toString());
       }
     } catch (e) {
-      return Result.error('Unexpected error occurred');
+      return Result.error('Error : $e');
     }
   }
 
@@ -86,12 +54,18 @@ class AuthRemoteDatasource {
       if (e.type == DioExceptionType.connectionError) {
         return Result.error("Connection error");
       } else {
-        return Result.error('Something went wrong');
+        return Result.error(e.error.toString());
       }
     } catch (e) {
       return Result.error('Unexpected error occurred');
     }
   }
 
-  Future<void> logOut() async {}
+  Future<void> logOut() async {
+    try {
+      await dio.post('/logout');
+    } catch (e) {
+      print("Logout failed: $e");
+    }
+  }
 }

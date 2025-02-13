@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/edit_profile_page.dart';
+import 'package:interns_talk_mobile/ui/pages/login_page.dart';
 import 'package:interns_talk_mobile/ui/pages/setting_page.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
 
@@ -9,21 +12,32 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        title: Text(
-          'Profile',
-          style: Theme.of(context).textTheme.titleMedium,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthLoggedOut) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+            (route) => false,
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          title: Text(
+            'Profile',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
+        body: _BodyView(),
       ),
-      body: _BodyView(),
     );
   }
 }
 
 class _BodyView extends StatelessWidget {
-  const _BodyView({super.key});
+  const _BodyView();
 
   @override
   Widget build(BuildContext context) {
@@ -125,22 +139,23 @@ class LogOutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric( vertical: 64),
+      padding: const EdgeInsets.symmetric(vertical: 64),
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          minimumSize: Size(screenWidth/ 1.2, 52),
+          minimumSize: Size(screenWidth / 1.2, 52),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Rounded corners
+            borderRadius: BorderRadius.circular(8),
           ),
           side: BorderSide(
             color: Theme.of(context).colorScheme.primary,
             width: 2,
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          context.read<AuthBloc>().add(AuthLogoutEvent());
+        },
         child: Text('Log Out'),
       ),
     );

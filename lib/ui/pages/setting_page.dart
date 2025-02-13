@@ -21,7 +21,7 @@ class SettingPage extends StatelessWidget {
 }
 
 class _BodyView extends StatefulWidget {
-  const _BodyView({super.key});
+  const _BodyView();
 
   @override
   State<_BodyView> createState() => _BodyViewState();

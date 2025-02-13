@@ -13,6 +13,7 @@ class ChatRoomPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
+        automaticallyImplyLeading: false,
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
@@ -25,10 +26,8 @@ class ChatRoomPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: IconButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (BuildContext context)=>
-                  const ProfilePage())
-                );
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => const ProfilePage()));
               },
               icon: Icon(CupertinoIcons.profile_circled),
             ),

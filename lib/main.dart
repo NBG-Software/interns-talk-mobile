@@ -1,13 +1,35 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:interns_talk_mobile/ui/pages/login_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interns_talk_mobile/data/datasources/auth_local_datasource.dart';
+import 'package:interns_talk_mobile/data/datasources/auth_remote_datasource.dart';
+import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
+import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
+import 'package:interns_talk_mobile/ui/pages/splash_screen.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(const MyApp());
+  final dio = Dio();
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) => AuthBloc(AuthRepository(
+                  localDS: AuthLocalDatasource(),
+                  remoteDS: AuthRemoteDatasource(dio),
+                ))),
+        // BlocProvider(
+        //     create: (context) => UserBloc(UserRepository(
+        //           userRemoteDatasource: UserRemoteDatasource(dio),
+        //         ))),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +53,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const SplashScreen(),
     );
   }
 }
