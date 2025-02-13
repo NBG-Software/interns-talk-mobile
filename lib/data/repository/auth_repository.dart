@@ -1,6 +1,7 @@
 import 'package:interns_talk_mobile/common/result.dart';
 import 'package:interns_talk_mobile/data/datasources/auth_local_datasource.dart';
 import 'package:interns_talk_mobile/data/datasources/auth_remote_datasource.dart';
+import 'package:interns_talk_mobile/data/model/user_model.dart';
 
 class AuthRepository {
   final AuthLocalDatasource localDS;
@@ -39,6 +40,10 @@ class AuthRepository {
       password: password,
       passwordConfirmation: passwordConfirmation,
     );
+  }
+
+  Future<Result<User>> getUserInfo() async {
+    return await remoteDS.getUserInfo();
   }
 
   Future<void> logOut() async {

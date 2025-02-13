@@ -35,7 +35,7 @@ class User {
           DateTime.parse(json['email_verified_at']),
       password: json['password'] as String?,
       role: json['role'] as String?,
-      profilePicture: json['profile_picture'] as String?,
+      profilePicture: json['image'] as String?,
       deletedAt: json['deleted_at'] ?? DateTime.parse(json['deleted_at']),
       createdAt: json['created_at'] ?? DateTime.parse(json['created_at']),
       updatedAt: json['updated_at'] ?? DateTime.parse(json['updated_at']),

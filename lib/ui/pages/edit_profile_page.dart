@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 
 import '../../common/custom_text_form_field.dart';
 import '../../utils/colors.dart';
@@ -6,8 +8,19 @@ import '../../utils/dimens.dart';
 import '../../utils/images.dart';
 import '../../utils/string.dart';
 
-class EditProfilePage extends StatelessWidget {
+class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
+
+  @override
+  State<EditProfilePage> createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthBloc>().add(AuthGetUserInfoEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,93 +99,91 @@ class ProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final firstNameController = TextEditingController();
-    final lastNameController = TextEditingController();
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: CustomTextFormField(
-                controller: firstNameController,
-                keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return kFirstNameErrorText;
-                  }
-                  return null;
-                },
-                hintText: kFirstNameHint,
-                hintTextColor: kHintTextColor,
-                fillColor: kTextFieldContainer,
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        if (state is AuthLoading) {
+          return Center(child: CircularProgressIndicator());
+        } else if (state is AuthUserLoaded) {
+          final user = state.user;
+
+          final firstNameController =
+              TextEditingController(text: user.firstName);
+          final lastNameController = TextEditingController(text: user.lastName);
+
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomTextFormField(
+                      controller: firstNameController,
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return kFirstNameErrorText;
+                        }
+                        return null;
+                      },
+                      hintText: kFirstNameHint,
+                      hintTextColor: kHintTextColor,
+                      fillColor: kTextFieldContainer,
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: CustomTextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: lastNameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return kLastNameErrorText;
+                        }
+                        return null;
+                      },
+                      hintText: kLastNameHint,
+                      hintTextColor: kHintTextColor,
+                      fillColor: kTextFieldContainer,
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            Expanded(
-              child: CustomTextFormField(
-                keyboardType: TextInputType.text,
-                controller: lastNameController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return kLastNameErrorText;
-                  }
-                  return null;
-                },
-                hintText: kLastNameHint,
-                hintTextColor: kHintTextColor,
+              SizedBox(height: kMarginMedium1x),
+              CustomTextFormField(
+                suffixIconPath: kEmailIcon,
+                readOnly: true,
+                hintText: user.email ?? 'yourmail@gmail.com',
+                iconColor: kIconColorGrey,
                 fillColor: kTextFieldContainer,
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
+                suffixPadding: EdgeInsets.only(right: 12),
               ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: kMarginMedium1x,
-        ),
-        CustomTextFormField(
-          suffixIconPath: kEmailIcon,
-          readOnly: true,
-          hintText: 'yourmail@gmail.com',
-          iconColor: kIconColorGrey,
-          fillColor: kTextFieldContainer,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 16,
-          ),
-          suffixPadding: EdgeInsets.only(right: 12),
-        ),
-        SizedBox(
-          height: kMarginMedium1x,
-        ),
-        CustomTextFormField(
-          suffixIconPath: kLockIcon,
-          readOnly: true,
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          iconColor: kIconColorGrey,
-          suffixPadding: EdgeInsets.only(right: 12),
-          hintText: '•',
-          fillColor: kTextFieldContainer,
-          hintTextColor: kHintTextColor,
-        ),
-        SizedBox(
-          height: kMarginMedium1x,
-        ),
-        CustomTextFormField(
-          suffixIconPath: kLockIcon,
-          readOnly: true,
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          iconColor: kIconColorGrey,
-          suffixPadding: EdgeInsets.only(right: 12),
-          hintText: '•',
-          fillColor: kTextFieldContainer,
-          hintTextColor: kHintTextColor,
-        ),
-      ],
+              SizedBox(height: kMarginMedium1x),
+              CustomTextFormField(
+                suffixIconPath: kLockIcon,
+                readOnly: true,
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                iconColor: kIconColorGrey,
+                suffixPadding: EdgeInsets.only(right: 12),
+                hintText: '•',
+                fillColor: kTextFieldContainer,
+                hintTextColor: kHintTextColor,
+              ),
+            ],
+          );
+        } else if (state is AuthError) {
+          return Center(child: Text('Error: ${state.message}'));
+        }
+
+        return Container();
+      },
     );
   }
 }
