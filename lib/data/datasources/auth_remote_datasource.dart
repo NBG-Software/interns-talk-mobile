@@ -33,6 +33,7 @@ class AuthRemoteDatasource {
     } catch (e) {
       return Result.error('Error : $e');
     }
+    return Result.success('token');
   }
 
   Future<Result<String>> signUp(
@@ -42,23 +43,29 @@ class AuthRemoteDatasource {
       required String password,
       required String passwordConfirmation}) async {
     try {
-      final response = await dio.post('/register', data: {
-        'first_name': firstName,
-        'last_name': lastName,
-        'email': email,
-        'password': password,
-        'password_confirmation': passwordConfirmation
-      });
-      return response.data['message'];
-    } on DioException catch (e) {
-      if (e.type == DioExceptionType.connectionError) {
-        return Result.error("Connection error");
-      } else {
-        return Result.error(e.error.toString());
-      }
-    } catch (e) {
-      return Result.error('Unexpected error occurred');
-    }
+          final response = await dio.post('/register', data: {
+            'first_name': firstName,
+            'last_name': lastName,
+            'email': email,
+            'password': password,
+            'password_confirmation': passwordConfirmation
+          });
+          String? token = response.data['data']['token'];
+          if (token != null) {
+            return Result.success(token);
+          } else {
+            return Result.error("Token not found");
+          }
+        } on DioException catch (e) {
+          if (e.type == DioExceptionType.connectionError) {
+            return Result.error("Connection error");
+          } else {
+            return Result.error(e.error.toString());
+          }
+        } catch (e) {
+          return Result.error('Unexpected error occurred');
+        }
+
   }
 
   Future<void> logOut() async {

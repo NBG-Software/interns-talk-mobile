@@ -16,7 +16,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email, password: event.password);
     if (result.isSuccess) {
       await authRepository.saveToken(token: result.data!);
-      emit(AuthAuthenticated(result.data ?? "Log in success"));
+      emit(AuthAuthenticated("Welcome"));
     } else {
       emit(AuthError(result.error ?? 'Something went wrong'));
     }
@@ -29,12 +29,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       firstName: event.firstName,
       lastName: event.lastName,
       email: event.email,
-      passwordConfrimation: event.confirmPassword,
+      passwordConfirmation: event.confirmPassword,
       password: event.password,
     );
 
     if (result.isSuccess) {
-      emit(AuthAuthenticated(result.data ?? "Successfully signed up"));
+      await authRepository.saveToken(token: result.data!);
+      emit(AuthAuthenticated("Welcome ${event.firstName} ${event.lastName}"));
     } else {
       emit(AuthError(result.error ?? 'Something went wrong'));
     }

@@ -31,13 +31,13 @@ class AuthRepository {
       required String lastName,
       required String email,
       required String password,
-      required String passwordConfrimation}) async {
+      required String passwordConfirmation}) async {
     return await remoteDS.signUp(
       firstName: firstName,
       lastName: lastName,
       email: email,
       password: password,
-      passwordConfirmation: passwordConfrimation,
+      passwordConfirmation: passwordConfirmation,
     );
   }
 
