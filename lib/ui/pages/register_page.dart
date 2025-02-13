@@ -106,7 +106,7 @@ class __BodyViewState extends State<_BodyView> {
                 ],
               ),
               SizedBox(
-                height: 52,
+                height: 20,
               ),
               Form(
                 key: _formKey,
@@ -251,9 +251,10 @@ class __BodyViewState extends State<_BodyView> {
                   ),
                   InkWell(
                       onTap: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                const LoginPage()));
+                                const LoginPage()),
+                            (route)=>false);
                       },
                       child: Text(
                         kLoginButtonText,
