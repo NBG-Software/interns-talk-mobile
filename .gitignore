@@ -46,11 +46,20 @@ macos/Flutter/ephemeral/
 windows/.dart_tool/
 windows/flutter/ephemeral/
 windows/generated_plugin_registrant.*
+windows/CMakeLists.txt.user
+windows/build/
+windows/runner/Debug/
+windows/runner/Release/
+windows/runner/x64/
+windows/runner/x86/
+windows/runner/Win32/
 
 # Linux
 linux/.dart_tool/
 linux/flutter/ephemeral/
 linux/generated_plugin_registrant.*
+linux/build/
+linux/CMakeLists.txt.user
 
 # CMake Build Files (Common)
 CMakeCache.txt
@@ -91,3 +100,5 @@ xcuserdata/
 
 # Firebase
 firebase.json
+linux/flutter/generated_plugins.cmake
+windows/flutter/generated_plugins.cmake
