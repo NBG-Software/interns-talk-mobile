@@ -79,8 +79,8 @@ class ProfileDataView extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: Image.network(
-            'https://framerusercontent.com/images/XMW8cln5SZReUZI5zimRfTIBA.jpg',
+          child: Image.asset(
+            kUserPlaceHolderImage,
             scale: 1.0,
             width: 148,
           ),

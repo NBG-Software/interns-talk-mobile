@@ -24,7 +24,11 @@ class AuthRemoteDatasource {
       String token = response.data['data']['token'];
       return Result.success(token);
     } on DioException catch (e) {
-      return Result.error(e.response?.data["message"]);
+      if (e.response != null) {
+        return Result.error(e.response?.data["message"]);
+      } else {
+        return Result.error(e.message ?? "Connection error!!");
+      }
     } catch (e) {
       return Result.error('Error: $e');
     }
@@ -54,7 +58,7 @@ class AuthRemoteDatasource {
       if (e.type == DioExceptionType.connectionError) {
         return Result.error("Connection error");
       } else {
-        return Result.error(e.error.toString());
+        return Result.error(e.message ?? "Something went wrong");
       }
     } catch (e) {
       return Result.error('Unexpected error occurred');
