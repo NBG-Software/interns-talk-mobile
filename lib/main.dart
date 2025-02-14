@@ -13,7 +13,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  final dio = Dio();
+  final dio = Dio(BaseOptions(headers: {
+    'Content-Type': 'application/json',
+  }));
   runApp(
     MultiBlocProvider(
       providers: [
@@ -38,6 +40,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: TextTheme(
             titleLarge: TextStyle(

@@ -31,7 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await authRepository.saveToken(token: result.data!);
       emit(AuthAuthenticated("Welcome"));
     } else {
-      emit(AuthError(result.error ?? 'Something went wrong'));
+      emit(AuthError(result.error ?? 'Login failed'));
     }
   }
 

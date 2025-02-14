@@ -9,10 +9,14 @@ class DioClient {
 
   DioClient()
       : dio = Dio(BaseOptions(
-    baseUrl: kBaseUrl,
-    connectTimeout: Duration(seconds: 60),
-    receiveTimeout: Duration(seconds: 60),
-  )) {
+          baseUrl: kBaseUrl,
+          connectTimeout: Duration(seconds: 60),
+          receiveTimeout: Duration(seconds: 60),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        )) {
     _setupInterceptors();
   }
 
@@ -28,7 +32,8 @@ class _AuthInterceptor extends Interceptor {
   final _storage = FlutterSecureStorage();
 
   @override
-  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  Future<void> onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     String? token = await _storage.read(key: kAuthTokenKey);
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -38,15 +43,17 @@ class _AuthInterceptor extends Interceptor {
 }
 
 class ThrottleInterceptor extends Interceptor {
-  static const int requestInterval = 1000; // 1 second
+  static const int requestInterval = 1000;
   DateTime? _lastRequestTime;
 
   @override
-  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  Future<void> onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     final now = DateTime.now();
 
     if (_lastRequestTime != null) {
-      final timeSinceLastRequest = now.difference(_lastRequestTime!).inMilliseconds;
+      final timeSinceLastRequest =
+          now.difference(_lastRequestTime!).inMilliseconds;
 
       if (timeSinceLastRequest < requestInterval) {
         final delay = requestInterval - timeSinceLastRequest;

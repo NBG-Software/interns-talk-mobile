@@ -11,28 +11,23 @@ class AuthRemoteDatasource {
     required String email,
     required String password,
   }) async {
+    Dio ddio = Dio(BaseOptions(headers: {
+      'Accept': 'application/json',
+    }));
     try {
-      final response = await dio.post(
-        '/login',
+      final Response response = await ddio.post(
+        'http://192.168.10.194:8000/api/v1/login',
         data: {
           'email': email,
           'password': password,
         },
       );
-      String? token = response.data['data']['token'];
-      if (token != null) {
-        return Result.success(token);
-      } else {
-        return Result.error("Token not found");
-      }
+      String token = response.data['data']['token'];
+      return Result.success(token);
     } on DioException catch (e) {
-      if (e.type == DioExceptionType.connectionError) {
-        return Result.error("Connection error");
-      } else {
-        return Result.error(e.error.toString());
-      }
+      return Result.error(e.response?.data["message"]);
     } catch (e) {
-      return Result.error('Error : $e');
+      return Result.error('Error: $e');
     }
   }
 
@@ -69,7 +64,7 @@ class AuthRemoteDatasource {
 
   Future<void> logOut() async {
     try {
-      await dio.post('/logout');
+      await dio.post('http://192.168.10.194:8000/api/v1/logout');
     } catch (e) {
       print("Logout failed: $e");
     }
@@ -77,7 +72,7 @@ class AuthRemoteDatasource {
 
   Future<Result<User>> getUserInfo() async {
     try {
-      final response = await dio.get('/user');
+      final response = await dio.get('http://192.168.10.194:8000/api/v1//user');
       if (response.statusCode == 200) {
         return Result.success(User.fromJson(response.data));
       } else {
