@@ -1,22 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:interns_talk_mobile/common/result.dart';
 import 'package:interns_talk_mobile/data/model/user_model.dart';
+import 'package:interns_talk_mobile/data/service/dio_client.dart';
 
 class AuthRemoteDatasource {
-  final Dio dio;
+  final DioClient dioClient;
+  final Dio dio = DioClient().dio;
 
-  AuthRemoteDatasource(this.dio);
+  AuthRemoteDatasource(this.dioClient);
 
   Future<Result<String>> logIn({
     required String email,
     required String password,
   }) async {
-    Dio ddio = Dio(BaseOptions(headers: {
-      'Accept': 'application/json',
-    }));
     try {
-      final Response response = await ddio.post(
-        'http://192.168.10.194:8000/api/v1/login',
+      final Response response = await dio.post(
+        '/login',
         data: {
           'email': email,
           'password': password,
@@ -64,7 +63,7 @@ class AuthRemoteDatasource {
 
   Future<void> logOut() async {
     try {
-      await dio.post('http://192.168.10.194:8000/api/v1/logout');
+      await dio.post('/logout');
     } catch (e) {
       print("Logout failed: $e");
     }
@@ -72,9 +71,11 @@ class AuthRemoteDatasource {
 
   Future<Result<User>> getUserInfo() async {
     try {
-      final response = await dio.get('http://192.168.10.194:8000/api/v1//user');
+      final response = await dio.get('/user');
       if (response.statusCode == 200) {
-        return Result.success(User.fromJson(response.data));
+        final user = response.data['data'];
+        final userModel = User.fromJson(user);
+        return Result.success(userModel);
       } else {
         return Result.error("Failed to fetch user data");
       }

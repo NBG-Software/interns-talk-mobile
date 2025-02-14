@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/data/datasources/auth_local_datasource.dart';
 import 'package:interns_talk_mobile/data/datasources/auth_remote_datasource.dart';
 import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
+import 'package:interns_talk_mobile/data/service/dio_client.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/splash_screen.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
@@ -13,16 +14,15 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  final dio = Dio(BaseOptions(headers: {
-    'Content-Type': 'application/json',
-  }));
+  final dioClient = DioClient();
+
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(
             create: (context) => AuthBloc(AuthRepository(
                   localDS: AuthLocalDatasource(),
-                  remoteDS: AuthRemoteDatasource(dio),
+                  remoteDS: AuthRemoteDatasource(dioClient),
                 ))),
         // BlocProvider(
         //     create: (context) => UserBloc(UserRepository(

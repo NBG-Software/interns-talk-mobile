@@ -1,15 +1,15 @@
 class User {
-  String? id;
+  int? id;
   String? firstName;
   String? lastName;
   String? email;
-  DateTime? emailVerifiedAt;
+  String? emailVerifiedAt;
   String? password;
   String? role;
   String? profilePicture;
-  DateTime? deletedAt;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  String? deletedAt;
+  String? createdAt;
+  String? updatedAt;
 
   User({
     this.id,
@@ -27,18 +27,17 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'] as String?,
-      firstName: json['first_name'] as String?,
-      lastName: json['last_name'] as String?,
-      email: json['email'] as String?,
-      emailVerifiedAt: json['email_verified_at'] ??
-          DateTime.parse(json['email_verified_at']),
-      password: json['password'] as String?,
-      role: json['role'] as String?,
-      profilePicture: json['image'] as String?,
-      deletedAt: json['deleted_at'] ?? DateTime.parse(json['deleted_at']),
-      createdAt: json['created_at'] ?? DateTime.parse(json['created_at']),
-      updatedAt: json['updated_at'] ?? DateTime.parse(json['updated_at']),
+      id: json['id'],
+      firstName: json['first_name'],
+      lastName: json['last_name'],
+      email: json['email'],
+      emailVerifiedAt: json['email_verified_at'],
+      password: json['password'],
+      role: json['role'],
+      profilePicture: json['image'],
+      deletedAt: json['deleted_at'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
     );
   }
 
@@ -48,13 +47,13 @@ class User {
       'first_name': firstName,
       'last_name': lastName,
       'email': email,
-      'email_verified_at': emailVerifiedAt?.toIso8601String(),
+      'email_verified_at': emailVerifiedAt,
       'password': password,
       'role': role,
       'profile_picture': profilePicture,
-      'deleted_at': deletedAt?.toIso8601String(),
-      'created_at': createdAt?.toIso8601String(),
-      'updated_at': updatedAt?.toIso8601String(),
+      'deleted_at': deletedAt,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
     };
   }
 
