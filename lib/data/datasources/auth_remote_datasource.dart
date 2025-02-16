@@ -23,14 +23,14 @@ class AuthRemoteDatasource {
       );
       String token = response.data['data']['token'];
       return Result.success(token);
-    } on DioException catch (e) {
-      if (e.response != null) {
-        return Result.error(e.response?.data["message"]);
-      } else {
-        return Result.error(e.message ?? "Connection error!!");
-      }
-    } catch (e) {
-      return Result.error('Error: $e');
+    }
+
+    on DioException catch(e){
+      final errorMessage = handleDioError(e);
+      return Result.error(errorMessage);
+    }
+    catch (e) {
+      return Result.error("Unexpected error occurred");
     }
   }
 
@@ -54,14 +54,12 @@ class AuthRemoteDatasource {
       } else {
         return Result.error("Token not found");
       }
-    } on DioException catch (e) {
-      if (e.type == DioExceptionType.connectionError) {
-        return Result.error("Connection error");
-      } else {
-        return Result.error(e.message ?? "Something went wrong");
-      }
-    } catch (e) {
-      return Result.error('Unexpected error occurred');
+    }   on DioException catch(e){
+      final errorMessage = handleDioError(e);
+      return Result.error(errorMessage);
+    }
+    catch (e) {
+      return Result.error("Unexpected error occurred");
     }
   }
 
@@ -83,8 +81,38 @@ class AuthRemoteDatasource {
       } else {
         return Result.error("Failed to fetch user data");
       }
-    } catch (e) {
-      return Result.error("Error: $e");
+    }
+    on DioException catch(e){
+      final errorMessage = handleDioError(e);
+      return Result.error(errorMessage);
+    }
+    catch (e) {
+      return Result.error("Unexpected error occurred");
+    }
+  }
+  String handleDioError(DioException e) {
+    if (e.response != null) {
+
+      final message = e.response?.data?['message'] ?? "Something went wrong!";
+      return message;
+    }
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+        return "Connection timed out. Please check your internet.";
+      case DioExceptionType.sendTimeout:
+        return "Request took too long to send. Try again.";
+      case DioExceptionType.receiveTimeout:
+        return "Server is taking too long to respond. Try again later.";
+      case DioExceptionType.badCertificate:
+        return "Security issue detected. Unable to proceed.";
+      case DioExceptionType.badResponse:
+        return "Server error: ${e.response?.statusCode} ${e.response?.statusMessage}";
+      case DioExceptionType.cancel:
+        return "Request was cancelled.";
+      case DioExceptionType.connectionError:
+        return "No internet connection. Please check your network.";
+      case DioExceptionType.unknown:
+        return "An unexpected error occurred. Please try again.";
     }
   }
 }
