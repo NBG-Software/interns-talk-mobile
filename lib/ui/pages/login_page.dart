@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/common/custom_text_form_field.dart';
+import 'package:interns_talk_mobile/common/validators.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/chat_room_page.dart';
 import 'package:interns_talk_mobile/ui/pages/register_page.dart';
@@ -57,6 +59,7 @@ class _BodyViewState extends State<_BodyView> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool isVisible = false;
 
   void _summitForm() {
     context.read<AuthBloc>().add(AuthLoginEvent(
@@ -117,17 +120,12 @@ class _BodyViewState extends State<_BodyView> {
                     children: [
                       CustomTextFormField(
                         controller: _emailController,
-                        suffixIconPath: kEmailIcon,
+                        suffixIcon: Image.asset(kEmailIcon),
                         iconColor: kIconColorGrey,
                         keyboardType: TextInputType.emailAddress,
                         autoValidateMode: AutovalidateMode.onUserInteraction,
                         hintText: kEmailHintText,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return kEmailEmptyErrorText;
-                          }
-                          return null;
-                        },
+                        validator: Validators.emailValidator,
                         fillColor: kTextFieldContainer,
                         hintTextColor: kHintTextColor,
                         contentPadding: EdgeInsets.symmetric(
@@ -141,21 +139,25 @@ class _BodyViewState extends State<_BodyView> {
                       ),
                       CustomTextFormField(
                         controller: _passwordController,
-                        suffixIconPath: kLockIcon,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return kPasswordEmptyErrorText;
-                          }
-                          return null;
-                        },
+                        obscureText: !isVisible,
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                isVisible = !isVisible;
+                              });
+                            },
+                            icon: isVisible
+                                ? Icon(CupertinoIcons.lock)
+                                : Icon(CupertinoIcons.lock_slash)),
+                        validator: Validators.passwordValidator,
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+
                         iconColor: kIconColorGrey,
                         suffixPadding: EdgeInsets.only(right: 12),
                         autoValidateMode: AutovalidateMode.onUserInteraction,
                         hintText: kPasswordHintText,
                         keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
                         fillColor: kTextFieldContainer,
                         hintTextColor: kHintTextColor,
                       ),

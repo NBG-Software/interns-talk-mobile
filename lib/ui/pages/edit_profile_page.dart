@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/data/model/user_model.dart';
@@ -173,7 +174,7 @@ class ProfileForm extends StatelessWidget {
         ),
         SizedBox(height: kMarginMedium1x),
         CustomTextFormField(
-          suffixIconPath: kEmailIcon,
+          suffixIcon: Image.asset(kEmailIcon),
           readOnly: true,
           hintText: user?.email ?? '@',
           iconColor: kIconColorGrey,
@@ -186,7 +187,7 @@ class ProfileForm extends StatelessWidget {
         ),
         SizedBox(height: kMarginMedium1x),
         CustomTextFormField(
-          suffixIconPath: kLockIcon,
+          suffixIcon: Icon(CupertinoIcons.lock),
           readOnly: true,
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           iconColor: kIconColorGrey,

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:interns_talk_mobile/utils/colors.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final String? hintText;
-  final String? suffixIconPath;
+  final Widget? suffixIcon;
   final AutovalidateMode? autoValidateMode;
   final Color? iconColor;
   final Color? hintTextColor;
@@ -31,7 +32,7 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText,
     this.contentPadding,
     this.suffixPadding,
-    this.suffixIconPath,
+    this.suffixIcon,
     this.iconColor,
     this.hintTextColor,
     this.validator,
@@ -49,18 +50,12 @@ class CustomTextFormField extends StatelessWidget {
       obscureText : obscureText ?? false,
       keyboardType: keyboardType,
       obscuringCharacter: obscuringCharacter ?? '•',
+
       decoration: InputDecoration(
         contentPadding: contentPadding,
         hintText: hintText,
-        suffixIcon: suffixIconPath != null
-            ? Padding(
-                padding: suffixPadding ?? EdgeInsets.zero,
-                child: Image.asset(
-                  suffixIconPath!,
-                  color: iconColor,
-                ),
-              )
-            : null,
+        suffixIcon: suffixIcon,
+        suffixIconColor: kIconColorGrey,
         filled: true,
         fillColor: fillColor,
         hintStyle: TextStyle(color: hintTextColor),

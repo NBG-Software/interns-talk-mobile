@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/common/custom_text_form_field.dart';
@@ -53,6 +54,8 @@ class __BodyViewState extends State<_BodyView> {
   final _strongPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool isVisible = false;
+  bool isObscured = true;
 
   Future<void> _summitForm() async {
     context.read<AuthBloc>().add(AuthSignUpEvent(
@@ -160,7 +163,7 @@ class __BodyViewState extends State<_BodyView> {
                     ),
                     CustomTextFormField(
                       controller: _emailController,
-                      suffixIconPath: kEmailIcon,
+                      suffixIcon:Image.asset(kEmailIcon),
                       keyboardType: TextInputType.emailAddress,
                       iconColor: kIconColorGrey,
                       autoValidateMode: AutovalidateMode.onUserInteraction,
@@ -180,8 +183,16 @@ class __BodyViewState extends State<_BodyView> {
                     CustomTextFormField(
                       controller: _strongPasswordController,
                       keyboardType: TextInputType.visiblePassword,
-                      suffixIconPath: kLockIcon,
-                      obscureText: true,
+                      obscureText: !isVisible,
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isVisible = !isVisible;
+                            });
+                          },
+                          icon: isVisible
+                              ? Icon(CupertinoIcons.lock)
+                              : Icon(CupertinoIcons.lock_slash)),
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                       iconColor: kIconColorGrey,
@@ -198,8 +209,16 @@ class __BodyViewState extends State<_BodyView> {
                     CustomTextFormField(
                       controller: _confirmPasswordController,
                       keyboardType: TextInputType.visiblePassword,
-                      suffixIconPath: kLockIcon,
-                      obscureText: true,
+                      obscureText:isObscured,
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isObscured = !isObscured;
+                            });
+                          },
+                          icon: !isObscured
+                              ? Icon(CupertinoIcons.lock)
+                              : Icon(CupertinoIcons.lock_slash)),
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                       iconColor: kIconColorGrey,
