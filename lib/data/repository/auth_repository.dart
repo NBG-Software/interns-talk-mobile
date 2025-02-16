@@ -27,6 +27,10 @@ class AuthRepository {
     return await localDS.isLoggedIn();
   }
 
+  Future<Result<String>> sendResetEmail({required String email})async{
+    return await remoteDS.sendResetEmail(email: email);
+  }
+
   Future<Result<String>> signUp(
       {required String firstName,
       required String lastName,

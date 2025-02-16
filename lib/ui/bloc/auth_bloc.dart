@@ -10,7 +10,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthSignUpEvent>(_onSignUp);
     on<AuthLogoutEvent>(_onLogout);
     on<AuthGetUserInfoEvent>(_onGetUserInfo);
+    on<AuthForgotPasswordEvent>(_onForgotPassword);
   }
+
+  Future<void> _onForgotPassword(
+      AuthForgotPasswordEvent event, Emitter<AuthState> emit
+      ) async{
+    emit(AuthLoading());
+    final result = await authRepository.sendResetEmail(
+      email: event.email
+    );
+
+    if (result.isSuccess) {
+      emit(AuthAuthenticated(result.data!));
+    } else {
+      emit(AuthError(result.error ?? "Failed send email"));
+    }
+  }
+
   Future<void> _onGetUserInfo(
       AuthGetUserInfoEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
@@ -61,6 +78,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 }
 
 abstract class AuthEvent {}
+
+class AuthForgotPasswordEvent extends AuthEvent{
+  final String email;
+
+  AuthForgotPasswordEvent({required this.email});
+}
 
 class AuthLoginEvent extends AuthEvent {
   final String email;

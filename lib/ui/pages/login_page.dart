@@ -5,6 +5,7 @@ import 'package:interns_talk_mobile/common/custom_text_form_field.dart';
 import 'package:interns_talk_mobile/common/validators.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/chat_room_page.dart';
+import 'package:interns_talk_mobile/ui/pages/forgot_password_page.dart';
 import 'package:interns_talk_mobile/ui/pages/register_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:interns_talk_mobile/utils/dimens.dart';
@@ -166,11 +167,21 @@ class _BodyViewState extends State<_BodyView> {
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          kForgotPasswordText,
-                          style: TextStyle(
-                              color: kTextColor,
-                              decoration: TextDecoration.underline),
+                        child: TextButton(
+                          onPressed: (){
+                            Navigator.push(context,
+                            MaterialPageRoute(builder: (context) =>
+                              const ForgotPasswordPage()
+
+                            )
+                            );
+                          },
+                          child: Text(
+                            kForgotPasswordText,
+                            style: TextStyle(
+                                color: kTextColor,
+                                decoration: TextDecoration.underline),
+                          ),
                         ),
                       ),
                     ],

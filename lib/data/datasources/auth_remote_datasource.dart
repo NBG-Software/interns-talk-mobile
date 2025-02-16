@@ -23,13 +23,10 @@ class AuthRemoteDatasource {
       );
       String token = response.data['data']['token'];
       return Result.success(token);
-    }
-
-    on DioException catch(e){
+    } on DioException catch (e) {
       final errorMessage = handleDioError(e);
       return Result.error(errorMessage);
-    }
-    catch (e) {
+    } catch (e) {
       return Result.error("Unexpected error occurred");
     }
   }
@@ -54,11 +51,10 @@ class AuthRemoteDatasource {
       } else {
         return Result.error("Token not found");
       }
-    }   on DioException catch(e){
+    } on DioException catch (e) {
       final errorMessage = handleDioError(e);
       return Result.error(errorMessage);
-    }
-    catch (e) {
+    } catch (e) {
       return Result.error("Unexpected error occurred");
     }
   }
@@ -81,18 +77,35 @@ class AuthRemoteDatasource {
       } else {
         return Result.error("Failed to fetch user data");
       }
-    }
-    on DioException catch(e){
+    } on DioException catch (e) {
       final errorMessage = handleDioError(e);
       return Result.error(errorMessage);
-    }
-    catch (e) {
+    } catch (e) {
       return Result.error("Unexpected error occurred");
     }
   }
+
+  Future<Result<String>> sendResetEmail({required String email}) async {
+    try {
+      final response = await dio.post('/password/forgot', data: {
+        'email': email,
+      });
+      if (response.data != null) {
+        final message = response.data['message'];
+        return Result.success(message);
+      } else {
+        return Result.error('Fail to send reset email');
+      }
+    } on DioException catch (e) {
+      final errorMessage = handleDioError(e);
+      return Result.error(errorMessage);
+    } catch (e) {
+      return Result.error("Unexpected error occurred");
+    }
+  }
+
   String handleDioError(DioException e) {
     if (e.response != null) {
-
       final message = e.response?.data?['message'] ?? "Something went wrong!";
       return message;
     }
