@@ -7,8 +7,14 @@ import 'package:interns_talk_mobile/data/datasources/auth_remote_datasource.dart
 import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
 import 'package:interns_talk_mobile/data/service/dio_client.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
+import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
+import 'package:interns_talk_mobile/ui/pages/chat_room_page.dart';
+import 'package:interns_talk_mobile/ui/pages/profile_page.dart';
 import 'package:interns_talk_mobile/ui/pages/splash_screen.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
+
+import 'data/datasources/user_remote_datasource.dart';
+import 'data/repository/user_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,14 +26,20 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => AuthBloc(AuthRepository(
-                  localDS: AuthLocalDatasource(),
-                  remoteDS: AuthRemoteDatasource(dioClient),
-                ))),
-        // BlocProvider(
-        //     create: (context) => UserBloc(UserRepository(
-        //           userRemoteDatasource: UserRemoteDatasource(dio),
-        //         ))),
+          create: (context) => AuthBloc(
+            AuthRepository(
+              localDS: AuthLocalDatasource(),
+              remoteDS: AuthRemoteDatasource(dioClient),
+            ),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ProfileBloc(
+            UserRepository(
+              UserRemoteDatasource(dioClient),
+            ),
+          ),
+        ),
       ],
       child: MyApp(),
     ),

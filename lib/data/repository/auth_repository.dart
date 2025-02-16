@@ -46,9 +46,7 @@ class AuthRepository {
     );
   }
 
-  Future<Result<User>> getUserInfo() async {
-    return await remoteDS.getUserInfo();
-  }
+
 
   Future<void> logOut() async {
     await remoteDS.logOut();

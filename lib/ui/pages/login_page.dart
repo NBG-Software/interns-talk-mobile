@@ -153,7 +153,6 @@ class _BodyViewState extends State<_BodyView> {
                         validator: Validators.passwordValidator,
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-
                         iconColor: kIconColorGrey,
                         suffixPadding: EdgeInsets.only(right: 12),
                         autoValidateMode: AutovalidateMode.onUserInteraction,
@@ -168,13 +167,12 @@ class _BodyViewState extends State<_BodyView> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton(
-                          onPressed: (){
-                            Navigator.push(context,
-                            MaterialPageRoute(builder: (context) =>
-                              const ForgotPasswordPage()
-
-                            )
-                            );
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgotPasswordPage()));
                           },
                           child: Text(
                             kForgotPasswordText,

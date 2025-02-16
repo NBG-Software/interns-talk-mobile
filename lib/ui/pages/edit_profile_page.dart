@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/data/model/user_model.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
+import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/error_screen.dart';
 
 import '../../common/custom_text_form_field.dart';
@@ -22,7 +23,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    context.read<AuthBloc>().add(AuthGetUserInfoEvent());
+    context.read<ProfileBloc>().add(GetUserInfoEvent());
   }
 
   @override
@@ -35,65 +36,80 @@ class _EditProfilePageState extends State<EditProfilePage> {
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
-      body: _BodyView(),
+      body: BlocConsumer<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+          else if(state is ProfileUpdated) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Profile updated')),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is ProfileLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is ProfileLoaded) {
+            return _BodyView(user: state.user);
+          } else if (state is ProfileUpdated) {
+            return _BodyView(user: state.updatedUser);
+          } else if (state is ProfileError) {
+            return ErrorScreen(
+              title: 'Connection error',
+              imagePath: kSorryImage,
+              errorText: state.message,
+              buttonText: 'Ok',
+            );
+          }
+          return ErrorScreen(
+            title: 'Something went wrong',
+            imagePath: kSorryImage,
+            errorText: '',
+            buttonText: 'Ok',
+          );
+        },
+      )
+
     );
   }
 }
 
 class _BodyView extends StatelessWidget {
-  const _BodyView();
+  final User user;
+  const _BodyView({required this.user});
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
-        if (state is AuthLoading) {
-          return Center(child: CircularProgressIndicator());
-        } else if (state is AuthUserLoaded) {
-          return SingleChildScrollView(
-            child: Container(
-              width: screenWidth,
-              height: screenHeight,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TitleContent(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ProfileForm(),
-                      ],
-                    ),
-                    Spacer(),
-                    ConfirmButton(),
-                    SizedBox(height: 64)
-                  ],
-                ),
+    return SingleChildScrollView(
+      child: Container(
+        width: screenWidth,
+        height: screenHeight,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TitleContent(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ProfileForm(
+                    user: user,
+                  ),
+                ],
               ),
-            ),
-          );
-        } else if (state is AuthError) {
-          return ErrorScreen(
-            title: 'Connection error',
-            imagePath: kSorryImage,
-            errorText: state.message,
-            buttonText: 'Ok',
-          );
-        }
-        return ErrorScreen(
-          title: 'Connection error',
-          imagePath: kSorryImage,
-          errorText: 'Something went wrong',
-          buttonText: 'Ok',
-        );
-      },
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -130,7 +146,7 @@ class ProfileForm extends StatelessWidget {
         TextEditingController(text: user?.firstName ?? kFirstNameHint);
     final lastNameController =
         TextEditingController(text: user?.lastName ?? kLastNameHint);
-
+    final screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Row(
@@ -196,30 +212,29 @@ class ProfileForm extends StatelessWidget {
           fillColor: kTextFieldContainer,
           hintTextColor: kHintTextColor,
         ),
-      ],
-    );
-  }
-}
-
-class ConfirmButton extends StatelessWidget {
-  const ConfirmButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 64),
-      child: FilledButton(
-        style: FilledButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          minimumSize: Size(screenWidth / 1.2, 52),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+        SizedBox(
+          height: 60,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 64),
+          child: FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              minimumSize: Size(screenWidth / 1.2, 52),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            onPressed: () {
+              context.read<ProfileBloc>().add(EditProfileEvent(
+                    firstName: firstNameController.text,
+                    lastName: lastNameController.text,
+                  ));
+            },
+            child: Text('Confirm'),
           ),
         ),
-        onPressed: () {},
-        child: Text('Confirm'),
-      ),
+      ],
     );
   }
 }

@@ -9,7 +9,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLoginEvent>(_onLogin);
     on<AuthSignUpEvent>(_onSignUp);
     on<AuthLogoutEvent>(_onLogout);
-    on<AuthGetUserInfoEvent>(_onGetUserInfo);
     on<AuthForgotPasswordEvent>(_onForgotPassword);
   }
 
@@ -28,17 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onGetUserInfo(
-      AuthGetUserInfoEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    final result = await authRepository.getUserInfo();
 
-    if (result.isSuccess) {
-      emit(AuthUserLoaded(result.data!));
-    } else {
-      emit(AuthError(result.error ?? "Failed to load user info"));
-    }
-  }
 
   Future<void> _onLogin(AuthLoginEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
@@ -106,9 +95,6 @@ class AuthSignUpEvent extends AuthEvent {
       required this.password,
       required this.confirmPassword});
 }
-
-class AuthGetUserInfoEvent extends AuthEvent {}
-
 class AuthLogoutEvent extends AuthEvent {}
 
 abstract class AuthState {}
@@ -120,11 +106,6 @@ class AuthLoading extends AuthState {}
 class AuthAuthenticated extends AuthState {
   final String message;
   AuthAuthenticated(this.message);
-}
-
-class AuthUserLoaded extends AuthState {
-  final User user;
-  AuthUserLoaded(this.user);
 }
 
 class AuthError extends AuthState {
