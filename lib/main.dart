@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,8 +7,6 @@ import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
 import 'package:interns_talk_mobile/data/service/dio_client.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
-import 'package:interns_talk_mobile/ui/pages/chat_room_page.dart';
-import 'package:interns_talk_mobile/ui/pages/profile_page.dart';
 import 'package:interns_talk_mobile/ui/pages/splash_screen.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 
