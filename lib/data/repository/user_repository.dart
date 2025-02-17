@@ -1,4 +1,5 @@
 import 'package:interns_talk_mobile/data/datasources/user_remote_datasource.dart';
+import 'package:interns_talk_mobile/data/model/mentor_model.dart';
 
 import '../../common/result.dart';
 import '../model/user_model.dart';
@@ -6,7 +7,7 @@ import '../model/user_model.dart';
 class UserRepository {
   final UserRemoteDatasource remoteDatasource;
 
-  UserRepository(this.remoteDatasource);
+  UserRepository({required this.remoteDatasource});
 
   Future<Result<User>> getUserInfo() async {
     return await remoteDatasource.getUserInfo();
@@ -24,5 +25,9 @@ class UserRepository {
 
   Future<Result<String>> uploadProfilePicture(String imagePath) async {
     return await remoteDatasource.uploadProfilePicture(imagePath);
+  }
+
+  Future<Result<List<Mentor>>> getMentorList() async {
+    return await remoteDatasource.getMentorList();
   }
 }

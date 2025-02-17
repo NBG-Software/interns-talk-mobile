@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:interns_talk_mobile/data/model/mentor_model.dart';
 
 import '../../common/handler.dart';
 import '../../common/result.dart';
@@ -68,8 +69,9 @@ class UserRemoteDatasource {
       FormData formData = FormData.fromMap({
         'profile_picture': await MultipartFile.fromFile(imagePath),
       });
-      final response = await dio.post('/user/upload-profile-picture', data: formData);
-      if (response.data!= null) {
+      final response =
+          await dio.post('/user/upload-profile-picture', data: formData);
+      if (response.data != null) {
         return Result.success("Profile picture updated successfully");
       } else {
         return Result.error("Failed to upload profile picture");
@@ -82,4 +84,21 @@ class UserRemoteDatasource {
     }
   }
 
+  Future<Result<List<Mentor>>> getMentorList() async {
+    try {
+      final response = await dio.get('/mentor');
+      if (response.data != null) {
+        return Result.success((response.data['data'] as List)
+            .map((json) => Mentor.fromJson(json))
+            .toList());
+      } else {
+        return Result.error('Data not found');
+      }
+    } on DioException catch (e) {
+      final errorMessage = Handler.handleDioError(e);
+      return Result.error(errorMessage);
+    } catch (e) {
+      return Result.error("Unexpected error occurred");
+    }
+  }
 }
