@@ -20,6 +20,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+      ),
       body: BlocConsumer<AuthBloc, AuthState>(builder: (context, state) {
         if (state is AuthLoading) {
           return Center(
@@ -59,16 +62,15 @@ class _BodyViewState extends State<_BodyView> {
 
   void _summitForm() {
     context.read<AuthBloc>().add(AuthForgotPasswordEvent(
-      email: _emailController.text,
-    ));
+          email: _emailController.text,
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-           horizontal: kMarginLarge),
+        padding: const EdgeInsets.symmetric(horizontal: kMarginLarge),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -104,7 +106,7 @@ class _BodyViewState extends State<_BodyView> {
                   backgroundColor: WidgetStatePropertyAll(
                       Theme.of(context).colorScheme.primary),
                   minimumSize:
-                  WidgetStatePropertyAll(Size(double.infinity, 52)),
+                      WidgetStatePropertyAll(Size(double.infinity, 52)),
                   shape: WidgetStatePropertyAll(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
