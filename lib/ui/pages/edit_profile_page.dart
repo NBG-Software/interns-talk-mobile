@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/data/model/user_model.dart';
-import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/error_screen.dart';
 
@@ -29,51 +28,48 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        title: Text(
-          'Edit profile',
-          style: Theme.of(context).textTheme.titleMedium,
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          title: Text(
+            'Edit profile',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
-      ),
-      body: BlocConsumer<ProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
-          }
-          else if(state is ProfileUpdated) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Profile updated')),
-            );
-          }
-        },
-        builder: (context, state) {
-          if (state is ProfileLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is ProfileLoaded) {
-            return _BodyView(user: state.user);
-          } else if (state is ProfileUpdated) {
-            return _BodyView(user: state.updatedUser);
-          } else if (state is ProfileError) {
+        body: BlocConsumer<ProfileBloc, ProfileState>(
+          listener: (context, state) {
+            if (state is ProfileError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            } else if (state is ProfileUpdated) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Profile updated')),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is ProfileLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is ProfileLoaded) {
+              return _BodyView(user: state.user);
+            } else if (state is ProfileUpdated) {
+              return _BodyView(user: state.updatedUser);
+            } else if (state is ProfileError) {
+              return ErrorScreen(
+                title: 'Connection error',
+                imagePath: kSorryImage,
+                errorText: state.message,
+                buttonText: 'Ok',
+              );
+            }
             return ErrorScreen(
-              title: 'Connection error',
+              title: 'Something went wrong',
               imagePath: kSorryImage,
-              errorText: state.message,
+              errorText: '',
               buttonText: 'Ok',
             );
-          }
-          return ErrorScreen(
-            title: 'Something went wrong',
-            imagePath: kSorryImage,
-            errorText: '',
-            buttonText: 'Ok',
-          );
-        },
-      )
-
-    );
+          },
+        ));
   }
 }
 

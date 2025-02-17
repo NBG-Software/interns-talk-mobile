@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:interns_talk_mobile/common/handler.dart';
 import 'package:interns_talk_mobile/common/result.dart';
-import 'package:interns_talk_mobile/data/model/user_model.dart';
 import 'package:interns_talk_mobile/data/service/dio_client.dart';
 
 class AuthRemoteDatasource {
@@ -68,8 +67,6 @@ class AuthRemoteDatasource {
     }
   }
 
-
-
   Future<Result<String>> sendResetEmail({required String email}) async {
     try {
       final response = await dio.post('/password/forgot', data: {
@@ -88,6 +85,4 @@ class AuthRemoteDatasource {
       return Result.error("Unexpected error occurred");
     }
   }
-
-
 }

@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:interns_talk_mobile/data/model/user_model.dart';
 import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -13,12 +12,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onForgotPassword(
-      AuthForgotPasswordEvent event, Emitter<AuthState> emit
-      ) async{
+      AuthForgotPasswordEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    final result = await authRepository.sendResetEmail(
-      email: event.email
-    );
+    final result = await authRepository.sendResetEmail(email: event.email);
 
     if (result.isSuccess) {
       emit(AuthAuthenticated(result.data!));
@@ -26,8 +22,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthError(result.error ?? "Failed send email"));
     }
   }
-
-
 
   Future<void> _onLogin(AuthLoginEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
@@ -68,7 +62,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
 abstract class AuthEvent {}
 
-class AuthForgotPasswordEvent extends AuthEvent{
+class AuthForgotPasswordEvent extends AuthEvent {
   final String email;
 
   AuthForgotPasswordEvent({required this.email});
@@ -95,6 +89,7 @@ class AuthSignUpEvent extends AuthEvent {
       required this.password,
       required this.confirmPassword});
 }
+
 class AuthLogoutEvent extends AuthEvent {}
 
 abstract class AuthState {}
