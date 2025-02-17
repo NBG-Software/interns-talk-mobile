@@ -140,7 +140,7 @@ class _ConversationPageState extends State<ConversationPage> {
           defaultSendButtonColor: kPrimaryColor,
           textFieldBackgroundColor: kAppWhite,
           sendButtonIcon: Icon(CupertinoIcons.paperplane_fill),
-          closeIconColor: kAppWhite,
+          closeIconColor: kPrimaryColor,
           textFieldConfig: TextFieldConfiguration(
             padding: EdgeInsets.symmetric(horizontal: 20),
             hintText: 'Write your message',
