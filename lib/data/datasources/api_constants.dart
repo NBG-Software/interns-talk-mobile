@@ -1,1 +1,1 @@
-const kBaseUrl = 'http://47.129.56.224/api/v1';
+const kBaseUrl = 'https://intern-talks.nbgsoftware.com/api/v1';

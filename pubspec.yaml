@@ -39,6 +39,7 @@ dependencies:
   intl: ^0.20.2
   package_info_plus: ^8.2.1
   flutter_bloc: ^9.0.0
+  chatview: ^2.4.0
 
 dev_dependencies:
   flutter_test:

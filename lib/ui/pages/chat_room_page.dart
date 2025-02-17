@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:interns_talk_mobile/ui/pages/conversation_page.dart';
 import 'package:interns_talk_mobile/ui/pages/profile_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
@@ -39,8 +40,16 @@ class ChatRoomPage extends StatelessWidget {
   }
 }
 
-class ChatRoomBodyView extends StatelessWidget {
+class ChatRoomBodyView extends StatefulWidget {
   const ChatRoomBodyView({super.key});
+
+  @override
+  State<ChatRoomBodyView> createState() => _ChatRoomBodyViewState();
+}
+
+class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
+  int chatCount = 1;
+  int mentorCount = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +63,7 @@ class ChatRoomBodyView extends StatelessWidget {
           ListView.builder(
               padding:
                   EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 30),
-              itemCount: 1,
+              itemCount: chatCount,
               physics: ClampingScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
@@ -90,7 +99,12 @@ class ChatRoomBodyView extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {}, icon: Icon(CupertinoIcons.forward))
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const ConversationPage()));
+                          },
+                          icon: Icon(CupertinoIcons.forward))
                     ],
                   ),
                 );
@@ -102,7 +116,7 @@ class ChatRoomBodyView extends StatelessWidget {
           ListView.builder(
               padding:
                   EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 8),
-              itemCount: 10,
+              itemCount: mentorCount,
               physics: ClampingScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
@@ -138,7 +152,15 @@ class ChatRoomBodyView extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              chatCount = chatCount + 1;
+                              mentorCount = mentorCount - 1;
+                            });
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const ConversationPage()));
+                          },
                           icon: Icon(CupertinoIcons.add_circled))
                     ],
                   ),
