@@ -10,4 +10,8 @@ class ChatRepository {
   Future<Result<List<Chat>>> getChatList() async {
     return await chatRemoteDatasource.getChatList();
   }
+
+  Future<Result<int>> createChat({required int mentorId}) async {
+    return await chatRemoteDatasource.createChat(mentorId: mentorId);
+  }
 }

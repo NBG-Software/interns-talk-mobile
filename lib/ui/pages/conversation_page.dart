@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 
 class ConversationPage extends StatefulWidget {
-  const ConversationPage({super.key});
+  final int chatId;
+
+  const ConversationPage({super.key, required this.chatId});
 
   @override
   State<ConversationPage> createState() => _ConversationPageState();

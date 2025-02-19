@@ -13,33 +13,19 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
     required this.userRepository,
   }) : super(ChatRoomInitial()) {
     on<GetDataEvent>(_onGetData);
-    // on<GetMentorListEvent>(_onGetMentorList);
-    // on<GetChatListEvent>(_onGetChatList);
+    on<CreateChatEvent>(_onCreateChat);
   }
 
-  // Future<void> _onGetMentorList(
-  //     GetMentorListEvent event, Emitter<ChatRoomState> emit) async {
-  //   emit(ChatRoomLoading());
-  //   final result = await userRepository.getMentorList();
-
-  //   if (result.isSuccess) {
-  //     emit(MentorListLoaded(result.data!));
-  //   } else {
-  //     emit(ChatRoomError(result.error ?? "Failed to load mentor list"));
-  //   }
-  // }
-
-  // Future<void> _onGetChatList(
-  //     GetChatListEvent event, Emitter<ChatRoomState> emit) async {
-  //   emit(ChatRoomLoading());
-  //   final result = await chatRepository.getChatList();
-
-  //   if (result.isSuccess) {
-  //     emit(ChatListLoaded(result.data!));
-  //   } else {
-  //     emit(ChatRoomError(result.error ?? "Failed to load chat messages"));
-  //   }
-  // }
+  Future<void> _onCreateChat(
+      CreateChatEvent event, Emitter<ChatRoomState> emit) async {
+    emit(ChatRoomLoading());
+    final chat = await chatRepository.createChat(mentorId: event.mentorId);
+    if (chat.isSuccess) {
+      emit(ChatCreated(chat.data!));
+    }else{
+      emit(ChatCreatingError(chat.error ?? 'Fail to start chat'));
+    }
+  }
 
   Future<void> _onGetData(
       GetDataEvent event, Emitter<ChatRoomState> emit) async {
@@ -49,20 +35,20 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
 
     if (chats.isSuccess && mentors.isSuccess) {
       emit(DataLoaded(chats: chats.data ?? [], mentors: mentors.data ?? []));
-    }
-    // else if (chats.isSuccess && mentors.isError) {
-    //   emit(DataLoaded(chats: chats.data!, mentors: []));
-    // } else if (chats.isError && mentors.isSuccess) {
-    //   emit(DataLoaded(chats: [], mentors: mentors.data!));
-    // }
-    else {
-      emit(ChatRoomError("${chats.error}"));
+    } else {
+      emit(ChatRoomError(chats.error ?? 'Fail to load chat list'));
     }
   }
 }
 
 // Events
 abstract class ChatRoomEvent {}
+
+class CreateChatEvent extends ChatRoomEvent {
+  final int mentorId;
+
+  CreateChatEvent({required this.mentorId});
+}
 
 class GetMentorListEvent extends ChatRoomEvent {}
 
@@ -77,9 +63,16 @@ class ChatRoomInitial extends ChatRoomState {}
 
 class ChatRoomLoading extends ChatRoomState {}
 
+class ChatCreated extends ChatRoomState {
+  final int chatId;
+
+  ChatCreated(this.chatId);
+}
+
 class DataLoaded extends ChatRoomState {
   final List<Mentor> mentors;
   final List<Chat> chats;
+
   DataLoaded({required this.chats, required this.mentors});
 }
 
@@ -95,5 +88,11 @@ class DataLoaded extends ChatRoomState {
 
 class ChatRoomError extends ChatRoomState {
   final String message;
+
   ChatRoomError(this.message);
+}
+class ChatCreatingError extends ChatRoomState {
+  final String message;
+
+  ChatCreatingError(this.message);
 }

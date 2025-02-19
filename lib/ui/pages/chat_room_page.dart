@@ -34,8 +34,10 @@ class ChatRoomPage extends StatelessWidget {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const ProfilePage()));
               },
-              icon: Icon(CupertinoIcons.profile_circled,
-              size: 30,),
+              icon: Icon(
+                CupertinoIcons.profile_circled,
+                size: 30,
+              ),
             ),
           ),
         ],
@@ -45,6 +47,7 @@ class ChatRoomPage extends StatelessWidget {
   }
 }
 
+
 class ChatRoomBodyView extends StatefulWidget {
   const ChatRoomBodyView({super.key});
 
@@ -53,10 +56,15 @@ class ChatRoomBodyView extends StatefulWidget {
 }
 
 class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
-
-  Future<void> _onRefresh()async{
+  Future<void> _onRefresh() async {
     setState(() {
       context.read<ChatRoomBloc>().add(GetDataEvent());
+    });
+  }
+
+  Future<void> _onChatCreate({required int mentorId}) async {
+    setState(() {
+      context.read<ChatRoomBloc>().add(CreateChatEvent(mentorId: mentorId));
     });
   }
 
@@ -70,12 +78,25 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _onRefresh,
-      child: BlocBuilder<ChatRoomBloc, ChatRoomState>(
+      child: BlocConsumer<ChatRoomBloc, ChatRoomState>(
+        listener: (context, state)  async {
+          if (state is ChatCreated) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ConversationPage(chatId: state.chatId),
+              ),
+            );
+            context.read<ChatRoomBloc>().add(GetDataEvent());
+          }
+        },
         builder: (context, state) {
           if (state is ChatRoomLoading) {
             return _buildLoading("Loading chat list");
           } else if (state is ChatRoomError) {
-            return _buildError(state.message);
+            return _buildError(message: state.message,buttonText: 'Retry',onBtnClick: _onRefresh);
+          } else if (state is ChatCreatingError) {
+            return _buildError(message: state.message,buttonText: 'Ok',onBtnClick: _onRefresh);
           } else if (state is DataLoaded) {
             return _buildChatAndMentorList(state);
           } else {
@@ -102,24 +123,28 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
     );
   }
 
-  Widget _buildError(String message) {
+  Widget _buildError({
+    required String message,
+    required String buttonText,
+    required VoidCallback onBtnClick,
+  }) {
     return ErrorScreen(
       title: message,
       imagePath: kSorryImage,
       errorText: message,
-      buttonText: 'Retry',
-      onBtnClick: _onRefresh,
+      buttonText: buttonText,
+      onBtnClick: onBtnClick,
     );
   }
 
   Widget _buildChatAndMentorList(DataLoaded state) {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 20),
-      physics: AlwaysScrollableScrollPhysics(), 
+      physics: AlwaysScrollableScrollPhysics(),
       children: [
         if (state.chats.isNotEmpty) _buildChatList(state.chats),
         if (state.chats.isNotEmpty) Divider(),
-        if(state.mentors.isNotEmpty) _buildMentorList(state.mentors)
+        if (state.mentors.isNotEmpty) _buildMentorList(state.mentors)
       ],
     );
   }
@@ -163,12 +188,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                     ),
                   ),
                 ),
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const ConversationPage()));
-                    },
-                    icon: Icon(CupertinoIcons.forward))
+                IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.forward))
               ],
             ),
           );
@@ -181,8 +201,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ListView.builder(
-              padding:
-                  EdgeInsetsDirectional.only( bottom: 20),
+              padding: EdgeInsetsDirectional.only(bottom: 20),
               itemCount: mentors.length,
               physics: ClampingScrollPhysics(),
               shrinkWrap: true,
@@ -199,16 +218,18 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                             color: kUserProfileBackground,
                             borderRadius: BorderRadius.circular(8)),
                         child: Image.network(
-                         mentor.image!,
+                          mentor.image!,
                           loadingBuilder: (context, child, loadingProgress) {
                             if (loadingProgress == null) return child;
-                            return Center(child: CircularProgressIndicator()); // Show loader while loading
+                            return Center(
+                                child:
+                                    CircularProgressIndicator()); // Show loader while loading
                           },
                           errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(kUserPlaceHolderImage); // Show error icon if loading fails
+                            return Image.asset(
+                                kUserPlaceHolderImage); // Show error icon if loading fails
                           },
-                        )
-                        ,
+                        ),
                       ),
                       Expanded(
                         child: Padding(
@@ -231,10 +252,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                       ),
                       IconButton(
                           onPressed: () {
-                            setState(() {});
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    const ConversationPage()));
+                            _onChatCreate(mentorId: mentor.id!);
                           },
                           icon: Icon(CupertinoIcons.add_circled))
                     ],
