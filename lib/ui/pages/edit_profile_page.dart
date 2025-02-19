@@ -88,13 +88,12 @@ class _BodyView extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return SingleChildScrollView(
-      child: Container(
-        width: screenWidth,
-        height: screenHeight,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30),
+    return ListView(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30,vertical: 30),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +110,7 @@ class _BodyView extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -150,6 +149,7 @@ class ProfileForm extends StatelessWidget {
         TextEditingController(text: user?.lastName ?? kLastNameHint);
     final screenWidth = MediaQuery.of(context).size.width;
     return Column(
+
       children: [
         Row(
           children: [
@@ -215,10 +215,10 @@ class ProfileForm extends StatelessWidget {
           hintTextColor: kHintTextColor,
         ),
         SizedBox(
-          height: 60,
+          height: 100,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 64),
+          padding: const EdgeInsets.symmetric(vertical: 100),
           child: FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primary,

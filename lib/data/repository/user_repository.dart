@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/datasources/user_remote_datasource.dart';
 import 'package:interns_talk_mobile/data/model/mentor_model.dart';
@@ -25,8 +27,8 @@ class UserRepository {
     );
   }
 
-  Future<Result<String>> uploadProfilePicture(String imagePath) async {
-    return await remoteDatasource.uploadProfilePicture(imagePath);
+  Future<Result<String>> uploadProfilePicture(File profileImage) async {
+    return await remoteDatasource.uploadProfilePicture(profileImage);
   }
 
   Future<Result<List<Mentor>>> getMentorList() async {

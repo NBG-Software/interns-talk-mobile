@@ -1,14 +1,35 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
+import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/edit_profile_page.dart';
 import 'package:interns_talk_mobile/ui/pages/login_page.dart';
 import 'package:interns_talk_mobile/ui/pages/setting_page.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfileBloc>().add(GetUserInfoEvent());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<ProfileBloc>().add(GetUserInfoEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,37 +90,118 @@ class _BodyView extends StatelessWidget {
   }
 }
 
-class ProfileDataView extends StatelessWidget {
+class ProfileDataView extends StatefulWidget {
   const ProfileDataView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.asset(
-            kUserPlaceHolderImage,
-            scale: 1.0,
-            width: 148,
-          ),
-        ),
-        SizedBox(
-          height: 8,
-        ),
-        InkWell(
-          child: Row(
-            children: [
-              Image.asset(kUploadIcon),
-              SizedBox(
-                width: 8,
+  State<ProfileDataView> createState() => _ProfileDataViewState();
+}
+
+class _ProfileDataViewState extends State<ProfileDataView> {
+  File? _imageFile;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      File selectedImage = File(pickedFile.path);
+
+      // Show confirmation dialog
+      bool? confirmUpload = await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Confirm Upload'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.file(selectedImage, width: 180, height: 180, fit: BoxFit.cover),
+                SizedBox(height: 12),
+                Text("Do you want to upload this image?")
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('Cancel'),
               ),
-              Text('Upload'),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text('Upload', style: TextStyle(color: Colors.blue)),
+              ),
             ],
-          ),
-        ),
-      ],
+          );
+        },
+      );
+
+      // If user confirms, update state and upload
+      if (confirmUpload == true) {
+        setState(() {
+          _imageFile = selectedImage;
+        });
+
+        context.read<ProfileBloc>().add(UploadProfilePictureEvent(_imageFile!));
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Profile picture updated!")),
+        );
+      }
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        String? imageUrl;
+        if (state is ProfileLoaded) {
+          imageUrl = state.user.profilePicture;
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: _imageFile != null
+                  ? Image.file(
+                      _imageFile!,
+                      width: 148,
+                      height: 148,
+                      fit: BoxFit.cover,
+                    )
+                  : imageUrl != null
+                      ? Image.network(
+                          imageUrl,
+                          width: 148,
+                          height: 148,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(kUserPlaceHolderImage,
+                                width: 148, height: 148);
+                          },
+                        )
+                      : Image.asset(
+                          kUserPlaceHolderImage,
+                          width: 148,
+                          height: 148,
+                        ),
+            ),
+            SizedBox(height: 8),
+            InkWell(
+              onTap: _pickImage,
+              child: Row(
+                children: [
+                  Image.asset(kUploadIcon),
+                  SizedBox(width: 8),
+                  Text('Upload'),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -112,18 +214,20 @@ class ProfileMenuItems extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
+          onTap: () async{
+            await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const EditProfilePage()));
+            context.read<ProfileBloc>().add(GetUserInfoEvent());
           },
           leading: Icon(CupertinoIcons.person_circle),
           title: Text('Edit Profile'),
           trailing: Icon(CupertinoIcons.forward),
         ),
         ListTile(
-          onTap: () {
-            Navigator.of(context).push(
+          onTap: () async {
+           await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const SettingPage()));
+            context.read<ProfileBloc>().add(GetUserInfoEvent());
           },
           leading: Icon(Icons.settings_outlined),
           title: Text('Setting'),

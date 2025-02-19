@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/model/user_model.dart';
@@ -43,7 +45,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Future<void> _onUploadProfilePicture(
       UploadProfilePictureEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoading());
-    final result = await userRepository.uploadProfilePicture(event.imagePath);
+    final result = await userRepository.uploadProfilePicture(event.profileImage);
 
     if (result.isSuccess) {
       emit(ProfilePictureUpdated("Profile picture updated successfully"));
@@ -69,8 +71,8 @@ class EditProfileEvent extends ProfileEvent {
 }
 
 class UploadProfilePictureEvent extends ProfileEvent {
-  final String imagePath;
-  UploadProfilePictureEvent(this.imagePath);
+  final File profileImage;
+  UploadProfilePictureEvent(this.profileImage);
 }
 
 // States

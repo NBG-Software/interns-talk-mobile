@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/model/mentor_model.dart';
@@ -58,22 +60,17 @@ class UserRemoteDatasource {
     } catch (e) {
       return Result.error("Unexpected error occurred");
     }
-    // return Result.success(User(
-    //     firstName:firstName,
-    //     lastName: lastName,
-    //     email: 'petapaka@gmail.com'
-    // ));
   }
 
-  Future<Result<String>> uploadProfilePicture(String imagePath) async {
+  Future<Result<String>> uploadProfilePicture(File profileImage) async {
     try {
       FormData formData = FormData.fromMap({
-        'profile_picture': await MultipartFile.fromFile(imagePath),
+        'profile_picture': await MultipartFile.fromFile(profileImage.path),
       });
       final response = await dioClient.dio
-          .post('/user/upload-profile-picture', data: formData);
+          .post('/user/profile', data: formData);
       if (response.data != null) {
-        return Result.success("Profile picture updated successfully");
+        return Result.success(response.data['message']);
       } else {
         return Result.error("Failed to upload profile picture");
       }
