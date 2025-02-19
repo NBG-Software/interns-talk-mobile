@@ -28,6 +28,7 @@ import 'package:interns_talk_mobile/data/repository/chat_repository.dart'
 import 'package:interns_talk_mobile/data/repository/user_repository.dart'
     as _i58;
 import 'package:interns_talk_mobile/data/service/dio_client.dart' as _i158;
+import 'package:interns_talk_mobile/data/service/socket_service.dart' as _i28;
 import 'package:interns_talk_mobile/di/register_module.dart' as _i704;
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart' as _i607;
 import 'package:interns_talk_mobile/ui/bloc/chat_room_bloc.dart' as _i996;
@@ -46,6 +47,7 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final registerModule = _$RegisterModule();
+    gh.singleton<_i28.SocketService>(() => _i28.SocketService());
     gh.lazySingleton<_i361.Dio>(() => registerModule.provideDio());
     gh.lazySingleton<_i558.FlutterSecureStorage>(
         () => registerModule.provideSecureStorage());
