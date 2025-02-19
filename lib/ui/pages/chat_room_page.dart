@@ -91,6 +91,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 20),
