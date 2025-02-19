@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:interns_talk_mobile/ui/pages/terms_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingPage extends StatelessWidget {
@@ -61,6 +62,11 @@ class _BodyViewState extends State<_BodyView> {
             trailing: Icon(CupertinoIcons.forward),
           ),
           ListTile(
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+              const TermsPage()
+              ));
+            },
             leading: Icon(Icons.settings_outlined),
             title: Text('Terms and Conditions'),
             trailing: Icon(CupertinoIcons.forward),
