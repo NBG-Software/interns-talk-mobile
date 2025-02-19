@@ -154,7 +154,38 @@ class LogOutButton extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          context.read<AuthBloc>().add(AuthLogoutEvent());
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('Logging out'),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: [
+                        Text('Are you sure to log out?'),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(AuthLogoutEvent());
+                      },
+                      child: Text(
+                        'Log out',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error),
+                      ),
+                    ),
+                  ],
+                );
+              });
         },
         child: Text('Log Out'),
       ),
