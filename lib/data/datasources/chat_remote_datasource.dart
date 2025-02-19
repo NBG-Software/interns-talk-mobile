@@ -1,19 +1,20 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/common/result.dart';
 import 'package:interns_talk_mobile/data/model/chat_model.dart';
 import 'package:interns_talk_mobile/data/service/dio_client.dart';
 
 import '../../common/handler.dart';
 
+@lazySingleton
 class ChatRemoteDatasource {
   final DioClient dioClient;
-  final Dio dio = DioClient().dio;
 
   ChatRemoteDatasource(this.dioClient);
 
   Future<Result<List<Chat>>> getChatList() async {
     try {
-      final response = await dio.get('/chats/latest');
+      final response = await dioClient.dio.get('/chats/latest');
 
       if (response.data != null) {
         final List<dynamic> data = response.data['data'] as List<dynamic>;
@@ -34,7 +35,7 @@ class ChatRemoteDatasource {
 
  Future<Result<int>> createChat({required int mentorId}) async {
     try {
-      final response = await dio.post('/chats',
+      final response = await dioClient.dio.post('/chats',
           data: {'mentor_id': mentorId});
       if(response.data != null){
         final int chatId = response.data['data']['chat_id'];

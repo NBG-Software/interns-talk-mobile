@@ -32,9 +32,10 @@ class _LoginPageState extends State<LoginPage> {
         return _BodyView();
       }, listener: (context, state) {
         if (state is AuthAuthenticated) {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => ChatRoomPage()),
+            (route) => false,
           );
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),

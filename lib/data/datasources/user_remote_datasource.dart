@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/model/mentor_model.dart';
 
 import '../../common/handler.dart';
@@ -6,15 +7,15 @@ import '../../common/result.dart';
 import '../model/user_model.dart';
 import '../service/dio_client.dart';
 
+@lazySingleton
 class UserRemoteDatasource {
   final DioClient dioClient;
-  final Dio dio = DioClient().dio;
 
   UserRemoteDatasource(this.dioClient);
 
   Future<Result<User>> getUserInfo() async {
     try {
-      final response = await dio.get('/user');
+      final response = await dioClient.dio.get('/user');
       if (response.data != null) {
         final user = response.data['data'];
         final userModel = User.fromJson(user);
@@ -40,7 +41,7 @@ class UserRemoteDatasource {
     required String lastName,
   }) async {
     try {
-      final response = await dio.patch('/user', data: {
+      final response = await dioClient.dio.patch('/user', data: {
         'first_name': firstName,
         'last_name': lastName,
       });
@@ -69,8 +70,8 @@ class UserRemoteDatasource {
       FormData formData = FormData.fromMap({
         'profile_picture': await MultipartFile.fromFile(imagePath),
       });
-      final response =
-          await dio.post('/user/upload-profile-picture', data: formData);
+      final response = await dioClient.dio
+          .post('/user/upload-profile-picture', data: formData);
       if (response.data != null) {
         return Result.success("Profile picture updated successfully");
       } else {
@@ -86,7 +87,7 @@ class UserRemoteDatasource {
 
   Future<Result<List<Mentor>>> getMentorList() async {
     try {
-      final response = await dio.get('/mentor');
+      final response = await dioClient.dio.get('/mentor');
       if (response.data != null) {
         return Result.success((response.data['data'] as List)
             .map((json) => Mentor.fromJson(json))

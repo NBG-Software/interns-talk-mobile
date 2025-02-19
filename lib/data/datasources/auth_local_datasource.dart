@@ -1,11 +1,12 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/utils/string.dart';
 
+@lazySingleton
 class AuthLocalDatasource {
   final FlutterSecureStorage storage;
 
-  AuthLocalDatasource({FlutterSecureStorage? storage})
-      : storage = storage ?? const FlutterSecureStorage();
+  AuthLocalDatasource(this.storage);
 
   Future<void> saveToken({required String token}) async {
     await storage.write(key: kAuthTokenKey, value: token);

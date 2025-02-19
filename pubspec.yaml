@@ -40,6 +40,10 @@ dependencies:
   package_info_plus: ^8.2.1
   flutter_bloc: ^9.0.0
   chatview: ^2.4.0
+  get_it: ^8.0.3
+  injectable_generator: ^2.7.0
+  injectable: ^2.5.0
+  build_runner: ^2.4.15
 
 dev_dependencies:
   flutter_test:

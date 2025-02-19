@@ -7,9 +7,11 @@ import 'package:interns_talk_mobile/data/datasources/chat_remote_datasource.dart
 import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
 import 'package:interns_talk_mobile/data/repository/chat_repository.dart';
 import 'package:interns_talk_mobile/data/service/dio_client.dart';
+import 'package:interns_talk_mobile/di/injection.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/bloc/chat_room_bloc.dart';
 import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
+import 'package:interns_talk_mobile/ui/bloc/splash_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/splash_screen.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 
@@ -20,33 +22,15 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  final dioClient = DioClient();
+  await configureDependencies();
 
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => AuthBloc(
-            AuthRepository(
-              localDS: AuthLocalDatasource(),
-              remoteDS: AuthRemoteDatasource(dioClient),
-            ),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => ProfileBloc(
-            UserRepository(
-              remoteDatasource: UserRemoteDatasource(dioClient),
-            ),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => ChatRoomBloc(
-              chatRepository: ChatRepository(
-                  chatRemoteDatasource: ChatRemoteDatasource(dioClient)),
-              userRepository: UserRepository(
-                  remoteDatasource: UserRemoteDatasource(dioClient))),
-        )
+        BlocProvider(create: (context) => getIt<AuthBloc>()),
+        BlocProvider(create: (context) => getIt<ProfileBloc>()),
+        BlocProvider(create: (context) => getIt<ChatRoomBloc>()),
+        BlocProvider(create: (context) => getIt<SplashBloc>()),
       ],
       child: MyApp(),
     ),

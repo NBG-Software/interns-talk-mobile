@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/data/datasources/auth_local_datasource.dart';
+import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
 import 'package:interns_talk_mobile/ui/pages/chat_room_page.dart';
 import 'package:interns_talk_mobile/ui/pages/login_page.dart';
+
+import '../bloc/splash_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,25 +18,28 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _checkLoginStatus();
-  }
-
-  Future<void> _checkLoginStatus() async {
-    bool isLoggedIn = await AuthLocalDatasource().isLoggedIn();
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => isLoggedIn ? ChatRoomPage() : LoginPage(),
-      ),
-    );
+    context.read<SplashBloc>().add(CheckLoginStatus());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: CircularProgressIndicator(),
-    ));
+    return BlocListener<SplashBloc, SplashState>(
+      listener: (context, state) {
+        if (state is Authenticated) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ChatRoomPage()),
+          );
+        } else if (state is Unauthenticated) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+        }
+      },
+      child: Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+    );
   }
 }

@@ -1,9 +1,11 @@
+import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/datasources/user_remote_datasource.dart';
 import 'package:interns_talk_mobile/data/model/mentor_model.dart';
 
 import '../../common/result.dart';
 import '../model/user_model.dart';
 
+@lazySingleton
 class UserRepository {
   final UserRemoteDatasource remoteDatasource;
 

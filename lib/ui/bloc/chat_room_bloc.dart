@@ -1,9 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/model/chat_model.dart';
 import 'package:interns_talk_mobile/data/model/mentor_model.dart';
 import 'package:interns_talk_mobile/data/repository/chat_repository.dart';
 import 'package:interns_talk_mobile/data/repository/user_repository.dart';
 
+@lazySingleton
 class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
   final ChatRepository chatRepository;
   final UserRepository userRepository;

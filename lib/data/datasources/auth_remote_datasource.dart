@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/common/handler.dart';
 import 'package:interns_talk_mobile/common/result.dart';
 import 'package:interns_talk_mobile/data/service/dio_client.dart';
 
+@lazySingleton
 class AuthRemoteDatasource {
   final DioClient dioClient;
-  final Dio dio = DioClient().dio;
-
   AuthRemoteDatasource(this.dioClient);
 
   Future<Result<String>> logIn({
@@ -14,7 +14,7 @@ class AuthRemoteDatasource {
     required String password,
   }) async {
     try {
-      final Response response = await dio.post(
+      final Response response = await dioClient.dio.post(
         '/login',
         data: {
           'email': email,
@@ -38,7 +38,7 @@ class AuthRemoteDatasource {
       required String password,
       required String passwordConfirmation}) async {
     try {
-      final response = await dio.post('/register', data: {
+      final response = await dioClient.dio.post('/register', data: {
         'first_name': firstName,
         'last_name': lastName,
         'email': email,
@@ -61,7 +61,7 @@ class AuthRemoteDatasource {
 
   Future<void> logOut() async {
     try {
-      await dio.post('/logout');
+      await dioClient.dio.post('/logout');
     } catch (e) {
       print("Logout failed: $e");
     }
@@ -69,7 +69,7 @@ class AuthRemoteDatasource {
 
   Future<Result<String>> sendResetEmail({required String email}) async {
     try {
-      final response = await dio.post('/password/forgot', data: {
+      final response = await dioClient.dio.post('/password/forgot', data: {
         'email': email,
       });
       if (response.data != null) {

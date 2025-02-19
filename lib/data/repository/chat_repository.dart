@@ -1,7 +1,9 @@
+import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/common/result.dart';
 import 'package:interns_talk_mobile/data/datasources/chat_remote_datasource.dart';
 import 'package:interns_talk_mobile/data/model/chat_model.dart';
 
+@lazySingleton
 class ChatRepository {
   final ChatRemoteDatasource chatRemoteDatasource;
 

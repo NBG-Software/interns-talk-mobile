@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
 
+@lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
 

@@ -26,9 +26,10 @@ class RegisterPage extends StatelessWidget {
         return _BodyView();
       }, listener: (context, state) {
         if (state is AuthAuthenticated) {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => ChatRoomPage()),
+            (route) => false,
           );
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -163,7 +164,7 @@ class __BodyViewState extends State<_BodyView> {
                     ),
                     CustomTextFormField(
                       controller: _emailController,
-                      suffixIcon:Image.asset(kEmailIcon),
+                      suffixIcon: Image.asset(kEmailIcon),
                       keyboardType: TextInputType.emailAddress,
                       iconColor: kIconColorGrey,
                       autoValidateMode: AutovalidateMode.onUserInteraction,
@@ -209,7 +210,7 @@ class __BodyViewState extends State<_BodyView> {
                     CustomTextFormField(
                       controller: _confirmPasswordController,
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText:isObscured,
+                      obscureText: isObscured,
                       suffixIcon: IconButton(
                           onPressed: () {
                             setState(() {
@@ -270,10 +271,11 @@ class __BodyViewState extends State<_BodyView> {
                   ),
                   InkWell(
                       onTap: () {
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const LoginPage()),
-                            (route)=>false);
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const LoginPage()),
+                            (route) => false);
                       },
                       child: Text(
                         kLoginButtonText,

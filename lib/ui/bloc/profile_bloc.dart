@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/model/user_model.dart';
 import 'package:interns_talk_mobile/data/repository/user_repository.dart';
 
+@lazySingleton
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final UserRepository userRepository;
 

@@ -1,7 +1,9 @@
+import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/common/result.dart';
 import 'package:interns_talk_mobile/data/datasources/auth_local_datasource.dart';
 import 'package:interns_talk_mobile/data/datasources/auth_remote_datasource.dart';
 
+@lazySingleton
 class AuthRepository {
   final AuthLocalDatasource localDS;
   final AuthRemoteDatasource remoteDS;
