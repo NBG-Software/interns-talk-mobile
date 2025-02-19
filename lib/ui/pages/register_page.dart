@@ -227,7 +227,7 @@ class __BodyViewState extends State<_BodyView> {
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return kPasswordNotMatchErrorText;
+                          return kPasswordEmptyErrorText;
                         } else if (value.isNotEmpty &&
                             value != _strongPasswordController.text) {
                           return kPasswordNotMatchErrorText;

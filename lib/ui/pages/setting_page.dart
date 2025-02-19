@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:interns_talk_mobile/ui/pages/terms_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import 'change_password_page.dart';
+
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
 
@@ -57,15 +59,19 @@ class _BodyViewState extends State<_BodyView> {
             trailing: Text(appVersion),
           ),
           ListTile(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ChangePasswordPage(),
+              ));
+            },
             leading: Icon(CupertinoIcons.lock),
             title: Text('Change Password'),
             trailing: Icon(CupertinoIcons.forward),
           ),
           ListTile(
-            onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
-              const TermsPage()
-              ));
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const TermsPage()));
             },
             leading: Icon(Icons.settings_outlined),
             title: Text('Terms and Conditions'),

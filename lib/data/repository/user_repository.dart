@@ -17,6 +17,10 @@ class UserRepository {
     return await remoteDatasource.getUserInfo();
   }
 
+  Future<Result<String>> changePassword(String currentPassword, String newPassword) async{
+    return await remoteDatasource.changePassword(currentPassword,newPassword);
+  }
+
   Future<Result<User>> updateUserProfile({
     required String firstName,
     required String lastName,

@@ -67,8 +67,8 @@ class UserRemoteDatasource {
       FormData formData = FormData.fromMap({
         'profile_picture': await MultipartFile.fromFile(profileImage.path),
       });
-      final response = await dioClient.dio
-          .post('/user/profile', data: formData);
+      final response =
+          await dioClient.dio.post('/user/profile', data: formData);
       if (response.data != null) {
         return Result.success(response.data['message']);
       } else {
@@ -91,6 +91,29 @@ class UserRemoteDatasource {
             .toList());
       } else {
         return Result.error('Data not found');
+      }
+    } on DioException catch (e) {
+      final errorMessage = Handler.handleDioError(e);
+      return Result.error(errorMessage);
+    } catch (e) {
+      return Result.error("Unexpected error occurred");
+    }
+  }
+
+  Future<Result<String>> changePassword(
+      String currentPassword, String newPassword) async {
+    try {
+      final response = await dioClient.dio.post(
+        '/password/forgot',
+        data: {
+          "current_password": currentPassword,
+          "new_password": newPassword
+        },
+      );
+      if (response.data != null) {
+        return Result.success(response.data['message']);
+      } else {
+        return Result.error("Fail to change password");
       }
     } on DioException catch (e) {
       final errorMessage = Handler.handleDioError(e);
