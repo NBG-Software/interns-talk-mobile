@@ -48,13 +48,15 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
     final mentors = await userRepository.getMentorList();
 
     if (chats.isSuccess && mentors.isSuccess) {
-      emit(DataLoaded(chats: chats.data!, mentors: mentors.data!));
-    } else if (chats.isSuccess && mentors.isError) {
-      emit(DataLoaded(chats: chats.data!, mentors: []));
-    } else if (chats.isError && mentors.isSuccess) {
-      emit(DataLoaded(chats: [], mentors: mentors.data!));
-    } else {
-      emit(ChatRoomError("Failed to load chat list"));
+      emit(DataLoaded(chats: chats.data ?? [], mentors: mentors.data ?? []));
+    }
+    // else if (chats.isSuccess && mentors.isError) {
+    //   emit(DataLoaded(chats: chats.data!, mentors: []));
+    // } else if (chats.isError && mentors.isSuccess) {
+    //   emit(DataLoaded(chats: [], mentors: mentors.data!));
+    // }
+    else {
+      emit(ChatRoomError("${chats.error}"));
     }
   }
 }

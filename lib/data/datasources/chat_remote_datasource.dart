@@ -3,6 +3,8 @@ import 'package:interns_talk_mobile/common/result.dart';
 import 'package:interns_talk_mobile/data/model/chat_model.dart';
 import 'package:interns_talk_mobile/data/service/dio_client.dart';
 
+import '../../common/handler.dart';
+
 class ChatRemoteDatasource {
   final DioClient dioClient;
   final Dio dio = DioClient().dio;
@@ -14,15 +16,19 @@ class ChatRemoteDatasource {
       final response = await dio.get('/chats/latest');
 
       if (response.data != null) {
-        final data = response.data['data'];
-        List<Chat> chatList = data.map((e) => Chat.fromJson(e)).toList();
+        final List<dynamic> data = response.data['data'] as List<dynamic>;
+        List<Chat> chatList =
+            data.map((e) => Chat.fromJson(e as Map<String, dynamic>)).toList();
         return Result.success(chatList);
       } else {
         return Result.error(
             "Failed to fetch chat list: ${response.statusMessage}");
       }
+    } on DioException catch (e) {
+      final errorMessage = Handler.handleDioError(e);
+      return Result.error(errorMessage);
     } catch (e) {
-      return Result.error("Error fetching chat list: $e");
+      return Result.error("Unexpected error occurred");
     }
   }
 }

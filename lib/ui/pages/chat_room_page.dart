@@ -5,6 +5,7 @@ import 'package:interns_talk_mobile/data/model/chat_model.dart';
 import 'package:interns_talk_mobile/data/model/mentor_model.dart';
 import 'package:interns_talk_mobile/ui/bloc/chat_room_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/conversation_page.dart';
+import 'package:interns_talk_mobile/ui/pages/error_screen.dart';
 import 'package:interns_talk_mobile/ui/pages/profile_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
@@ -33,7 +34,8 @@ class ChatRoomPage extends StatelessWidget {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const ProfilePage()));
               },
-              icon: Icon(CupertinoIcons.profile_circled),
+              icon: Icon(CupertinoIcons.profile_circled,
+              size: 30,),
             ),
           ),
         ],
@@ -51,69 +53,79 @@ class ChatRoomBodyView extends StatefulWidget {
 }
 
 class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
+
+  Future<void> _onRefresh()async{
+    setState(() {
+      context.read<ChatRoomBloc>().add(GetDataEvent());
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    // context.read<ChatRoomBloc>().add(GetMentorListEvent());
-    // context.read<ChatRoomBloc>().add(GetChatListEvent());
     context.read<ChatRoomBloc>().add(GetDataEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          BlocBuilder<ChatRoomBloc, ChatRoomState>(builder: (context, state) {
-            if (state is ChatRoomLoading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is DataLoaded) {
-              return _buildChatList(state.chats);
-            } else if (state is ChatRoomError) {
-              return Center(
-                child: Text(state.message),
-              );
-            } else {
-              return Container();
-            }
-          }),
-          BlocBuilder<ChatRoomBloc, ChatRoomState>(builder: (context, state) {
-            if (state is DataLoaded) {
-              if (state.chats.isNotEmpty) {
-                return Divider();
-              } else {
-                return SizedBox.shrink();
-              }
-            } else {
-              return SizedBox.shrink();
-            }
-          }),
-          BlocBuilder<ChatRoomBloc, ChatRoomState>(builder: (context, state) {
-            if (state is ChatRoomLoading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is DataLoaded) {
-              return _buildMentorList(state.mentors);
-            } else if (state is ChatRoomError) {
-              return Center(
-                child: Text(state.message),
-              );
-            } else {
-              return Container();
-            }
-          })
-        ],
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: BlocBuilder<ChatRoomBloc, ChatRoomState>(
+        builder: (context, state) {
+          if (state is ChatRoomLoading) {
+            return _buildLoading("Loading chat list");
+          } else if (state is ChatRoomError) {
+            return _buildError(state.message);
+          } else if (state is DataLoaded) {
+            return _buildChatAndMentorList(state);
+          } else {
+            return Container();
+          }
+        },
       ),
+    );
+  }
+
+  Widget _buildLoading(String message) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 20),
+            Text(message),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildError(String message) {
+    return ErrorScreen(
+      title: message,
+      imagePath: kSorryImage,
+      errorText: message,
+      buttonText: 'Retry',
+      onBtnClick: _onRefresh,
+    );
+  }
+
+  Widget _buildChatAndMentorList(DataLoaded state) {
+    return ListView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      physics: AlwaysScrollableScrollPhysics(), 
+      children: [
+        if (state.chats.isNotEmpty) _buildChatList(state.chats),
+        if (state.chats.isNotEmpty) Divider(),
+        if(state.mentors.isNotEmpty) _buildMentorList(state.mentors)
+      ],
     );
   }
 
   Widget _buildChatList(List<Chat> chats) {
     return ListView.builder(
-        padding: EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 30),
+        padding: EdgeInsetsDirectional.symmetric(vertical: 30),
         itemCount: chats.length,
         physics: ClampingScrollPhysics(),
         shrinkWrap: true,
@@ -138,14 +150,14 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          chat.mentorId.toString(),
+                          '${chat.firstName} ${chat.lastName}',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
                         Text(
                           'User $index sent you a message blahljdlsjflsjfl',
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Text(chat.updatedAt!.toIso8601String())
+                        Text(chat.updatedAt?.toIso8601String() ?? '')
                       ],
                     ),
                   ),
@@ -169,14 +181,14 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
         children: [
           ListView.builder(
               padding:
-                  EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 8),
+                  EdgeInsetsDirectional.only( bottom: 20),
               itemCount: mentors.length,
               physics: ClampingScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 final mentor = mentors[index];
                 return Padding(
-                  padding: const EdgeInsets.only(top: 30),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Row(
                     children: [
                       Container(
@@ -185,7 +197,17 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                         decoration: BoxDecoration(
                             color: kUserProfileBackground,
                             borderRadius: BorderRadius.circular(8)),
-                        child: Image.asset(kUserPlaceHolderImage),
+                        child: Image.network(
+                         mentor.image!,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(child: CircularProgressIndicator()); // Show loader while loading
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(kUserPlaceHolderImage); // Show error icon if loading fails
+                          },
+                        )
+                        ,
                       ),
                       Expanded(
                         child: Padding(

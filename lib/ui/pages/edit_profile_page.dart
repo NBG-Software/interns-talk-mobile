@@ -60,6 +60,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 imagePath: kSorryImage,
                 errorText: state.message,
                 buttonText: 'Ok',
+                onBtnClick: (){
+                  Navigator.pop(context);
+                },
               );
             }
             return ErrorScreen(
@@ -67,6 +70,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
               imagePath: kSorryImage,
               errorText: '',
               buttonText: 'Ok',
+              onBtnClick: (){
+                Navigator.pop(context);
+              },
             );
           },
         ));

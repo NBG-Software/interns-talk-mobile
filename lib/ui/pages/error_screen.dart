@@ -5,6 +5,7 @@ class ErrorScreen extends StatelessWidget {
   final String imagePath;
   final String errorText;
   final String buttonText;
+  final VoidCallback onBtnClick;
 
   const ErrorScreen({
     super.key,
@@ -12,6 +13,7 @@ class ErrorScreen extends StatelessWidget {
     required this.imagePath,
     required this.errorText,
     required this.buttonText,
+    required this.onBtnClick
   });
 
   @override
@@ -49,9 +51,9 @@ class ErrorScreen extends StatelessWidget {
                           BorderRadius.circular(8), // Rounded corners
                     ),
                   ),
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
+                  onPressed:
+                    onBtnClick
+                  ,
                   child: Text(buttonText),
                 ),
               ],
