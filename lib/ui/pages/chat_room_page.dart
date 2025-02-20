@@ -74,7 +74,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
     context.read<ChatRoomBloc>().add(GetDataEvent());
   }
 
-  void startChatting(int chatId) {
+  void startChatting(int chatId, {Mentor? mentor}) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return ConversationPage(chatId: chatId);
     }));
@@ -90,7 +90,9 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ConversationPage(chatId: state.chatId),
+                builder: (context) => ConversationPage(
+                  chatId: state.chatId,
+                ),
               ),
             );
             context.read<ChatRoomBloc>().add(GetDataEvent());
@@ -217,7 +219,11 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                 ),
                 IconButton(
                     onPressed: () {
-                      startChatting(chat.chatId);
+                      Mentor mentor = Mentor(
+                          id: chat.chatId,
+                          firstName: chat.firstName,
+                          lastName: chat.lastName);
+                      startChatting(chat.chatId, mentor: mentor);
                     },
                     icon: Icon(CupertinoIcons.forward))
               ],

@@ -7,8 +7,13 @@ import 'package:interns_talk_mobile/utils/colors.dart';
 
 class ConversationPage extends StatefulWidget {
   final int chatId;
+  // final Mentor mentor;
 
-  const ConversationPage({super.key, required this.chatId});
+  const ConversationPage({
+    super.key,
+    required this.chatId,
+    // required this.mentor,
+  });
 
   @override
   State<ConversationPage> createState() => _ConversationPageState();
@@ -21,11 +26,19 @@ class _ConversationPageState extends State<ConversationPage> {
   void initState() {
     super.initState();
 
+    // final userState = context.read<ProfileBloc>().state;
+
+    // if (userState is ProfileLoaded) {
+    //   final String name =
+    //       '${userState.user.firstName} ${userState.user.lastName}';
+    //   currentUser = ChatUser(id: userState.user.id.toString(), name: name);
+    // }
+
     _chatController = ChatController(
       initialMessageList: [],
       scrollController: ScrollController(),
       otherUsers: [ChatUser(id: '2', name: 'Ko Hein')],
-      currentUser: ChatUser(id: '1', name: 'Ko Htwe'),
+      currentUser: ChatUser(id: '1', name: 'Current User'),
     );
     context.read<ConversationBloc>().add(GetChatHistoryEvent(widget.chatId));
   }
@@ -35,16 +48,14 @@ class _ConversationPageState extends State<ConversationPage> {
     return BlocListener<ConversationBloc, ConversationState>(
       listener: (context, state) {
         if (state is ChatHistoryLoaded) {
-          setState(() {
-            _chatController.initialMessageList = state.messages
-                .map((msg) => Message(
-                      id: msg.id.toString(),
-                      message: msg.messageMedia ?? msg.messageText,
-                      createdAt: msg.createdAt.toLocal(),
-                      sentBy: msg.senderId.toString(),
-                    ))
-                .toList();
-          });
+          _chatController.loadMoreData(state.messages
+              .map((msg) => Message(
+                    id: msg.id.toString(),
+                    message: msg.messageMedia ?? msg.messageText,
+                    createdAt: msg.createdAt.toLocal(),
+                    sentBy: msg.senderId.toString(),
+                  ))
+              .toList());
         } else if (state is NewMessageReceived) {
           _chatController.addMessage(Message(
             message: state.message.messageMedia ?? state.message.messageText,
@@ -97,7 +108,7 @@ class _ConversationPageState extends State<ConversationPage> {
             elevation: 2,
             backGroundColor: kTextFieldContainer,
             backArrowColor: kAppBlack,
-            chatTitle: 'Ko Hein',
+            chatTitle: _chatController.otherUsers[0].name,
             chatTitleTextStyle: TextStyle(
               // color: theme.appBarTitleTextStyle,
               fontWeight: FontWeight.bold,

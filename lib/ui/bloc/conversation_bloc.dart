@@ -42,15 +42,12 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       "timestamp": DateTime.now().toString()
     };
 
-    /// Send the message via socket
     socketService.sendMessage(event.chatId, message);
 
-    /// Create a local message instance and emit it as `MessageSent`
     final sentMessage = MessageModel.fromJson(message);
     emit(MessageSent(sentMessage));
   }
 
-  /// Listen for new messages via Socket.IO
   void _onListenMessage(
       ListenMessageEvent event, Emitter<ConversationState> emit) {
     emit(NewMessageReceived(event.message));
