@@ -37,11 +37,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
         body: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
-            if (state is ProfileError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-            } else if (state is ProfileUpdated) {
+            if (state is ProfileUpdated) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Profile updated')),
               );
@@ -82,6 +78,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
 class _BodyView extends StatelessWidget {
   final User user;
+
   const _BodyView({required this.user});
 
   @override
