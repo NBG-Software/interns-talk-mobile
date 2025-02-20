@@ -17,12 +17,14 @@ class MessageModel {
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(
-      id: json['id'],
-      chatId: json['chat_id'],
-      senderId: json['sender_id'],
+      id: json['id'] ?? 0,
+      chatId: json['chat_id'] ?? 0,
+      senderId: json['sender_id'] ?? 0,
       messageText: json['message_text'] ?? '',
       messageMedia: json['message_media'],
-      createdAt: DateTime.parse(json['created_at']),
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(),
     );
   }
 

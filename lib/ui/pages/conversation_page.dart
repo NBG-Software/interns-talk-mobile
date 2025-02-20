@@ -61,13 +61,16 @@ class _ConversationPageState extends State<ConversationPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocListener<ConversationBloc, ConversationState>(
       listener: (context, state) {
+        print("📌 Bloc state changed: $state");
         if (state is ConversationLoading) {
           setState(() {
             _chatViewState = ChatViewState.loading;
           });
         } else if (state is ChatHistoryLoaded) {
+          print("✅ Messages updated: ${state.messages.length}");
           final messages = state.messages;
           _chatController.loadMoreData(messages
               .map((msg) => Message(
@@ -97,7 +100,7 @@ class _ConversationPageState extends State<ConversationPage> {
             enableReplySnackBar: false,
             enableSwipeToReply: false,
             lastSeenAgoBuilderVisibility: true,
-            receiptsBuilderVisibility: true,
+            receiptsBuilderVisibility: false,
             enableScrollToBottomButton: true,
           ),
           scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
@@ -185,6 +188,7 @@ class _ConversationPageState extends State<ConversationPage> {
           ),
           chatBubbleConfig: ChatBubbleConfiguration(
             outgoingChatBubbleConfig: ChatBubble(
+              margin: EdgeInsets.symmetric(horizontal: 16),
               textStyle: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -226,60 +230,6 @@ class _ConversationPageState extends State<ConversationPage> {
               color: kReceiveMessageColor,
             ),
           ),
-          reactionPopupConfig: ReactionPopupConfiguration(
-            shadow: BoxShadow(
-              color: Colors.black54,
-              blurRadius: 20,
-            ),
-            backgroundColor: kAppBlack,
-          ),
-          messageConfig: MessageConfiguration(
-            messageReactionConfig: MessageReactionConfiguration(
-              backgroundColor: kAppWhite,
-              borderColor: kTextFieldContainer,
-              reactedUserCountTextStyle: TextStyle(color: kTextColor),
-              reactionCountTextStyle: TextStyle(color: kTextColor),
-              reactionsBottomSheetConfig: ReactionsBottomSheetConfiguration(
-                backgroundColor: kSurfaceGrey,
-                reactedUserTextStyle: TextStyle(
-                  color: kTextColor,
-                ),
-                reactionWidgetDecoration: BoxDecoration(
-                  color: kSurfaceGrey,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      offset: const Offset(0, 20),
-                      blurRadius: 40,
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            imageMessageConfig: ImageMessageConfiguration(
-              hideShareIcon: true,
-              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
-            ),
-          ),
-          repliedMessageConfig: RepliedMessageConfiguration(
-            backgroundColor: kReceiveMessageColor,
-            verticalBarColor: kReceiveMessageColor,
-            repliedMsgAutoScrollConfig: RepliedMsgAutoScrollConfig(
-              enableHighlightRepliedMsg: true,
-              highlightColor: Colors.pinkAccent.shade100,
-              highlightScale: 1.1,
-            ),
-            textStyle: const TextStyle(
-              color: kTextColor,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.25,
-            ),
-            replyTitleTextStyle: TextStyle(color: kTextColor),
-          ),
-          swipeToReplyConfig: SwipeToReplyConfiguration(
-            replyIconColor: kPrimaryColor,
-          ),
         ),
       ),
     );
@@ -297,11 +247,12 @@ class _ConversationPageState extends State<ConversationPage> {
       replyMessage: replyMessage,
       messageType: messageType,
     );
-
+    print("📝 Adding new message to chat: ${newMessage.message}");
     _chatController.addMessage(newMessage);
 
     context.read<ConversationBloc>().add(SendMessageEvent(
           chatId: widget.chatId,
+          senderId: int.parse(currentUserId ?? '1'),
           messageText: message,
         ));
   }

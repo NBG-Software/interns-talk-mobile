@@ -200,7 +200,23 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                     decoration: BoxDecoration(
                         color: kUserProfileBackground,
                         borderRadius: BorderRadius.circular(8)),
-                    child: Image.asset(kUserPlaceHolderImage),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        fit: BoxFit.cover,
+                        chat.image!,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                              child:
+                              CircularProgressIndicator()); // Show loader while loading
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                              kUserPlaceHolderImage); // Show error icon if loading fails
+                        },
+                      ),
+                    ),
                   ),
                   Expanded(
                     child: Padding(
@@ -253,18 +269,22 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                         decoration: BoxDecoration(
                             color: kUserProfileBackground,
                             borderRadius: BorderRadius.circular(8)),
-                        child: Image.network(
-                          mentor.image!,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                                child:
-                                    CircularProgressIndicator()); // Show loader while loading
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                                kUserPlaceHolderImage); // Show error icon if loading fails
-                          },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            mentor.image!,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                  child:
+                                      CircularProgressIndicator()); // Show loader while loading
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                  kUserPlaceHolderImage); // Show error icon if loading fails
+                            },
+                          ),
                         ),
                       ),
                       Expanded(

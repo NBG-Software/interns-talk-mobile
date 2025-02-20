@@ -11,6 +11,7 @@ class SocketService {
   SocketService(this.authLocalDatasource) {
     init();
   }
+
   Future<void> init() async {
     final token = await authLocalDatasource.getToken();
     if (token == null || token.isEmpty) {
@@ -18,13 +19,29 @@ class SocketService {
       return;
     }
     socket = IO.io(
-      kBaseUrl,
-      IO.OptionBuilder().setTransports(['websocket']).setExtraHeaders(
-          {'Authorization': 'Bearer $token'}).build(),
+     '$kBaseUrl:3000',
+      IO.OptionBuilder().setTransports(['websocket'])
+          .setExtraHeaders(
+          {'Authorization': 'Bearer $token',
+          'X-App-Key': 'odbvje0i0aya2scsimxq'})
+          .setQuery({'token': token, 'appKey' : 'odbvje0i0aya2scsimxq'})
+          .build(),
     );
     socket.io.options?['reconnection'] = true;
     socket.io.options?['autoConnect'] = false;
     socket.connect();
+
+    socket.onConnect((_) {
+      print("✅ Socket connected successfully.");
+    });
+
+    socket.onDisconnect((_) {
+      print("❌ Socket disconnected.");
+    });
+
+    socket.onError((error) {
+      print("⚠️ Socket error: $error");
+    });
   }
 
   void sendMessage(int chatId, Map<String, dynamic> message) {

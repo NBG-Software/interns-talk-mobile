@@ -42,21 +42,25 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   Future<void> _onSendMessage(
       SendMessageEvent event, Emitter<ConversationState> emit) async {
     final message = {
-      "text": event.messageText,
-      "media": event.messageMedia,
-      "timestamp": DateTime.now().toString()
+      "id": DateTime.now().millisecondsSinceEpoch, // Generate a temp ID
+      "chat_id": event.chatId,
+      'sender_id' : event.senderId,// Ensure sender ID is included
+      "message_text": event.messageText,
+      "message_media": event.messageMedia,
+      "created_at": DateTime.now().toString()
     };
+    print("🛠 Message data: $message");
 
     socketService.sendMessage(event.chatId, message);
-
     final sentMessage = MessageModel.fromJson(message);
 
-    if (state is ChatHistoryLoaded) {
-      final updatedMessages = List<MessageModel>.from(
-          (state as ChatHistoryLoaded).messages)
-        ..add(sentMessage);
-      emit(ChatHistoryLoaded(updatedMessages));
-    }
+    // if (state is ChatHistoryLoaded) {
+    //   final updatedMessages = List<MessageModel>.from(
+    //       (state as ChatHistoryLoaded).messages)
+    //     ..add(sentMessage);
+    //   emit(ConversationInitial());
+    //   emit(ChatHistoryLoaded(updatedMessages));
+    // }
   }
 
   void _onNewMessageReceived(
@@ -81,12 +85,14 @@ class GetChatHistoryEvent extends ConversationEvent {
 
 class SendMessageEvent extends ConversationEvent {
   final int chatId;
+  final int senderId;
   final String messageText;
   final String? messageMedia;
 
   SendMessageEvent({
     required this.chatId,
     required this.messageText,
+    required this.senderId,
     this.messageMedia,
   });
 }
