@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interns_talk_mobile/common/date_formatter.dart';
 import 'package:interns_talk_mobile/data/model/chat_model.dart';
 import 'package:interns_talk_mobile/data/model/mentor_model.dart';
 import 'package:interns_talk_mobile/ui/bloc/chat_room_bloc.dart';
@@ -161,7 +162,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
       physics: AlwaysScrollableScrollPhysics(),
       children: [
         if (state.chats.isNotEmpty) _buildChatList(state.chats),
-        if (state.chats.isNotEmpty) Divider(),
+        if (state.chats.isNotEmpty && state.mentors.isNotEmpty) Divider(),
         if (state.mentors.isNotEmpty) _buildMentorList(state.mentors)
       ],
     );
@@ -197,16 +198,22 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                           '${chat.firstName} ${chat.lastName}',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        Text(
-                          'User $index sent you a message blahljdlsjflsjfl',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(chat.updatedAt?.toIso8601String() ?? '')
+                        chat.messageMedia == null
+                            ? Text(
+                                chat.messageText ?? 'Sent a message',
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : Text('Sent a photo'),
+                        Text(DateFormatter.utcToLocal12Hour(chat.createdAt))
                       ],
                     ),
                   ),
                 ),
-                IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.forward))
+                IconButton(
+                    onPressed: () {
+                      // startChatting(chatId: chat.chatId);
+                    },
+                    icon: Icon(CupertinoIcons.forward))
               ],
             ),
           );

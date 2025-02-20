@@ -86,9 +86,10 @@ class UserRemoteDatasource {
     try {
       final response = await dioClient.dio.get('/mentor');
       if (response.data != null) {
-        return Result.success((response.data['data'] as List)
+        final montorList = (response.data['data'] as List)
             .map((json) => Mentor.fromJson(json))
-            .toList());
+            .toList();
+        return Result.success(montorList);
       } else {
         return Result.error('Data not found');
       }

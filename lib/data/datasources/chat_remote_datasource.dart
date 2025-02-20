@@ -17,9 +17,9 @@ class ChatRemoteDatasource {
       final response = await dioClient.dio.get('/chats/latest');
 
       if (response.data != null) {
-        final List<dynamic> data = response.data['data'] as List<dynamic>;
+        final List<dynamic> data = response.data['data'];
         List<Chat> chatList =
-        data.map((e) => Chat.fromJson(e as Map<String, dynamic>)).toList();
+            data.map((e) => Chat.fromJson(e as Map<String, dynamic>)).toList();
         return Result.success(chatList);
       } else {
         return Result.error(
@@ -33,23 +33,21 @@ class ChatRemoteDatasource {
     }
   }
 
- Future<Result<int>> createChat({required int mentorId}) async {
+  Future<Result<int>> createChat({required int mentorId}) async {
     try {
-      final response = await dioClient.dio.post('/chats',
-          data: {'mentor_id': mentorId});
-      if(response.data != null){
+      final response =
+          await dioClient.dio.post('/chats', data: {'mentor_id': mentorId});
+      if (response.data != null) {
         final int chatId = response.data['data']['chat_id'];
         return Result.success(chatId);
-      }
-      else{
+      } else {
         return Result.error(response.data['message']);
       }
-    }  on DioException catch (e) {
+    } on DioException catch (e) {
       final errorMessage = Handler.handleDioError(e);
       return Result.error(errorMessage);
     } catch (e) {
       return Result.error("Unexpected error occurred");
     }
-
   }
 }
