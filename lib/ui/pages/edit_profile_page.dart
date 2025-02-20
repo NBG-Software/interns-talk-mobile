@@ -56,11 +56,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
               return _BodyView(user: state.updatedUser);
             } else if (state is ProfileError) {
               return ErrorScreen(
-                title: 'Connection error',
+                title: state.message,
                 imagePath: kSorryImage,
                 errorText: state.message,
                 buttonText: 'Ok',
-                onBtnClick: (){
+                onBtnClick: () {
                   Navigator.pop(context);
                 },
               );
@@ -68,9 +68,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
             return ErrorScreen(
               title: 'Something went wrong',
               imagePath: kSorryImage,
-              errorText: '',
+              errorText:
+                  'An unexpected error has occurred, and we’re working to resolve it promptly.',
               buttonText: 'Ok',
-              onBtnClick: (){
+              onBtnClick: () {
                 Navigator.pop(context);
               },
             );
@@ -85,11 +86,10 @@ class _BodyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ListView(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30,vertical: 30),
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -147,7 +147,6 @@ class ProfileForm extends StatelessWidget {
         TextEditingController(text: user?.lastName ?? kLastNameHint);
     final screenWidth = MediaQuery.of(context).size.width;
     return Column(
-
       children: [
         Row(
           children: [
