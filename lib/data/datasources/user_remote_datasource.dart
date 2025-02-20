@@ -104,11 +104,8 @@ class UserRemoteDatasource {
       String currentPassword, String newPassword) async {
     try {
       final response = await dioClient.dio.post(
-        '/password/forgot',
-        data: {
-          "current_password": currentPassword,
-          "new_password": newPassword
-        },
+        '/password',
+        data: {"old_password": currentPassword, "new_password": newPassword},
       );
       if (response.data != null) {
         return Result.success(response.data['message']);
