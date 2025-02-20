@@ -22,7 +22,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  bool isVisible =false;
+  bool isVisible = false;
   bool isObscured = true;
 
   void _changePassword() {
@@ -70,7 +70,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             ? Icon(CupertinoIcons.lock)
                             : Icon(CupertinoIcons.lock_slash)),
                     contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                     iconColor: kIconColorGrey,
                     suffixPadding: EdgeInsets.only(right: 12),
                     autoValidateMode: AutovalidateMode.onUserInteraction,
@@ -89,11 +89,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             isObscured = !isObscured;
                           });
                         },
-                        icon: isVisible
+                        icon: !isObscured
                             ? Icon(CupertinoIcons.lock)
                             : Icon(CupertinoIcons.lock_slash)),
                     contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                     iconColor: kIconColorGrey,
                     suffixPadding: EdgeInsets.only(right: 12),
                     autoValidateMode: AutovalidateMode.onUserInteraction,
@@ -112,11 +112,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             isObscured = !isObscured;
                           });
                         },
-                        icon: isVisible
+                        icon: !isObscured
                             ? Icon(CupertinoIcons.lock)
                             : Icon(CupertinoIcons.lock_slash)),
                     contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                     iconColor: kIconColorGrey,
                     suffixPadding: EdgeInsets.only(right: 12),
                     autoValidateMode: AutovalidateMode.onUserInteraction,
@@ -133,12 +133,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     fillColor: kTextFieldContainer,
                     hintTextColor: kHintTextColor,
                   ),
-                  SizedBox(height: 60,),
+                  SizedBox(
+                    height: 60,
+                  ),
                   BlocListener<ProfileBloc, ProfileState>(
                     listener: (context, state) {
                       if (state is ChangePasswordSuccess) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Password changed successfully!")),
+                          SnackBar(
+                              content: Text("Password changed successfully!")),
                         );
                         Navigator.pop(context); // Close the page
                       } else if (state is ChangePasswordFailure) {
