@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:interns_talk_mobile/data/datasources/auth_local_datasource.dart';
-import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
 import 'package:interns_talk_mobile/ui/pages/chat_room_page.dart';
 import 'package:interns_talk_mobile/ui/pages/login_page.dart';
 

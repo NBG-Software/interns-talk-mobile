@@ -252,7 +252,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                       ),
                       IconButton(
                           onPressed: () {
-                            _onChatCreate(mentorId: mentor.id!);
+                            _onChatCreate(mentorId: mentor.id);
                           },
                           icon: Icon(CupertinoIcons.add_circled))
                     ],
