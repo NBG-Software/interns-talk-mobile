@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/di/injection.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/bloc/chat_room_bloc.dart';
+import 'package:interns_talk_mobile/ui/bloc/conversation_bloc.dart';
 import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
 import 'package:interns_talk_mobile/ui/bloc/splash_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/splash_screen.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +22,7 @@ Future<void> main() async {
         BlocProvider(create: (context) => getIt<ProfileBloc>()),
         BlocProvider(create: (context) => getIt<ChatRoomBloc>()),
         BlocProvider(create: (context) => getIt<SplashBloc>()),
+        BlocProvider(create: (context) => getIt<ConversationBloc>())
       ],
       child: MyApp(),
     ),

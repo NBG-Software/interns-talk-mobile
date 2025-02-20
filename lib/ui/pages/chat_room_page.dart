@@ -74,6 +74,12 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
     context.read<ChatRoomBloc>().add(GetDataEvent());
   }
 
+  void startChatting(int chatId) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return ConversationPage(chatId: chatId);
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -211,7 +217,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                 ),
                 IconButton(
                     onPressed: () {
-                      // startChatting(chatId: chat.chatId);
+                      startChatting(chat.chatId);
                     },
                     icon: Icon(CupertinoIcons.forward))
               ],
