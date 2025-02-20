@@ -59,10 +59,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i361.Dio>(),
           gh<_i558.FlutterSecureStorage>(),
         ));
-    gh.lazySingleton<_i972.ChatRemoteDatasource>(
-        () => _i972.ChatRemoteDatasource(gh<_i158.DioClient>()));
     gh.lazySingleton<_i610.AuthRemoteDatasource>(
         () => _i610.AuthRemoteDatasource(gh<_i158.DioClient>()));
+    gh.lazySingleton<_i972.ChatRemoteDatasource>(
+        () => _i972.ChatRemoteDatasource(gh<_i158.DioClient>()));
     gh.lazySingleton<_i542.UserRemoteDatasource>(
         () => _i542.UserRemoteDatasource(gh<_i158.DioClient>()));
     gh.lazySingleton<_i69.AuthRepository>(() => _i69.AuthRepository(
@@ -75,8 +75,6 @@ extension GetItInjectableX on _i174.GetIt {
         remoteDatasource: gh<_i542.UserRemoteDatasource>()));
     gh.lazySingleton<_i724.SplashBloc>(
         () => _i724.SplashBloc(gh<_i69.AuthRepository>()));
-    gh.lazySingleton<_i607.AuthBloc>(
-        () => _i607.AuthBloc(gh<_i69.AuthRepository>()));
     gh.lazySingleton<_i994.ConversationBloc>(() => _i994.ConversationBloc(
           chatRepository: gh<_i835.ChatRepository>(),
           socketService: gh<_i28.SocketService>(),
@@ -84,6 +82,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i996.ChatRoomBloc>(() => _i996.ChatRoomBloc(
           chatRepository: gh<_i835.ChatRepository>(),
           userRepository: gh<_i58.UserRepository>(),
+        ));
+    gh.lazySingleton<_i607.AuthBloc>(() => _i607.AuthBloc(
+          gh<_i69.AuthRepository>(),
+          gh<_i58.UserRepository>(),
         ));
     gh.lazySingleton<_i178.ProfileBloc>(
         () => _i178.ProfileBloc(gh<_i58.UserRepository>()));

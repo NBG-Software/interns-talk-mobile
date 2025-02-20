@@ -150,7 +150,6 @@ class _ProfileDataViewState extends State<ProfileDataView> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(

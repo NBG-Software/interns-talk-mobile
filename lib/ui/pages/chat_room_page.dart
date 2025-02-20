@@ -65,6 +65,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
   Future<void> _onChatCreate({required int mentorId}) async {
     setState(() {
       context.read<ChatRoomBloc>().add(CreateChatEvent(mentorId: mentorId));
+      // _startChatting(chatId: chatId, mentorId: mentorId, mentorName: mentorName);
     });
   }
 
@@ -74,9 +75,16 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
     context.read<ChatRoomBloc>().add(GetDataEvent());
   }
 
-  void startChatting(int chatId, {Mentor? mentor}) {
+  void _startChatting(
+      {required int chatId,
+      required int mentorId,
+      required String mentorName}) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return ConversationPage(chatId: chatId);
+      return ConversationPage(
+        chatId: chatId,
+        mentorId: mentorId,
+        mentorName: mentorName,
+      );
     }));
   }
 
@@ -87,14 +95,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
       child: BlocConsumer<ChatRoomBloc, ChatRoomState>(
         listener: (context, state) async {
           if (state is ChatCreated) {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ConversationPage(
-                  chatId: state.chatId,
-                ),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Chat created')));
             context.read<ChatRoomBloc>().add(GetDataEvent());
           }
         },
@@ -186,47 +187,45 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
           final chat = chats[index];
           return Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: Row(
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: kUserProfileBackground,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Image.asset(kUserPlaceHolderImage),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${chat.firstName} ${chat.lastName}',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        chat.messageMedia == null
-                            ? Text(
-                                chat.messageText ?? 'Sent a message',
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            : Text('Sent a photo'),
-                        Text(DateFormatter.utcToLocal12Hour(chat.createdAt))
-                      ],
+            child: InkWell(
+              onTap: () {
+                _startChatting(chatId: chat.chatId,mentorId: chat.mentorId,
+                    mentorName: '${chat.firstName} ${chat.lastName}');
+              },
+              child: Row(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: kUserProfileBackground,
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Image.asset(kUserPlaceHolderImage),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${chat.firstName} ${chat.lastName}',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          chat.messageMedia == null
+                              ? Text(
+                                  chat.messageText ?? 'No message yet',
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : Text('Sent a photo'),
+                          Text(DateFormatter.utcToLocal12Hour(chat.createdAt))
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                    onPressed: () {
-                      Mentor mentor = Mentor(
-                          id: chat.chatId,
-                          firstName: chat.firstName,
-                          lastName: chat.lastName);
-                      startChatting(chat.chatId, mentor: mentor);
-                    },
-                    icon: Icon(CupertinoIcons.forward))
-              ],
+                  Icon(CupertinoIcons.forward)
+                ],
+              ),
             ),
           );
         });

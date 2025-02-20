@@ -13,17 +13,10 @@ class SocketService {
   }
   Future<void> init() async {
     final token = await authLocalDatasource.getToken();
-    // socket = IO.io(
-    //   kBaseUrl,
-    //   IO.OptionBuilder().setTransports(['websocket']).setExtraHeaders(
-    //       {'Authorization': 'Bearer $token'}).build(),
-    // );
-    // socket.connect();
     if (token == null || token.isEmpty) {
       print("No token found. Socket connection aborted.");
       return;
     }
-
     socket = IO.io(
       kBaseUrl,
       IO.OptionBuilder().setTransports(['websocket']).setExtraHeaders(

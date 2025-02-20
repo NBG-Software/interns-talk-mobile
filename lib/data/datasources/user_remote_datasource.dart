@@ -31,11 +31,6 @@ class UserRemoteDatasource {
     } catch (e) {
       return Result.error("Unexpected error occurred");
     }
-    // return Result.success(User(
-    //   firstName: 'Peter',
-    //   lastName: 'Paka',
-    //   email: 'petapaka@gmail.com'
-    // ));
   }
 
   Future<Result<User>> updateUserProfile({

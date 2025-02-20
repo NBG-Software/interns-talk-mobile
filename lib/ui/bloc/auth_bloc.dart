@@ -1,12 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
+import 'package:interns_talk_mobile/data/repository/user_repository.dart';
 
 @lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
+  final UserRepository userRepository;
 
-  AuthBloc(this.authRepository) : super(AuthInitial()) {
+  AuthBloc(this.authRepository, this.userRepository) : super(AuthInitial()) {
     on<AuthLoginEvent>(_onLogin);
     on<AuthSignUpEvent>(_onSignUp);
     on<AuthLogoutEvent>(_onLogout);
@@ -31,7 +33,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email, password: event.password);
     if (result.isSuccess) {
       await authRepository.saveToken(token: result.data!);
-      emit(AuthAuthenticated("Welcome"));
+      final userInfoResult = await userRepository.getUserInfo();
+      if (userInfoResult.isSuccess) {
+        final userInfo = userInfoResult.data!;
+        await authRepository.saveUserInfo(userInfo.id,
+            userInfo.firstName ?? 'Unknown', userInfo.lastName ?? 'User');
+        emit(AuthAuthenticated("Welcome ${userInfo.firstName} ${userInfo.lastName}"));
+      }
+      else{
+        emit(AuthError(userInfoResult.error ?? 'Fail to fetch user info'));
+      }
     } else {
       emit(AuthError(result.error ?? 'Login failed'));
     }
@@ -102,11 +113,13 @@ class AuthLoading extends AuthState {}
 
 class AuthAuthenticated extends AuthState {
   final String message;
+
   AuthAuthenticated(this.message);
 }
 
 class AuthError extends AuthState {
   final String message;
+
   AuthError(this.message);
 }
 

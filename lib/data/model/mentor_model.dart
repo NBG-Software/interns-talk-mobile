@@ -24,7 +24,7 @@ class Mentor {
       email: json['email'] ?? "No email",
       id: json['mentor_id'],
       image: json['image'] ?? "",
-      company: json['company'] as String? ?? "Not specified",
+      company: json['company'] ?? "Not specified",
       expertise: json['expertise'] ?? "General",
     );
   }

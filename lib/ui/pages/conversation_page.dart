@@ -2,18 +2,23 @@ import 'package:chatview/chatview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interns_talk_mobile/data/datasources/auth_local_datasource.dart';
 import 'package:interns_talk_mobile/ui/bloc/conversation_bloc.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 
+import '../../di/injection.dart';
+import '../bloc/profile_bloc.dart';
+
 class ConversationPage extends StatefulWidget {
   final int chatId;
-  // final Mentor mentor;
+  final int mentorId;
+  final String mentorName;
 
-  const ConversationPage({
-    super.key,
-    required this.chatId,
-    // required this.mentor,
-  });
+  const ConversationPage(
+      {super.key,
+      required this.chatId,
+      required this.mentorId,
+      required this.mentorName});
 
   @override
   State<ConversationPage> createState() => _ConversationPageState();
@@ -21,34 +26,50 @@ class ConversationPage extends StatefulWidget {
 
 class _ConversationPageState extends State<ConversationPage> {
   late ChatController _chatController;
+  late AuthLocalDatasource authLocalDatasource;
+  ChatViewState _chatViewState = ChatViewState.loading;
+  String? currentUserId;
+  String? userName;
 
   @override
   void initState() {
     super.initState();
+    authLocalDatasource = getIt<AuthLocalDatasource>();
+    _loadUserAndInitController();
+  }
 
-    // final userState = context.read<ProfileBloc>().state;
+  Future<void> _loadUserAndInitController() async {
+    final userInfo = await authLocalDatasource.loadUserInfo();
+    if (userInfo != null) {
+      setState(() {
+        currentUserId = userInfo['userId'];
+        userName = userInfo['userName'];
+      });
 
-    // if (userState is ProfileLoaded) {
-    //   final String name =
-    //       '${userState.user.firstName} ${userState.user.lastName}';
-    //   currentUser = ChatUser(id: userState.user.id.toString(), name: name);
-    // }
+      _chatController = ChatController(
+        initialMessageList: [],
+        scrollController: ScrollController(),
+        otherUsers: [
+          ChatUser(id: widget.mentorId.toString(), name: widget.mentorName)
+        ],
+        currentUser: ChatUser(id: currentUserId ?? '0', name: 'Current User'),
+      );
+      context.read<ConversationBloc>().add(GetChatHistoryEvent(widget.chatId));
+    }
 
-    _chatController = ChatController(
-      initialMessageList: [],
-      scrollController: ScrollController(),
-      otherUsers: [ChatUser(id: '2', name: 'Ko Hein')],
-      currentUser: ChatUser(id: '1', name: 'Current User'),
-    );
-    context.read<ConversationBloc>().add(GetChatHistoryEvent(widget.chatId));
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<ConversationBloc, ConversationState>(
       listener: (context, state) {
-        if (state is ChatHistoryLoaded) {
-          _chatController.loadMoreData(state.messages
+        if (state is ConversationLoading) {
+          setState(() {
+            _chatViewState = ChatViewState.loading;
+          });
+        } else if (state is ChatHistoryLoaded) {
+          final messages = state.messages;
+          _chatController.loadMoreData(messages
               .map((msg) => Message(
                     id: msg.id.toString(),
                     message: msg.messageMedia ?? msg.messageText,
@@ -56,12 +77,16 @@ class _ConversationPageState extends State<ConversationPage> {
                     sentBy: msg.senderId.toString(),
                   ))
               .toList());
-        } else if (state is NewMessageReceived) {
-          _chatController.addMessage(Message(
-            message: state.message.messageMedia ?? state.message.messageText,
-            createdAt: state.message.createdAt,
-            sentBy: state.message.senderId.toString(),
-          ));
+          setState(() {
+            _chatViewState = messages.isEmpty
+                ? ChatViewState.noData
+                : ChatViewState.hasMessages;
+          });
+        }
+        else if (state is ConversationError) {
+          setState(() {
+            _chatViewState = ChatViewState.error;
+          });
         }
       },
       child: Scaffold(
@@ -87,7 +112,7 @@ class _ConversationPageState extends State<ConversationPage> {
               size: 30,
             ),
           ),
-          chatViewState: ChatViewState.hasMessages,
+          chatViewState: _chatViewState,
           chatViewStateConfig: ChatViewStateConfiguration(
             noMessageWidgetConfig: ChatViewStateWidgetConfiguration(
               showDefaultReloadButton: false,
@@ -261,19 +286,23 @@ class _ConversationPageState extends State<ConversationPage> {
   }
 
   void _onSendTap(
-    String message,
-    ReplyMessage replyMessage,
-    MessageType messageType,
-  ) {
-    _chatController.addMessage(
-      Message(
-        id: DateTime.now().toString(),
-        createdAt: DateTime.now(),
-        message: message,
-        sentBy: _chatController.currentUser.id,
-        replyMessage: replyMessage,
-        messageType: messageType,
-      ),
+      String message, ReplyMessage replyMessage, MessageType messageType) {
+    if (message.trim().isEmpty) return;
+
+    final newMessage = Message(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      createdAt: DateTime.now(),
+      message: message,
+      sentBy: _chatController.currentUser.id,
+      replyMessage: replyMessage,
+      messageType: messageType,
     );
+
+    _chatController.addMessage(newMessage);
+
+    context.read<ConversationBloc>().add(SendMessageEvent(
+          chatId: widget.chatId,
+          messageText: message,
+        ));
   }
 }

@@ -24,6 +24,10 @@ class AuthRepository {
     await localDS.saveToken(token: token);
   }
 
+  Future<void> saveUserInfo(int userId, String firstName, String lastName) async {
+    await localDS.saveUserInfo(userId, firstName, lastName);
+  }
+
   Future<bool> isLoggedIn() async {
     return await localDS.isLoggedIn();
   }

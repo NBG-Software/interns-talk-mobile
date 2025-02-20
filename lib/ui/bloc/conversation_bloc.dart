@@ -8,6 +8,7 @@ import 'package:interns_talk_mobile/data/service/socket_service.dart';
 class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   final ChatRepository chatRepository;
   final SocketService socketService;
+  int? currentChatId;
 
   ConversationBloc({
     required this.chatRepository,
@@ -15,20 +16,24 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   }) : super(ConversationInitial()) {
     on<GetChatHistoryEvent>(_onGetChatHistory);
     on<SendMessageEvent>(_onSendMessage);
-    on<ListenMessageEvent>(_onListenMessage);
-
-    socketService.listenForMessages(1, (message) {
-      add(ListenMessageEvent(MessageModel.fromJson(message)));
-    });
+    on<NewMessageReceived>(_onNewMessageReceived);
   }
 
   Future<void> _onGetChatHistory(
       GetChatHistoryEvent event, Emitter<ConversationState> emit) async {
     emit(ConversationLoading());
+    currentChatId = event.chatId;
+
     final result = await chatRepository.getMessageHistory(event.chatId);
 
     if (result.isSuccess) {
       emit(ChatHistoryLoaded(result.data!));
+
+      socketService.listenForMessages(event.chatId, (data) {
+        final newMessage = MessageModel.fromJson(data);
+        add(NewMessageReceived(newMessage));
+      });
+
     } else {
       emit(ConversationError(result.error ?? "Failed to load chat history"));
     }
@@ -45,12 +50,23 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     socketService.sendMessage(event.chatId, message);
 
     final sentMessage = MessageModel.fromJson(message);
-    emit(MessageSent(sentMessage));
+
+    if (state is ChatHistoryLoaded) {
+      final updatedMessages = List<MessageModel>.from(
+          (state as ChatHistoryLoaded).messages)
+        ..add(sentMessage);
+      emit(ChatHistoryLoaded(updatedMessages));
+    }
   }
 
-  void _onListenMessage(
-      ListenMessageEvent event, Emitter<ConversationState> emit) {
-    emit(NewMessageReceived(event.message));
+  void _onNewMessageReceived(
+      NewMessageReceived event, Emitter<ConversationState> emit) {
+    if (state is ChatHistoryLoaded) {
+      final updatedMessages = List<MessageModel>.from(
+          (state as ChatHistoryLoaded).messages)
+        ..add(event.message);
+      emit(ChatHistoryLoaded(updatedMessages));
+    }
   }
 }
 
@@ -75,10 +91,10 @@ class SendMessageEvent extends ConversationEvent {
   });
 }
 
-class ListenMessageEvent extends ConversationEvent {
+class NewMessageReceived extends ConversationEvent {
   final MessageModel message;
 
-  ListenMessageEvent(this.message);
+  NewMessageReceived(this.message);
 }
 
 // States
@@ -92,18 +108,6 @@ class ChatHistoryLoaded extends ConversationState {
   final List<MessageModel> messages;
 
   ChatHistoryLoaded(this.messages);
-}
-
-class MessageSent extends ConversationState {
-  final MessageModel message;
-
-  MessageSent(this.message);
-}
-
-class NewMessageReceived extends ConversationState {
-  final MessageModel message;
-
-  NewMessageReceived(this.message);
 }
 
 class ConversationError extends ConversationState {
