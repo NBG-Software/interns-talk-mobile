@@ -121,6 +121,7 @@ class _BodyViewState extends State<_BodyView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CustomTextFormField(
+                        key: Key('email_field'),
                         controller: _emailController,
                         suffixIcon: Image.asset(kEmailIcon),
                         iconColor: kIconColorGrey,
@@ -140,6 +141,7 @@ class _BodyViewState extends State<_BodyView> {
                         height: 52,
                       ),
                       CustomTextFormField(
+                        key: Key('password_field'),
                         controller: _passwordController,
                         obscureText: !isVisible,
                         suffixIcon: IconButton(
@@ -190,6 +192,7 @@ class _BodyViewState extends State<_BodyView> {
                   height: 20,
                 ),
                 FilledButton(
+                    key: Key('login_button'),
                     style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(
                           Theme.of(context).colorScheme.primary),
