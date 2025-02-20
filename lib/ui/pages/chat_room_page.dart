@@ -47,7 +47,6 @@ class ChatRoomPage extends StatelessWidget {
   }
 }
 
-
 class ChatRoomBodyView extends StatefulWidget {
   const ChatRoomBodyView({super.key});
 
@@ -79,7 +78,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: BlocConsumer<ChatRoomBloc, ChatRoomState>(
-        listener: (context, state)  async {
+        listener: (context, state) async {
           if (state is ChatCreated) {
             await Navigator.push(
               context,
@@ -94,11 +93,30 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
           if (state is ChatRoomLoading) {
             return _buildLoading("Loading chat list");
           } else if (state is ChatRoomError) {
-            return _buildError(message: state.message,buttonText: 'Retry',onBtnClick: _onRefresh);
+            return _buildError(
+                message: state.message,
+                buttonText: 'Retry',
+                onBtnClick: _onRefresh);
           } else if (state is ChatCreatingError) {
-            return _buildError(message: state.message,buttonText: 'Ok',onBtnClick: _onRefresh);
+            return _buildError(
+                message: state.message,
+                buttonText: 'Ok',
+                onBtnClick: _onRefresh);
           } else if (state is DataLoaded) {
             return _buildChatAndMentorList(state);
+          } else if (state is ChatRoomNoData) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(state.message),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  FilledButton(onPressed: _onRefresh, child: Text('Refresh'))
+                ],
+              ),
+            );
           } else {
             return Container();
           }

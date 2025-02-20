@@ -24,7 +24,7 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
     final chat = await chatRepository.createChat(mentorId: event.mentorId);
     if (chat.isSuccess) {
       emit(ChatCreated(chat.data!));
-    }else{
+    } else {
       emit(ChatCreatingError(chat.error ?? 'Fail to start chat'));
     }
   }
@@ -36,7 +36,13 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
     final mentors = await userRepository.getMentorList();
 
     if (chats.isSuccess && mentors.isSuccess) {
-      emit(DataLoaded(chats: chats.data ?? [], mentors: mentors.data ?? []));
+      final mentorList = mentors.data ?? [];
+      final chatList = chats.data ?? [];
+      if (chatList.isEmpty && mentorList.isEmpty) {
+        emit(ChatRoomNoData('There is no mentor registered yet'));
+      } else {
+        emit(DataLoaded(chats: chatList, mentors: mentorList));
+      }
     } else {
       emit(ChatRoomError(chats.error ?? 'Fail to load chat list'));
     }
@@ -93,6 +99,13 @@ class ChatRoomError extends ChatRoomState {
 
   ChatRoomError(this.message);
 }
+
+class ChatRoomNoData extends ChatRoomState {
+  final String message;
+
+  ChatRoomNoData(this.message);
+}
+
 class ChatCreatingError extends ChatRoomState {
   final String message;
 
