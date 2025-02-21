@@ -19,12 +19,15 @@ class SocketService {
       return;
     }
     socket = IO.io(
-     '$kBaseUrl:3000',
-      IO.OptionBuilder().setTransports(['websocket'])
-          .setExtraHeaders(
-          {'Authorization': 'Bearer $token',
-          'X-App-Key': 'odbvje0i0aya2scsimxq'})
-          .setQuery({'token': token, 'appKey' : 'odbvje0i0aya2scsimxq'})
+      kBaseUrl,
+      IO.OptionBuilder()
+          .setTransports(['websocket'])
+          .setPath('/broadcasting/auth')
+          .setExtraHeaders({
+            'Authorization': 'Bearer $token',
+            'X-App-Key': 'odbvje0i0aya2scsimxq'
+          })
+          .setQuery({'token': token, 'appKey': 'odbvje0i0aya2scsimxq'})
           .build(),
     );
     socket.io.options?['reconnection'] = true;
