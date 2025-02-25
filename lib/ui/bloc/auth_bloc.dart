@@ -38,9 +38,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final userInfo = userInfoResult.data!;
         await authRepository.saveUserInfo(userInfo.id,
             userInfo.firstName ?? 'Unknown', userInfo.lastName ?? 'User');
-        emit(AuthAuthenticated("Welcome ${userInfo.firstName} ${userInfo.lastName}"));
-      }
-      else{
+        emit(AuthAuthenticated(
+            "Welcome ${userInfo.firstName} ${userInfo.lastName}"));
+      } else {
         emit(AuthError(userInfoResult.error ?? 'Fail to fetch user info'));
       }
     } else {
@@ -67,8 +67,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _onLogout(AuthLogoutEvent event, Emitter<AuthState> emit) {
-    authRepository.logOut();
+  Future<void> _onLogout(AuthLogoutEvent event, Emitter<AuthState> emit) async {
+    await authRepository.logOut();
     emit(AuthLoggedOut());
   }
 }
