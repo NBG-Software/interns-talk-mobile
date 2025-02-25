@@ -7,7 +7,6 @@ import 'package:interns_talk_mobile/ui/bloc/conversation_bloc.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 
 import '../../di/injection.dart';
-import '../bloc/profile_bloc.dart';
 
 class ConversationPage extends StatefulWidget {
   final int chatId;
@@ -50,18 +49,17 @@ class _ConversationPageState extends State<ConversationPage> {
         initialMessageList: [],
         scrollController: ScrollController(),
         otherUsers: [
-          ChatUser(id: widget.mentorId.toString(), name: widget.mentorName)
+          ChatUser(id: (widget.mentorId).toString(), name: widget.mentorName)
         ],
-        currentUser: ChatUser(id: currentUserId ?? '0', name: 'Current User'),
+        currentUser: ChatUser(
+            id: currentUserId ?? '0', name: userName ?? 'Current User'),
       );
       context.read<ConversationBloc>().add(GetChatHistoryEvent(widget.chatId));
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return BlocListener<ConversationBloc, ConversationState>(
       listener: (context, state) {
         print("📌 Bloc state changed: $state");
@@ -85,8 +83,7 @@ class _ConversationPageState extends State<ConversationPage> {
                 ? ChatViewState.noData
                 : ChatViewState.hasMessages;
           });
-        }
-        else if (state is ConversationError) {
+        } else if (state is ConversationError) {
           setState(() {
             _chatViewState = ChatViewState.error;
           });

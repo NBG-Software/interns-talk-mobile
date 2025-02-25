@@ -33,7 +33,6 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         final newMessage = MessageModel.fromJson(data);
         add(NewMessageReceived(newMessage));
       });
-
     } else {
       emit(ConversationError(result.error ?? "Failed to load chat history"));
     }
@@ -42,23 +41,23 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   Future<void> _onSendMessage(
       SendMessageEvent event, Emitter<ConversationState> emit) async {
     final message = {
-      "id": DateTime.now().millisecondsSinceEpoch, // Generate a temp ID
+      "id": DateTime.now().millisecondsSinceEpoch,
       "chat_id": event.chatId,
-      'sender_id' : event.senderId,// Ensure sender ID is included
+      'sender_id': event.senderId,
       "message_text": event.messageText,
       "message_media": event.messageMedia,
       "created_at": DateTime.now().toString()
     };
     print("🛠 Message data: $message");
 
-    socketService.sendMessage(event.chatId, message);
-    final sentMessage = MessageModel.fromJson(message);
+    // socketService.sendMessage(event.chatId, message);
+    // final sentMessage = MessageModel.fromJson(message);
 
     // if (state is ChatHistoryLoaded) {
-    //   final updatedMessages = List<MessageModel>.from(
-    //       (state as ChatHistoryLoaded).messages)
-    //     ..add(sentMessage);
-    //   emit(ConversationInitial());
+    //   final updatedMessages =
+    //       List<MessageModel>.from((state as ChatHistoryLoaded).messages)
+    //         ..add(sentMessage);
+    //   // emit(ConversationInitial());
     //   emit(ChatHistoryLoaded(updatedMessages));
     // }
   }
@@ -66,9 +65,9 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   void _onNewMessageReceived(
       NewMessageReceived event, Emitter<ConversationState> emit) {
     if (state is ChatHistoryLoaded) {
-      final updatedMessages = List<MessageModel>.from(
-          (state as ChatHistoryLoaded).messages)
-        ..add(event.message);
+      final updatedMessages =
+          List<MessageModel>.from((state as ChatHistoryLoaded).messages)
+            ..add(event.message);
       emit(ChatHistoryLoaded(updatedMessages));
     }
   }
