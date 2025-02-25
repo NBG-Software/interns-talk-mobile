@@ -41,9 +41,16 @@ void main() {
       build: () {
         when(() => mockAuthRepository.logIn(
                 email: any(named: 'email'), password: any(named: 'password')))
-            .thenAnswer((_) async => Future.value(Result.success('token')));
+            .thenAnswer((_) async => (Result.success('token')));
+        when(() => mockAuthRepository.saveToken(token: any(named: 'token')))
+            .thenAnswer((_) async => Future.value());
         when(() => mockUserRepository.getUserInfo()).thenAnswer((_) async =>
             Result.success(User(id: 1, firstName: 'John', lastName: 'Doe')));
+        when(() => mockAuthRepository.saveUserInfo(
+              any(),
+              any(),
+              any(),
+            )).thenAnswer((_) async => Future.value());
         return authBloc;
       },
       act: (bloc) => bloc
@@ -73,7 +80,12 @@ void main() {
               email: any(named: 'email'),
               password: any(named: 'password'),
               passwordConfirmation: any(named: 'passwordConfirmation'),
-            )).thenAnswer((_) async => Result.success('token'));
+            )).thenAnswer((_) async {
+          print('Mock SignUp Called');
+          return Future.value(Result.success('token'));
+        });
+        when(() => mockAuthRepository.saveToken(token: any(named: 'token')))
+            .thenAnswer((_) async => Future.value());
         return authBloc;
       },
       act: (bloc) => bloc.add(AuthSignUpEvent(
@@ -88,7 +100,8 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'emits [AuthLoggedOut] when logout is called',
       build: () {
-        when(() => mockAuthRepository.logOut()).thenAnswer((_) async {});
+        when(() => mockAuthRepository.logOut())
+            .thenAnswer((_) async => Future.value());
         return authBloc;
       },
       act: (bloc) => bloc.add(AuthLogoutEvent()),

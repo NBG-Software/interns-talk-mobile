@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
@@ -23,7 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (result.isSuccess) {
       emit(AuthAuthenticated(result.data!));
     } else {
-      emit(AuthError(result.error ?? "Failed send email"));
+      emit(AuthError(result.error ?? "Failed to send email"));
     }
   }
 
@@ -105,7 +106,10 @@ class AuthSignUpEvent extends AuthEvent {
 
 class AuthLogoutEvent extends AuthEvent {}
 
-abstract class AuthState {}
+abstract class AuthState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
 class AuthInitial extends AuthState {}
 
@@ -115,12 +119,18 @@ class AuthAuthenticated extends AuthState {
   final String message;
 
   AuthAuthenticated(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }
 
 class AuthError extends AuthState {
   final String message;
 
   AuthError(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }
 
 class AuthLoggedOut extends AuthState {}
