@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/model/user_model.dart';
@@ -17,19 +18,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Future<void> _onChangePassword(
-      ChangePasswordEvent event, Emitter<ProfileState> emit
-      ) async{
+      ChangePasswordEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoading());
-      // Simulating API call
-      final result = await userRepository.changePassword(
-        event.currentPassword,
-        event.newPassword,
-      );
-      if (result.isSuccess) {
-        emit(ChangePasswordSuccess(result.data!));
-      } else {
-        emit(ChangePasswordFailure(result.error ?? 'Fail to change password'));
-      }
+    final result = await userRepository.changePassword(
+      event.currentPassword,
+      event.newPassword,
+    );
+    if (result.isSuccess) {
+      emit(ChangePasswordSuccess(result.data!));
+    } else {
+      emit(ChangePasswordFailure(result.error ?? 'Fail to change password'));
+    }
   }
 
   Future<void> _onGetUserInfo(
@@ -62,7 +61,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Future<void> _onUploadProfilePicture(
       UploadProfilePictureEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoading());
-    final result = await userRepository.uploadProfilePicture(event.profileImage);
+    final result =
+        await userRepository.uploadProfilePicture(event.profileImage);
 
     if (result.isSuccess) {
       emit(ProfilePictureUpdated("Profile picture updated successfully"));
@@ -72,8 +72,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 }
 
-
-
 // Events
 abstract class ProfileEvent {}
 
@@ -81,9 +79,9 @@ class ChangePasswordEvent extends ProfileEvent {
   final String currentPassword;
   final String newPassword;
 
-  ChangePasswordEvent({required this.currentPassword, required this.newPassword});
+  ChangePasswordEvent(
+      {required this.currentPassword, required this.newPassword});
 }
-
 
 class GetUserInfoEvent extends ProfileEvent {}
 
@@ -103,7 +101,10 @@ class UploadProfilePictureEvent extends ProfileEvent {
 }
 
 // States
-abstract class ProfileState {}
+abstract class ProfileState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
 class ProfileInitial extends ProfileState {}
 
@@ -128,12 +129,13 @@ class ProfileError extends ProfileState {
   final String message;
   ProfileError(this.message);
 }
-class ChangePasswordFailure extends ProfileState{
+
+class ChangePasswordFailure extends ProfileState {
   final String message;
   ChangePasswordFailure(this.message);
 }
 
-class ChangePasswordSuccess extends ProfileState{
+class ChangePasswordSuccess extends ProfileState {
   final String message;
   ChangePasswordSuccess(this.message);
 }
