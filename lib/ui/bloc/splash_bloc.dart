@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/repository/auth_repository.dart';
@@ -8,7 +9,10 @@ abstract class SplashEvent {}
 class CheckLoginStatus extends SplashEvent {}
 
 // States
-abstract class SplashState {}
+abstract class SplashState extends Equatable {
+  @override
+  List<Object> get props => [];
+}
 
 class SplashInitial extends SplashState {}
 
