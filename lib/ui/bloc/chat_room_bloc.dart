@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/model/chat_model.dart';
@@ -65,7 +66,10 @@ class GetChatListEvent extends ChatRoomEvent {}
 class GetDataEvent extends ChatRoomEvent {}
 
 // Chat Room States
-abstract class ChatRoomState {}
+abstract class ChatRoomState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
 class ChatRoomInitial extends ChatRoomState {}
 
