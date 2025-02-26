@@ -27,17 +27,17 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      firstName: json['first_name'],
-      lastName: json['last_name'],
-      email: json['email'],
-      emailVerifiedAt: json['email_verified_at'],
-      password: json['password'],
-      role: json['role'],
-      profilePicture: json['image'],
-      deletedAt: json['deleted_at'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      id: json['id'] ?? 0,
+      firstName: json['first_name'] ?? 'Unknown',
+      lastName: json['last_name'] ?? 'User',
+      email: json['email'] ?? 'unknown',
+      emailVerifiedAt: json['email_verified_at'] ?? '',
+      password: json['password'] ?? '',
+      role: json['role'] ?? '',
+      profilePicture: json['image'] ?? '',
+      deletedAt: json['deleted_at'] ?? '',
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
     );
   }
 
