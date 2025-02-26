@@ -2,7 +2,7 @@ class MessageModel {
   final int id;
   final int chatId;
   final int senderId;
-  final String messageText;
+  final String? messageText;
   final String? messageMedia;
   final DateTime createdAt;
 
@@ -10,7 +10,7 @@ class MessageModel {
     required this.id,
     required this.chatId,
     required this.senderId,
-    required this.messageText,
+    this.messageText,
     this.messageMedia,
     required this.createdAt,
   });

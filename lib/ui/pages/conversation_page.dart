@@ -73,8 +73,11 @@ class _ConversationPageState extends State<ConversationPage> {
           _chatController.loadMoreData(messages
               .map((msg) => Message(
                     id: msg.id.toString(),
-                    message: msg.messageMedia ?? msg.messageText,
-                    createdAt: msg.createdAt.toLocal(),
+                    messageType: msg.messageMedia != null
+                        ? MessageType.image
+                        : MessageType.text,
+                    message: msg.messageMedia ?? msg.messageText ?? '',
+                    createdAt: msg.createdAt,
                     sentBy: msg.senderId.toString(),
                   ))
               .toList());
@@ -119,11 +122,20 @@ class _ConversationPageState extends State<ConversationPage> {
             ),
             errorWidgetConfig: ChatViewStateWidgetConfiguration(
                 reloadButtonColor: kPrimaryColor,
-                showDefaultReloadButton: true),
+                reloadButton: IconButton(
+                    onPressed: () {
+                      context
+                          .read<ConversationBloc>()
+                          .add(GetChatHistoryEvent(widget.chatId));
+                    },
+                    icon: Icon(
+                      Icons.refresh,
+                      color: kIconColorGrey,
+                    )),
+                showDefaultReloadButton: false),
             loadingWidgetConfig: ChatViewStateWidgetConfiguration(
               loadingIndicatorColor: kPrimaryColor,
             ),
-            onReloadButtonTap: () {},
           ),
           typeIndicatorConfig: TypeIndicatorConfiguration(
             flashingCircleBrightColor: kPrimaryColor,
