@@ -84,16 +84,6 @@ class DataLoaded extends ChatRoomState {
   DataLoaded({required this.chats, required this.mentors});
 }
 
-// class MentorListLoaded extends ChatRoomState {
-//   final List<Mentor> mentors;
-//   MentorListLoaded(this.mentors);
-// }
-
-// class ChatListLoaded extends ChatRoomState {
-//   final List<Chat> chats;
-//   ChatListLoaded(this.chats);
-// }
-
 class ChatRoomError extends ChatRoomState {
   final String message;
 
