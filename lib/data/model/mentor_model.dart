@@ -2,7 +2,7 @@ class Mentor {
   final String? firstName;
   final String? lastName;
   final String? email;
-  final int id;
+  final int? id;
   final String? image;
   final String? company;
   final String? expertise;

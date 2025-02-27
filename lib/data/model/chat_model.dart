@@ -1,6 +1,6 @@
 class Chat {
-  final int chatId;
-  final int mentorId;
+  final int? chatId;
+  final int? mentorId;
   final String? firstName;
   final String? lastName;
   final String? messageText;
@@ -13,8 +13,8 @@ class Chat {
       this.lastName,
       this.messageText,
       this.messageMedia,
-      required this.chatId,
-      required this.mentorId,
+      this.chatId,
+      this.mentorId,
       this.createdAt,
       this.image});
 

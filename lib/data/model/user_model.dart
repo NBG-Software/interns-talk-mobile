@@ -1,5 +1,5 @@
 class User {
-  int id;
+  int? id;
   String? firstName;
   String? lastName;
   String? email;
@@ -12,7 +12,7 @@ class User {
   String? updatedAt;
 
   User({
-    required this.id,
+    this.id,
     this.firstName,
     this.lastName,
     this.email,

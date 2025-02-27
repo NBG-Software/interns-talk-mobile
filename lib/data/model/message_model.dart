@@ -1,18 +1,18 @@
 class MessageModel {
-  final int id;
-  final int chatId;
-  final int senderId;
+  final int? id;
+  final int? chatId;
+  final int? senderId;
   final String? messageText;
   final String? messageMedia;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   MessageModel({
-    required this.id,
-    required this.chatId,
-    required this.senderId,
+    this.id,
+    this.chatId,
+    this.senderId,
     this.messageText,
     this.messageMedia,
-    required this.createdAt,
+    this.createdAt,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
