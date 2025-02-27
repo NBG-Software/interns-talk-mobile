@@ -24,7 +24,7 @@ void main() {
     authRemoteDatasource = AuthRemoteDatasource(mockDioClient);
   });
 
-  group('AuthRemoteDatasource', () {
+  group('AuthRemoteDatasource Success Cases', () {
     test('should return token when login is successful', () async {
       final mockResponse = Response(
         requestOptions: RequestOptions(path: '/login'),
@@ -44,26 +44,6 @@ void main() {
 
       expect(result.isSuccess, true);
       expect(result.data, 'mocked_token');
-    });
-
-    test('should return error when login fails', () async {
-      when(() => mockDio.post(
-            any(),
-            data: any(named: 'data'),
-          )).thenThrow(DioException(
-        requestOptions: RequestOptions(path: ''),
-        response: Response(
-          requestOptions: RequestOptions(path: ''),
-          statusCode: 401,
-          data: {'message': 'Invalid credentials'},
-        ),
-      ));
-
-      final result = await authRemoteDatasource.logIn(
-          email: 'wrong@example.com', password: 'wrongpassword');
-
-      expect(result.isSuccess, false);
-      expect(result.error, isNotNull);
     });
 
     test('should return token when sign-up is successful', () async {
@@ -92,6 +72,63 @@ void main() {
       expect(result.data, 'mocked_token');
     });
 
+    test('returns success message when logout API call is successful',
+        () async {
+      final mockResponse = Response(
+        requestOptions: RequestOptions(path: '/logout'),
+        data: {'message': 'Logout successful'},
+        statusCode: 200,
+      );
+
+      when(() => mockDio.post(any())).thenAnswer((_) async => mockResponse);
+
+      final result = await authRemoteDatasource.logOut();
+
+      expect(result.isSuccess, true);
+      expect(result.data, 'Logout successful');
+    });
+
+    test('should return success message when forgot password succeeds',
+        () async {
+      final mockResponse = Response(
+        requestOptions: RequestOptions(path: '/password/forgot'),
+        statusCode: 200,
+        data: {'message': 'Reset link sent'},
+      );
+
+      when(() => mockDio.post('/password/forgot',
+          data: {'email': 'test@example.com'})).thenAnswer((_) async {
+        return Future.value(mockResponse);
+      });
+
+      final result =
+          await authRemoteDatasource.sendResetEmail(email: 'test@example.com');
+      expect(result.isSuccess, true);
+      expect(result.data, 'Reset link sent');
+    });
+  });
+
+  group('AuthRemoteDatasource Failure Cases', () {
+    test('should return error when login fails', () async {
+      when(() => mockDio.post(
+            any(),
+            data: any(named: 'data'),
+          )).thenThrow(DioException(
+        requestOptions: RequestOptions(path: ''),
+        response: Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: 401,
+          data: {'message': 'Invalid credentials'},
+        ),
+      ));
+
+      final result = await authRemoteDatasource.logIn(
+          email: 'wrong@example.com', password: 'wrongpassword');
+
+      expect(result.isSuccess, false);
+      expect(result.error, isNotNull);
+    });
+
     test('should return error when sign-up fails', () async {
       when(() => mockDio.post(
             any(),
@@ -117,35 +154,25 @@ void main() {
       expect(result.error, 'Email already exists');
     });
 
-    test('should call Dio logout without error', () async {
-      when(() => mockDio.post(any()))
-          .thenAnswer((_) async => Future.value(Response(
-                requestOptions: RequestOptions(path: ''),
-                statusCode: 200,
-              )));
+    test('returns error when DioException occurs', () async {
+      when(() => mockDio.post(any())).thenThrow(DioException(
+        requestOptions: RequestOptions(path: '/logout'),
+        type: DioExceptionType.connectionTimeout,
+      ));
 
-      await authRemoteDatasource.logOut();
+      final result = await authRemoteDatasource.logOut();
 
-      verify(() => mockDioClient.dio.post('/logout')).called(1);
+      expect(result.isError, true);
+      expect(result.error, isNotNull);
     });
 
-    test('should return success message when forgot password succeeds',
-        () async {
-      final mockResponse = Response(
-        requestOptions: RequestOptions(path: '/password/forgot'),
-        statusCode: 200,
-        data: {'message': 'Reset link sent'},
-      );
+    test('returns error when an unexpected error occurs', () async {
+      when(() => mockDio.post(any())).thenThrow(Exception('Unexpected error'));
 
-      when(() => mockDio.post('/password/forgot',
-          data: {'email': 'test@example.com'})).thenAnswer((_) async {
-        return Future.value(mockResponse);
-      });
+      final result = await authRemoteDatasource.logOut();
 
-      final result =
-          await authRemoteDatasource.sendResetEmail(email: 'test@example.com');
-      expect(result.isSuccess, true);
-      expect(result.data, 'Reset link sent');
+      expect(result.isError, true);
+      expect(result.error, 'Unexpected error occurred');
     });
 
     test('should return error when forgot password fails', () async {

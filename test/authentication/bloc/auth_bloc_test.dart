@@ -35,7 +35,7 @@ void main() {
     authBloc.close();
   });
 
-  group('AuthBloc', () {
+  group('AuthBloc Success Cases', () {
     blocTest<AuthBloc, AuthState>(
       'emits [AuthLoading, AuthAuthenticated] when login succeeds',
       build: () {
@@ -59,19 +59,6 @@ void main() {
     );
 
     blocTest<AuthBloc, AuthState>(
-      'emits [AuthLoading, AuthError] when login fails',
-      build: () {
-        when(() => mockAuthRepository.logIn(
-                email: any(named: 'email'), password: any(named: 'password')))
-            .thenAnswer((_) async => Result.error('Login failed'));
-        return authBloc;
-      },
-      act: (bloc) => bloc.add(AuthLoginEvent(
-          email: 'wrong@example.com', password: 'wrongpassword')),
-      expect: () => [AuthLoading(), AuthError('Login failed')],
-    );
-
-    blocTest<AuthBloc, AuthState>(
       'emits [AuthLoading, AuthAuthenticated] when sign up succeeds',
       build: () {
         when(() => mockAuthRepository.signUp(
@@ -81,7 +68,6 @@ void main() {
               password: any(named: 'password'),
               passwordConfirmation: any(named: 'passwordConfirmation'),
             )).thenAnswer((_) async {
-          print('Mock SignUp Called');
           return Future.value(Result.success('token'));
         });
         when(() => mockAuthRepository.saveToken(token: any(named: 'token')))
@@ -98,14 +84,14 @@ void main() {
     );
 
     blocTest<AuthBloc, AuthState>(
-      'emits [AuthLoggedOut] when logout is called',
+      'emits [AuthLoading, AuthLoggedOut] when logout succeeds',
       build: () {
-        when(() => mockAuthRepository.logOut())
-            .thenAnswer((_) async => Future.value());
+        when(() => mockAuthRepository.logOut()).thenAnswer(
+            (_) async => Future.value(Result.success('Logout successful')));
         return authBloc;
       },
       act: (bloc) => bloc.add(AuthLogoutEvent()),
-      expect: () => [AuthLoggedOut()],
+      expect: () => [AuthLoading(), AuthLoggedOut('Logout successful')],
     );
 
     blocTest<AuthBloc, AuthState>(
@@ -119,6 +105,68 @@ void main() {
       act: (bloc) =>
           bloc.add(AuthForgotPasswordEvent(email: 'test@example.com')),
       expect: () => [AuthLoading(), AuthAuthenticated('Email Sent')],
+    );
+  });
+
+  group('AuthBloc Failure Cases', () {
+    blocTest<AuthBloc, AuthState>(
+      'emits [AuthLoading, AuthError] when login fails',
+      build: () {
+        when(() => mockAuthRepository.logIn(
+                email: any(named: 'email'), password: any(named: 'password')))
+            .thenAnswer((_) async => Result.error('Login failed'));
+        return authBloc;
+      },
+      act: (bloc) => bloc.add(AuthLoginEvent(
+          email: 'wrong@example.com', password: 'wrongpassword')),
+      expect: () => [AuthLoading(), AuthError('Login failed')],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'emits [AuthLoading, AuthError] when sign up fails',
+      build: () {
+        when(() => mockAuthRepository.signUp(
+              firstName: any(named: 'firstName'),
+              lastName: any(named: 'lastName'),
+              email: any(named: 'email'),
+              password: any(named: 'password'),
+              passwordConfirmation: any(named: 'passwordConfirmation'),
+            )).thenAnswer((_) async {
+          return Future.value(Result.error('Sign up failed'));
+        });
+        return authBloc;
+      },
+      act: (bloc) => bloc.add(AuthSignUpEvent(
+          firstName: 'Jane',
+          lastName: 'Doe',
+          email: 'jane@example.com',
+          password: 'password',
+          confirmPassword: 'password')),
+      expect: () => [AuthLoading(), AuthError('Sign up failed')],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'emits [AuthLoading, AuthError] when logout fails',
+      build: () {
+        when(() => mockAuthRepository.logOut())
+            .thenAnswer((_) async => Result.error('Logout failed'));
+        return authBloc;
+      },
+      act: (bloc) => bloc.add(AuthLogoutEvent()),
+      expect: () => [AuthLoading(), AuthError('Logout failed')],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'emits [AuthLoading, AuthError] when forgot password fails',
+      build: () {
+        when(() =>
+                mockAuthRepository.sendResetEmail(email: any(named: 'email')))
+            .thenAnswer((_) async => Result.error('Reset email failed'));
+        return authBloc;
+      },
+      act: (bloc) =>
+          bloc.add(AuthForgotPasswordEvent(email: 'test@example.com')),
+      expect: () => [AuthLoading(), AuthError('Reset email failed')],
     );
   });
 }

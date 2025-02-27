@@ -114,7 +114,8 @@ void main() {
     });
 
     test('should call remoteDS.logOut and localDS.deleteToken', () async {
-      when(() => mockRemoteDS.logOut()).thenAnswer((_) async {});
+      when(() => mockRemoteDS.logOut())
+          .thenAnswer((_) async => Result.success('Logged out'));
       when(() => mockLocalDS.deleteToken()).thenAnswer((_) async {});
 
       await authRepository.logOut();
