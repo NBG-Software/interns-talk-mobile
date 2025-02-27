@@ -95,7 +95,8 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
       child: BlocConsumer<ChatRoomBloc, ChatRoomState>(
         listener: (context, state) async {
           if (state is ChatCreated) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Chat created')));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('Chat created')));
             context.read<ChatRoomBloc>().add(GetDataEvent());
           }
         },
@@ -189,7 +190,9 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
             padding: const EdgeInsets.only(top: 20),
             child: InkWell(
               onTap: () {
-                _startChatting(chatId: chat.chatId,mentorId: chat.mentorId,
+                _startChatting(
+                    chatId: chat.chatId ?? 0,
+                    mentorId: chat.mentorId ?? 0,
                     mentorName: '${chat.firstName} ${chat.lastName}');
               },
               child: Row(
@@ -201,7 +204,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                         color: kUserProfileBackground,
                         borderRadius: BorderRadius.circular(8)),
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8),
                       child: Image.network(
                         fit: BoxFit.cover,
                         chat.image!,
@@ -209,7 +212,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                           if (loadingProgress == null) return child;
                           return Center(
                               child:
-                              CircularProgressIndicator()); // Show loader while loading
+                                  CircularProgressIndicator()); // Show loader while loading
                         },
                         errorBuilder: (context, error, stackTrace) {
                           return Image.asset(
@@ -308,7 +311,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                       ),
                       IconButton(
                           onPressed: () {
-                            _onChatCreate(mentorId: mentor.id);
+                            _onChatCreate(mentorId: mentor.id ?? 0);
                           },
                           icon: Icon(CupertinoIcons.add_circled))
                     ],
