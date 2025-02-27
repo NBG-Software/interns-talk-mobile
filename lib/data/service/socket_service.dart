@@ -47,9 +47,9 @@ class SocketService {
     });
   }
 
-  void sendMessage(int chatId, Map<String, dynamic> message) {
-    socket.emit('chat-channel-$chatId', message);
-  }
+  // void sendMessage(int chatId, Map<String, dynamic> message) {
+  //   socket.emit('chat-channel-$chatId', message);
+  // }
 
   void listenForMessages(
       int chatId, Function(Map<String, dynamic>) onMessageReceived) {

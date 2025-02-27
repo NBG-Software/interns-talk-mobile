@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/data/datasources/auth_local_datasource.dart';
+import 'package:interns_talk_mobile/data/model/message_model.dart';
 import 'package:interns_talk_mobile/ui/bloc/conversation_bloc.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 
@@ -77,7 +78,7 @@ class _ConversationPageState extends State<ConversationPage> {
                         ? MessageType.image
                         : MessageType.text,
                     message: msg.messageMedia ?? msg.messageText ?? '',
-                    createdAt: msg.createdAt,
+                    createdAt: msg.createdAt?.toLocal() ?? DateTime.now(),
                     sentBy: msg.senderId.toString(),
                   ))
               .toList());
@@ -249,7 +250,6 @@ class _ConversationPageState extends State<ConversationPage> {
     if (message.trim().isEmpty) return;
 
     final newMessage = Message(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
       createdAt: DateTime.now(),
       message: message,
       sentBy: _chatController.currentUser.id,
@@ -260,9 +260,18 @@ class _ConversationPageState extends State<ConversationPage> {
     _chatController.addMessage(newMessage);
 
     context.read<ConversationBloc>().add(SendMessageEvent(
-          chatId: widget.chatId,
-          senderId: int.parse(currentUserId ?? '1'),
-          messageText: message,
+          message: MessageModel(
+            id: int.parse(newMessage.id),
+            chatId: widget.chatId,
+            // senderId: int.parse(newMessage.sentBy),
+            messageText: newMessage.messageType == MessageType.text
+                ? newMessage.message
+                : null,
+            messageMedia: newMessage.messageType == MessageType.image
+                ? newMessage.message
+                : null,
+            createdAt: newMessage.createdAt,
+          ),
         ));
   }
 }

@@ -21,4 +21,8 @@ class ChatRepository {
   Future<Result<List<MessageModel>>> getMessageHistory(int chatId) async {
     return await chatRemoteDatasource.getMessageHistory(chatId);
   }
+
+  Future<Result<String>> sendMessage(MessageModel message) async {
+    return await chatRemoteDatasource.sendMessage(message);
+  }
 }

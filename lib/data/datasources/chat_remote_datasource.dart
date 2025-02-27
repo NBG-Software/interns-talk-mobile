@@ -71,4 +71,27 @@ class ChatRemoteDatasource {
       return Result.error("Unexpected error occurred");
     }
   }
+
+  Future<Result<String>> sendMessage(MessageModel message) async {
+    try {
+      final response = await dioClient.dio.post('/message', data: {
+        'chat_id': message.chatId,
+        'sender_id': message.senderId,
+        'message_text': message.messageText,
+        'message_media': message.messageMedia,
+      });
+
+      final statusMessage = response.data['message'];
+      if (response.data != null) {
+        return Result.success(statusMessage);
+      } else {
+        return Result.error(statusMessage);
+      }
+    } on DioException catch (e) {
+      final errorMessage = Handler.handleDioError(e);
+      return Result.error(errorMessage);
+    } catch (e) {
+      return Result.error("Unexpected error occurred");
+    }
+  }
 }
