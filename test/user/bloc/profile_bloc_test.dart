@@ -45,6 +45,18 @@ void main() {
     );
 
     blocTest<ProfileBloc, ProfileState>(
+      'emits [ProfileLoading, ProfileError] when GetUserInfoEvent fails',
+      build: () {
+        when(() => mockUserRepository.getUserInfo())
+            .thenAnswer((_) async => Result.error('Failed to fetch user info'));
+        return profileBloc;
+      },
+      act: (bloc) => bloc.add(GetUserInfoEvent()),
+      expect: () =>
+          [ProfileLoading(), ProfileError('Failed to fetch user info')],
+    );
+
+    blocTest<ProfileBloc, ProfileState>(
       'emits [ProfileLoading, ProfileUpdated] when EditProfileEvent is added',
       build: () {
         when(() => mockUserRepository.updateUserProfile(
@@ -58,6 +70,24 @@ void main() {
         lastName: 'Doe',
       )),
       expect: () => [ProfileLoading(), ProfileUpdated(testUser)],
+    );
+
+    blocTest<ProfileBloc, ProfileState>(
+      'emits [ProfileLoading, ProfileError] when EditProfileEvent fails',
+      build: () {
+        when(() => mockUserRepository.updateUserProfile(
+                  firstName: any(named: 'firstName'),
+                  lastName: any(named: 'lastName'),
+                ))
+            .thenAnswer((_) async => Result.error('Failed to update profile'));
+        return profileBloc;
+      },
+      act: (bloc) => bloc.add(EditProfileEvent(
+        firstName: 'John',
+        lastName: 'Doe',
+      )),
+      expect: () =>
+          [ProfileLoading(), ProfileError('Failed to update profile')],
     );
 
     blocTest<ProfileBloc, ProfileState>(
@@ -76,6 +106,23 @@ void main() {
     );
 
     blocTest<ProfileBloc, ProfileState>(
+      'emits [ProfileLoading, ProfileError] when ChangePasswordEvent fails',
+      build: () {
+        when(() => mockUserRepository.changePassword(any(), any()))
+            .thenAnswer((_) async => Result.error('Failed to change password'));
+        return profileBloc;
+      },
+      act: (bloc) => bloc.add(ChangePasswordEvent(
+        currentPassword: 'oldPassword',
+        newPassword: 'newPassword',
+      )),
+      expect: () => [
+        ProfileLoading(),
+        ChangePasswordFailure('Failed to change password')
+      ],
+    );
+
+    blocTest<ProfileBloc, ProfileState>(
       'emits [ProfileLoading, ProfilePictureUpdated] when UploadProfilePictureEvent is added',
       build: () {
         when(() => mockUserRepository.uploadProfilePicture(any())).thenAnswer(
@@ -88,6 +135,18 @@ void main() {
         ProfileLoading(),
         ProfilePictureUpdated("Profile picture updated successfully")
       ],
+    );
+
+    blocTest<ProfileBloc, ProfileState>(
+      'emits [ProfileLoading, ProfileError] when UploadProfilePictureEvent fails',
+      build: () {
+        when(() => mockUserRepository.uploadProfilePicture(any())).thenAnswer(
+            (_) async => Result.error('Failed to upload profile picture'));
+        return profileBloc;
+      },
+      act: (bloc) => bloc.add(UploadProfilePictureEvent(FakeFile())),
+      expect: () =>
+          [ProfileLoading(), ProfileError('Failed to upload profile picture')],
     );
   });
 }

@@ -29,7 +29,7 @@ void main() {
     userRemoteDatasource = UserRemoteDatasource(mockDioClient);
   });
 
-  group('UserRemoteDatasource', () {
+  group('UserRemoteDatasource Success Cases', () {
     test('should return User when getUserInfo is successful', () async {
       final mockResponse = Response(
         requestOptions: RequestOptions(path: '/user'),
@@ -51,22 +51,6 @@ void main() {
       expect(result.isSuccess, true);
       expect(result.data, isA<User>());
       expect(result.data?.firstName, 'John');
-    });
-
-    test('should return error when getUserInfo fails', () async {
-      when(() => mockDioClient.dio.get('/user')).thenThrow(DioException(
-        requestOptions: RequestOptions(path: '/user'),
-        response: Response(
-          requestOptions: RequestOptions(path: '/user'),
-          statusCode: 400,
-          data: {'message': 'User not found'},
-        ),
-      ));
-
-      final result = await userRemoteDatasource.getUserInfo();
-
-      expect(result.isSuccess, false);
-      expect(result.error, 'User not found');
     });
 
     test('should return updated User when updateUserProfile is successful',
@@ -124,7 +108,6 @@ void main() {
       when(() => mockDio.get('/mentor')).thenAnswer((_) async => mockResponse);
 
       final result = await userRemoteDatasource.getMentorList();
-      print(result.error);
       expect(result.isSuccess, true);
       expect(result.data, isA<List<Mentor>>());
       expect(result.data?.length, 2);
@@ -147,6 +130,97 @@ void main() {
 
       expect(result.isSuccess, true);
       expect(result.data, 'Password changed successfully');
+    });
+  });
+
+  group('UserRemoteDatasource Failure Cases', () {
+    test('should return error when getUserInfo fails', () async {
+      when(() => mockDioClient.dio.get('/user')).thenThrow(DioException(
+        requestOptions: RequestOptions(path: '/user'),
+        response: Response(
+          requestOptions: RequestOptions(path: '/user'),
+          statusCode: 400,
+          data: {'message': 'User not found'},
+        ),
+      ));
+
+      final result = await userRemoteDatasource.getUserInfo();
+
+      expect(result.isSuccess, false);
+      expect(result.error, 'User not found');
+    });
+
+    test('should return error when updateUserProfile fails', () async {
+      when(() => mockDio.patch('/user',
+              data: {'first_name': 'Updated', 'last_name': 'User'}))
+          .thenThrow(DioException(
+        requestOptions: RequestOptions(path: '/user'),
+        response: Response(
+          requestOptions: RequestOptions(path: '/user'),
+          statusCode: 400,
+          data: {'message': 'Update failed'},
+        ),
+      ));
+
+      final result = await userRemoteDatasource.updateUserProfile(
+          firstName: 'Updated', lastName: 'User');
+
+      expect(result.isSuccess, false);
+      expect(result.error, 'Update failed');
+    });
+
+    test('should return error when uploading profile picture fails', () async {
+      final file = File(kAppLogo);
+
+      when(() => mockDio.post('/user/profile', data: any(named: 'data')))
+          .thenThrow(DioException(
+        requestOptions: RequestOptions(path: '/user/profile'),
+        response: Response(
+          requestOptions: RequestOptions(path: '/user/profile'),
+          statusCode: 400,
+          data: {'message': 'Upload failed'},
+        ),
+      ));
+
+      final result = await userRemoteDatasource.uploadProfilePicture(file);
+
+      expect(result.isSuccess, false);
+      expect(result.error, 'Upload failed');
+    });
+
+    test('should return error when getMentorList fails', () async {
+      when(() => mockDio.get('/mentor')).thenThrow(DioException(
+        requestOptions: RequestOptions(path: '/mentor'),
+        response: Response(
+          requestOptions: RequestOptions(path: '/mentor'),
+          statusCode: 400,
+          data: {'message': 'Failed to fetch mentors'},
+        ),
+      ));
+
+      final result = await userRemoteDatasource.getMentorList();
+
+      expect(result.isSuccess, false);
+      expect(result.error, 'Failed to fetch mentors');
+    });
+
+    test('should return error when changing password fails', () async {
+      when(() => mockDio.post('/password',
+              data: {'old_password': 'oldPass', 'new_password': 'newPass'}))
+          .thenThrow(DioException(
+        requestOptions: RequestOptions(path: '/password'),
+        response: Response(
+          requestOptions: RequestOptions(path: '/password'),
+          statusCode: 400,
+          data: {'message': 'Password change failed'},
+        ),
+      ));
+
+      final result =
+          await userRemoteDatasource.changePassword('oldPass', 'newPass');
+
+      expect(result.isSuccess, false);
+      expect(result.error, 'Password change failed');
     });
   });
 }
