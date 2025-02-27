@@ -103,6 +103,16 @@ void main() {
       verify(() => mockStorage.read(key: 'userName')).called(1);
     });
 
+    test('should delete user info', () async {
+      when(() => mockStorage.delete(key: 'userId')).thenAnswer((_) async {});
+      when(() => mockStorage.delete(key: 'userName')).thenAnswer((_) async {});
+
+      await authLocalDatasource.deleteUserInfo();
+
+      verify(() => mockStorage.delete(key: 'userId')).called(1);
+      verify(() => mockStorage.delete(key: 'userName')).called(1);
+    });
+
     test('should return null when user info is missing', () async {
       when(() => mockStorage.read(key: 'userId')).thenAnswer((_) async => null);
       when(() => mockStorage.read(key: 'userName'))

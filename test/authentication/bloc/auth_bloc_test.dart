@@ -67,11 +67,17 @@ void main() {
               email: any(named: 'email'),
               password: any(named: 'password'),
               passwordConfirmation: any(named: 'passwordConfirmation'),
-            )).thenAnswer((_) async {
-          return Future.value(Result.success('token'));
-        });
+            )).thenAnswer((_) async => Result.success('token'));
+
         when(() => mockAuthRepository.saveToken(token: any(named: 'token')))
-            .thenAnswer((_) async => Future.value());
+            .thenAnswer((_) async {});
+
+        when(() => mockUserRepository.getUserInfo()).thenAnswer((_) async =>
+            Result.success(User(id: 1, firstName: 'Jane', lastName: 'Doe')));
+
+        when(() => mockAuthRepository.saveUserInfo(any(), any(), any()))
+            .thenAnswer((_) async {});
+
         return authBloc;
       },
       act: (bloc) => bloc.add(AuthSignUpEvent(
@@ -143,6 +149,34 @@ void main() {
           password: 'password',
           confirmPassword: 'password')),
       expect: () => [AuthLoading(), AuthError('Sign up failed')],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'emits [AuthLoading, AuthError] when fetching user info fails after sign up',
+      build: () {
+        when(() => mockAuthRepository.signUp(
+              firstName: any(named: 'firstName'),
+              lastName: any(named: 'lastName'),
+              email: any(named: 'email'),
+              password: any(named: 'password'),
+              passwordConfirmation: any(named: 'passwordConfirmation'),
+            )).thenAnswer((_) async => Result.success('token'));
+
+        when(() => mockAuthRepository.saveToken(token: any(named: 'token')))
+            .thenAnswer((_) async {});
+
+        when(() => mockUserRepository.getUserInfo())
+            .thenAnswer((_) async => Result.error('Fail to fetch user info'));
+
+        return authBloc;
+      },
+      act: (bloc) => bloc.add(AuthSignUpEvent(
+          firstName: 'Jane',
+          lastName: 'Doe',
+          email: 'jane@example.com',
+          password: 'password',
+          confirmPassword: 'password')),
+      expect: () => [AuthLoading(), AuthError('Fail to fetch user info')],
     );
 
     blocTest<AuthBloc, AuthState>(

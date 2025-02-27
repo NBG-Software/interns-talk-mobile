@@ -113,15 +113,21 @@ void main() {
           )).called(1);
     });
 
-    test('should call remoteDS.logOut and localDS.deleteToken', () async {
+    test('should call remoteDS.logOut and localDS.deleteToken & deleteUserInfo',
+        () async {
       when(() => mockRemoteDS.logOut())
-          .thenAnswer((_) async => Result.success('Logged out'));
+          .thenAnswer((_) async => Result.success('Logged out successfully'));
       when(() => mockLocalDS.deleteToken()).thenAnswer((_) async {});
+      when(() => mockLocalDS.deleteUserInfo()).thenAnswer((_) async {});
 
-      await authRepository.logOut();
+      final result = await authRepository.logOut();
 
       verify(() => mockRemoteDS.logOut()).called(1);
       verify(() => mockLocalDS.deleteToken()).called(1);
+      verify(() => mockLocalDS.deleteUserInfo()).called(1);
+
+      expect(result.isSuccess, true);
+      expect(result.data, "Logged out successfully");
     });
   });
 }
