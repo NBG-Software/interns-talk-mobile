@@ -62,7 +62,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if (result.isSuccess) {
       await authRepository.saveToken(token: result.data!);
-      emit(AuthAuthenticated("Welcome ${event.firstName} ${event.lastName}"));
+      final userInfoResult = await userRepository.getUserInfo();
+      if (userInfoResult.isSuccess) {
+        final userInfo = userInfoResult.data!;
+        await authRepository.saveUserInfo(userInfo.id ?? 0,
+            userInfo.firstName ?? 'Unknown', userInfo.lastName ?? 'User');
+        emit(AuthAuthenticated(
+            "Welcome ${userInfo.firstName} ${userInfo.lastName}"));
+      } else {
+        emit(AuthError(userInfoResult.error ?? 'Fail to fetch user info'));
+      }
+      // emit(AuthAuthenticated("Welcome ${event.firstName} ${event.lastName}"));
     } else {
       emit(AuthError(result.error ?? 'Something went wrong'));
     }
