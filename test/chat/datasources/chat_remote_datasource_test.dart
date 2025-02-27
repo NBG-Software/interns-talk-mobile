@@ -25,7 +25,7 @@ void main() {
     chatRemoteDatasource = ChatRemoteDatasource(mockDioClient);
   });
 
-  group('ChatRemoteDatasource', () {
+  group('ChatRemoteDatasource Success Cases', () {
     test('getChatList returns a list of chats on success', () async {
       final mockResponse = Response(
         requestOptions: RequestOptions(path: '/chats/latest'),
@@ -84,6 +84,45 @@ void main() {
 
       expect(result.isSuccess, true);
       expect(result.data, isA<List<MessageModel>>());
+    });
+  });
+
+  group('ChatRemoteDatasource Failure Cases', () {
+    test('getChatList returns an error on failure', () async {
+      when(() => mockDio.get(any())).thenThrow(DioException(
+        requestOptions: RequestOptions(path: '/chats/latest'),
+        error: 'Error',
+      ));
+
+      final result = await chatRemoteDatasource.getChatList();
+      expect(result.isSuccess, false);
+      expect(result.error, isNotNull);
+    });
+
+    test('createChat returns an error on failure', () async {
+      when(() => mockDio.post(any(), data: any(named: 'data'))).thenThrow(
+        DioException(
+          requestOptions: RequestOptions(path: '/chats'),
+          error: 'Error',
+        ),
+      );
+
+      final result = await chatRemoteDatasource.createChat(mentorId: 1);
+      expect(result.isSuccess, false);
+      expect(result.error, isNotNull);
+    });
+
+    test('getMessageHistory returns an error on failure', () async {
+      when(() => mockDio.get(any(), data: any(named: 'data'))).thenThrow(
+        DioException(
+          requestOptions: RequestOptions(path: '/message'),
+          error: 'Error',
+        ),
+      );
+
+      final result = await chatRemoteDatasource.getMessageHistory(1);
+      expect(result.isSuccess, false);
+      expect(result.error, isNotNull);
     });
   });
 }

@@ -76,5 +76,21 @@ void main() {
         ChatRoomNoData('There is no mentor registered yet')
       ],
     );
+
+    blocTest<ChatRoomBloc, ChatRoomState>(
+      'emits [ChatRoomLoading, ChatRoomError] when GetDataEvent is added and an error occurs',
+      build: () {
+        when(() => mockChatRepository.getChatList())
+            .thenAnswer((_) async => Result.error('Failed to fetch chats'));
+        when(() => mockUserRepository.getMentorList())
+            .thenAnswer((_) async => Result.error('Failed to fetch mentors'));
+        return chatRoomBloc;
+      },
+      act: (bloc) => bloc.add(GetDataEvent()),
+      expect: () => [
+        ChatRoomLoading(),
+        ChatRoomError('Failed to fetch chats and mentors')
+      ],
+    );
   });
 }
