@@ -24,7 +24,8 @@ class AuthRepository {
     await localDS.saveToken(token: token);
   }
 
-  Future<void> saveUserInfo(int userId, String firstName, String lastName) async {
+  Future<void> saveUserInfo(
+      int userId, String firstName, String lastName) async {
     await localDS.saveUserInfo(userId, firstName, lastName);
   }
 
@@ -51,8 +52,11 @@ class AuthRepository {
     );
   }
 
-  Future<void> logOut() async {
-    await remoteDS.logOut();
-    await localDS.deleteToken();
+  Future<Result<String>> logOut() async {
+    final result = await remoteDS.logOut();
+    if (result.isSuccess) {
+      await localDS.deleteToken();
+    }
+    return result;
   }
 }

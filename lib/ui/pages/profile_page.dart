@@ -35,12 +35,27 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthLoggedOut) {
+        if (state is AuthLoading) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Logging out...")),
+          );
+        } else if (state is AuthLoggedOut) {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => LoginPage()),
             (route) => false,
           );
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+        } else if (state is AuthError) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
         }
       },
       child: Scaffold(
@@ -116,7 +131,8 @@ class _ProfileDataViewState extends State<ProfileDataView> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.file(selectedImage, width: 180, height: 180, fit: BoxFit.cover),
+                Image.file(selectedImage,
+                    width: 180, height: 180, fit: BoxFit.cover),
                 SizedBox(height: 12),
                 Text("Do you want to upload this image?")
               ],
@@ -213,7 +229,7 @@ class ProfileMenuItems extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          onTap: () async{
+          onTap: () async {
             await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const EditProfilePage()));
             context.read<ProfileBloc>().add(GetUserInfoEvent());
@@ -224,7 +240,7 @@ class ProfileMenuItems extends StatelessWidget {
         ),
         ListTile(
           onTap: () async {
-           await Navigator.of(context).push(
+            await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const SettingPage()));
             context.read<ProfileBloc>().add(GetUserInfoEvent());
           },
@@ -279,6 +295,7 @@ class LogOutButton extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         context.read<AuthBloc>().add(AuthLogoutEvent());
+                        Navigator.of(context).pop();
                       },
                       child: Text(
                         'Log out',

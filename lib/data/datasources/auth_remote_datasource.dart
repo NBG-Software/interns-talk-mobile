@@ -59,11 +59,20 @@ class AuthRemoteDatasource {
     }
   }
 
-  Future<void> logOut() async {
+  Future<Result<String>> logOut() async {
     try {
-      await dioClient.dio.post('/logout');
+      final response = await dioClient.dio.post('/logout');
+      if (response.data != null) {
+        final message = response.data['message'];
+        return Result.success(message);
+      } else {
+        return Result.error('Fail to log out');
+      }
+    } on DioException catch (e) {
+      final errorMessage = Handler.handleDioError(e);
+      return Result.error(errorMessage);
     } catch (e) {
-      print("Logout failed: $e");
+      return Result.error("Unexpected error occurred");
     }
   }
 

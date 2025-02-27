@@ -37,7 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final userInfoResult = await userRepository.getUserInfo();
       if (userInfoResult.isSuccess) {
         final userInfo = userInfoResult.data!;
-        await authRepository.saveUserInfo(userInfo.id,
+        await authRepository.saveUserInfo(userInfo.id ?? 0,
             userInfo.firstName ?? 'Unknown', userInfo.lastName ?? 'User');
         emit(AuthAuthenticated(
             "Welcome ${userInfo.firstName} ${userInfo.lastName}"));
@@ -69,8 +69,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLogout(AuthLogoutEvent event, Emitter<AuthState> emit) async {
-    await authRepository.logOut();
-    emit(AuthLoggedOut());
+    emit(AuthLoading());
+    final result = await authRepository.logOut();
+    if (result.isSuccess) {
+      emit(AuthLoggedOut(result.data!));
+    } else {
+      emit(AuthError(result.error ?? 'Failed to log out'));
+    }
   }
 }
 
@@ -133,4 +138,11 @@ class AuthError extends AuthState {
   List<Object?> get props => [message];
 }
 
-class AuthLoggedOut extends AuthState {}
+class AuthLoggedOut extends AuthState {
+  final String message;
+
+  AuthLoggedOut(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
