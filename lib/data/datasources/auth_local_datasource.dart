@@ -11,7 +11,9 @@ class AuthLocalDatasource {
   Future<void> saveToken({required String token}) async {
     await storage.write(key: kAuthTokenKey, value: token);
   }
-  Future<void> saveUserInfo(int userId, String firstName, String lastName) async {
+
+  Future<void> saveUserInfo(
+      int userId, String firstName, String lastName) async {
     await storage.write(key: 'userId', value: userId.toString());
     await storage.write(key: 'userName', value: '$firstName $lastName');
   }
@@ -35,6 +37,11 @@ class AuthLocalDatasource {
 
   Future<void> deleteToken() async {
     await storage.delete(key: kAuthTokenKey);
+  }
+
+  Future<void> deleteUserInfo() async {
+    await storage.delete(key: 'userId');
+    await storage.delete(key: 'userName');
   }
 
   Future<bool> isLoggedIn() async {

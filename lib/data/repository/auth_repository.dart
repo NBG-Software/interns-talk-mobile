@@ -54,9 +54,11 @@ class AuthRepository {
 
   Future<Result<String>> logOut() async {
     final result = await remoteDS.logOut();
+    await localDS.deleteToken();
+    await localDS.deleteUserInfo();
     if (result.isSuccess) {
-      await localDS.deleteToken();
+      return Result.success("Logged out successfully");
     }
-    return result;
+    return Result.error(result.error ?? 'Error logging out');
   }
 }
