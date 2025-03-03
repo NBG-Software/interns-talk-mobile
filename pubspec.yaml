@@ -54,6 +54,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  appium_flutter_server: 0.0.27
 
 flutter_launcher_icons:
   android: true
