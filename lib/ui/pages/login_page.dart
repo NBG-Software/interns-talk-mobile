@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/common/custom_text_form_field.dart';
+import 'package:interns_talk_mobile/common/language_constants.dart';
 import 'package:interns_talk_mobile/common/validators.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/chat_room_page.dart';
@@ -10,7 +11,6 @@ import 'package:interns_talk_mobile/ui/pages/register_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:interns_talk_mobile/utils/dimens.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
-import 'package:interns_talk_mobile/utils/string.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -100,14 +100,14 @@ class _BodyViewState extends State<_BodyView> {
                 Column(
                   children: [
                     Text(
-                      kWelcomeTitleText,
+                      translation(context).welcomeTitle,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     SizedBox(
                       height: 52,
                     ),
                     Text(
-                      kWelcomeBodyText,
+                      translation(context).welcomeBody,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
@@ -127,7 +127,7 @@ class _BodyViewState extends State<_BodyView> {
                         iconColor: kIconColorGrey,
                         keyboardType: TextInputType.emailAddress,
                         autoValidateMode: AutovalidateMode.onUserInteraction,
-                        hintText: kEmailHintText,
+                        hintText: translation(context).emailHint,
                         validator: Validators.emailValidator,
                         fillColor: kTextFieldContainer,
                         hintTextColor: kHintTextColor,
@@ -159,7 +159,7 @@ class _BodyViewState extends State<_BodyView> {
                         iconColor: kIconColorGrey,
                         suffixPadding: EdgeInsets.only(right: 12),
                         autoValidateMode: AutovalidateMode.onUserInteraction,
-                        hintText: kPasswordHintText,
+                        hintText: translation(context).passwordHint,
                         keyboardType: TextInputType.visiblePassword,
                         fillColor: kTextFieldContainer,
                         hintTextColor: kHintTextColor,
@@ -178,7 +178,7 @@ class _BodyViewState extends State<_BodyView> {
                                         const ForgotPasswordPage()));
                           },
                           child: Text(
-                            kForgotPasswordText,
+                            translation(context).forgotPassword,
                             style: TextStyle(
                                 color: kTextColor,
                                 decoration: TextDecoration.underline),
@@ -209,14 +209,14 @@ class _BodyViewState extends State<_BodyView> {
                         _summitForm();
                       }
                     },
-                    child: Text(kLoginButtonText)),
+                    child: Text(translation(context).loginButton)),
                 SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(kDontHaveAccountText),
+                    Text(translation(context).dontHaveAccount),
                     SizedBox(
                       width: 8,
                     ),
@@ -227,7 +227,7 @@ class _BodyViewState extends State<_BodyView> {
                                 const RegisterPage()));
                       },
                       child: Text(
-                        kRegisterButtonText,
+                        translation(context).registerButton,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).colorScheme.primary,
