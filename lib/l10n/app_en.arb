@@ -5,6 +5,7 @@
     "passwordHint": "Password",
     "forgotPassword": "Forgot password?",
     "loginButton": "Log In",
+    "logoutButton":"Log Out",
     "dontHaveAccount": "Don't have an account?",
     "registerButton": "Register",
     "registerTitle": "Get Started",
@@ -34,5 +35,14 @@
     "burmese":"Burmese",
     "profileTitle":"Profile",
     "uploadBtnText": "Upload",
-    "editProfile":"Edit Profile"
+    "editProfile":"Edit Profile",
+    "cancel":"Cancel",
+    "confirmUpload":"Confirm Upload",
+    "uploadDescription":"Do you want to upload this image?",
+    "loggingOut": "Logging out",
+    "logOutConfirm":"Are you sure to log out?",
+    "editProfileTitle":"Edit Profile Here",
+    "enterNewProfile": "Please enter the new profile detail",
+    "confirmButtonText": "Confirm"
+
 }
