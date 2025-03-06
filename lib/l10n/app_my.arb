@@ -47,5 +47,6 @@
     "confirmButtonText": "အတည်ပြုပါ",
     "currentPassword":"လက်ရှိ စကား၀ှက်",
     "newPassword":"စကား၀ှက် အသစ်",
-    "changePassword":"စကားဝှက် ပြောင်းမည်"
+    "changePassword":"စကားဝှက် ပြောင်းမည်",
+    "chatRoomTitle":"စကားပြောခန်း"
 }

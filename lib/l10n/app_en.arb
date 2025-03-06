@@ -47,5 +47,6 @@
     "confirmButtonText": "Confirm",
     "currentPassword":"Current Password",
     "newPassword":"New Password",
-    "changePassword":"Change Password"
+    "changePassword":"Change Password",
+    "chatRoomTitle":"Chat Room"
 }
