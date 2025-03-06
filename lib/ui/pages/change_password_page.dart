@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/common/custom_text_form_field.dart';
+import 'package:interns_talk_mobile/common/language_constants.dart';
 import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
 
 import '../../common/validators.dart';
@@ -41,7 +42,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        'Change Password',
+        translation(context).changePasswordTitle,
         style: Theme.of(context).textTheme.titleMedium,
       )),
       body: SingleChildScrollView(
@@ -75,7 +76,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     suffixPadding: EdgeInsets.only(right: 12),
                     autoValidateMode: AutovalidateMode.onUserInteraction,
                     validator: Validators.passwordValidator,
-                    hintText: 'Current Password',
+                    hintText: translation(context).currentPassword,
                     fillColor: kTextFieldContainer,
                     hintTextColor: kHintTextColor,
                   ),
@@ -98,7 +99,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     suffixPadding: EdgeInsets.only(right: 12),
                     autoValidateMode: AutovalidateMode.onUserInteraction,
                     validator: Validators.passwordValidator,
-                    hintText: 'New Password',
+                    hintText: translation(context).newPassword,
                     fillColor: kTextFieldContainer,
                     hintTextColor: kHintTextColor,
                   ),
@@ -129,7 +130,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       }
                       return null;
                     },
-                    hintText: 'Confirm Password',
+                    hintText: translation(context).confirmPasswordHint,
                     fillColor: kTextFieldContainer,
                     hintTextColor: kHintTextColor,
                   ),
@@ -160,7 +161,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         ),
                       ),
                       onPressed: _changePassword,
-                      child: Text('Change Password'),
+                      child: Text(translation(context).changePassword),
                     ),
                   ),
                 ],

@@ -28,7 +28,7 @@
     "passwordDigitError": "Password must contain at least one digit",
     "settingTitle": "Settings",
     "version": "Version",
-    "changePassword": "Change Password",
+    "changePasswordTitle": "Change Password",
     "terms": "Terms and Conditions",
     "chooseLanguage":"Choose Language",
     "english":"English",
@@ -43,6 +43,8 @@
     "logOutConfirm":"Are you sure to log out?",
     "editProfileTitle":"Edit Profile Here",
     "enterNewProfile": "Please enter the new profile detail",
-    "confirmButtonText": "Confirm"
-
+    "confirmButtonText": "Confirm",
+    "currentPassword":"Current Password",
+    "newPassword":"New Password",
+    "changePassword":"Change Password"
 }
