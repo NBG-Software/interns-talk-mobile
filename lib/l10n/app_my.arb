@@ -16,6 +16,7 @@
     "strongPasswordHint": "စကားဝှက် အသစ်",
     "confirmPasswordHint": "စကားဝှက် အတည်ပြုပါ",
     "haveAccount": "အကောင့်ရှိပြီးသားလား?",
+    "sendEmail":"Reset လင့်ခ်ကို ပို့မည်",
     "firstNameError": "မည်သူ့အမည် ထည့်ရန် လိုအပ်သည်",
     "lastNameError": "မျိုးနွယ်အမည် ထည့်ရန် လိုအပ်သည်",
     "emailEmptyError": "အီးမေးလ် ထည့်ပါ",

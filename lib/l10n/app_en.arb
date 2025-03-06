@@ -16,6 +16,7 @@
     "strongPasswordHint": "Strong Password",
     "confirmPasswordHint": "Confirm Password",
     "haveAccount": "Already have an account?",
+    "sendEmail":"Send reset link",
     "firstNameError": "First name can't be empty",
     "lastNameError": "Last name can't be empty",
     "emailEmptyError": "Please enter an email",
