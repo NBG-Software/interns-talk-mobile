@@ -11,8 +11,6 @@ import 'package:interns_talk_mobile/ui/pages/register_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:interns_talk_mobile/utils/dimens.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
-import 'package:interns_talk_mobile/utils/string.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
