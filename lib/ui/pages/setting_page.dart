@@ -83,7 +83,7 @@ class _BodyViewState extends State<_BodyView> {
               ));
             },
             leading: Icon(CupertinoIcons.lock),
-            title: Text(translation(context).changePassword),
+            title: Text(translation(context).changePasswordTitle),
             trailing: Icon(CupertinoIcons.forward),
           ),
           ListTile(

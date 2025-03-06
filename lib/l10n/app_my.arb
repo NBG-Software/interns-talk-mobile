@@ -1,5 +1,5 @@
 {
-    "welcomeTitle": "Welcome back",
+    "welcomeTitle": "ပြန်လည် ကြိုဆိုပါတယ်",
     "welcomeBody": "သင့်အကောင့်သို့ ဝင်ရောက်အသုံးပြုရန် အကောင့်ဝင်ပါ",
     "emailHint": "အီးမေးလ်",
     "passwordHint": "စကားဝှက်",
@@ -9,7 +9,7 @@
     "dontHaveAccount": "အကောင့်မရှိဘူးလား?",
     "registerButton": "အကောင့်ပြုလုပ်မည်",
     "registerTitle": "စတင်မည်",
-    "registerBody": "အခမဲ့အကောင့် ဖ ပါ",
+    "registerBody": "အခမဲ့အကောင့် ဖွင့်ပါ",
     "firstNameHint": "မည်သူ့အမည်",
     "lastNameHint": "မျိုးနွယ်အမည်",
     "validEmailHint": "မှန်ကန်သော အီးမေးလ်",
@@ -28,14 +28,14 @@
     "passwordDigitError": "စကားဝှက်တွင် ဂဏန်းတစ်လုံး မဖြစ်မနေ ပါဝင်ရမည်",
     "settingTitle": "ဆက်တင်",
     "version": "ဗားရှင်း",
-    "changePassword": "စကားဝှက်ကိုပြောင်းရန်",
+    "changePasswordTitle": "စကားဝှက် ပြောင်းရန်",
     "terms": "စည်းကမ်းနှင့်သတ်မှတ်ချက်များ",
     "chooseLanguage":"ဘာသာစကား ရွေးချယ်ပါ",
     "english":"အင်္ဂလိပ်",
     "burmese":"မြန်မာ",
     "profileTitle":"ပရိုဖိုင်",
     "uploadBtnText": "ပုံတင်မည်",
-    "editProfile":"ပရိုဖိုင်ပြင်မည်",
+    "editProfile":"ပရိုဖိုင်အပြင်အဆင်",
     "cancel":"မလုပ်ပါ",
     "confirmUpload":"ပုံတင်ရန်အတည်ပြုပါ",
     "uploadDescription":"ပုံတင်ရန် သေချာပါသလား",
@@ -43,5 +43,8 @@
     "logOutConfirm":"အကောင့်ထွက်ရန် သေချာပါသလား",
     "editProfileTitle":"ပရိုဖိုင်ကို ဤနေရာတွင် ပြင်ပါ",
     "enterNewProfile": "ပရိုဖိုင်အသေးစိတ်အသစ်ကို ထည့်သွင်းပါ",
-    "confirmButtonText": "အတည်ပြုပါ"
+    "confirmButtonText": "အတည်ပြုပါ",
+    "currentPassword":"လက်ရှိ စကား၀ှက်",
+    "newPassword":"စကား၀ှက် အသစ်",
+    "changePassword":"စကားဝှက် ပြောင်းမည်"
 }
