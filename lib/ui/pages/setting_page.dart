@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:interns_talk_mobile/common/language_constants.dart';
+import 'package:interns_talk_mobile/ui/pages/language_page.dart';
 import 'package:interns_talk_mobile/ui/pages/terms_page.dart';
+import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
 import 'change_password_page.dart';
 
 class SettingPage extends StatelessWidget {
@@ -14,9 +16,25 @@ class SettingPage extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: true,
         title: Text(
-          'Setting',
+          translation(context).settingTitle,
           style: Theme.of(context).textTheme.titleMedium,
         ),
+        actions: [
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ChangeLanguagePage()));
+                },
+                child: Icon(Icons.language),
+                style: ButtonStyle(
+                    iconColor: WidgetStatePropertyAll(
+                      kIconOutlineColor,
+                    ),
+                    iconSize: WidgetStatePropertyAll(24)),
+              )),
+        ],
       ),
       body: _BodyView(),
     );
@@ -55,7 +73,7 @@ class _BodyViewState extends State<_BodyView> {
         children: [
           ListTile(
             leading: Icon(Icons.settings_outlined),
-            title: Text('Version'),
+            title: Text(translation(context).version),
             trailing: Text(appVersion),
           ),
           ListTile(
@@ -65,7 +83,7 @@ class _BodyViewState extends State<_BodyView> {
               ));
             },
             leading: Icon(CupertinoIcons.lock),
-            title: Text('Change Password'),
+            title: Text(translation(context).changePassword),
             trailing: Icon(CupertinoIcons.forward),
           ),
           ListTile(
@@ -74,7 +92,7 @@ class _BodyViewState extends State<_BodyView> {
                   MaterialPageRoute(builder: (context) => const TermsPage()));
             },
             leading: Icon(Icons.settings_outlined),
-            title: Text('Terms and Conditions'),
+            title: Text(translation(context).terms),
             trailing: Icon(CupertinoIcons.forward),
           ),
         ],

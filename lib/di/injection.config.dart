@@ -19,6 +19,8 @@ import 'package:interns_talk_mobile/data/datasources/auth_remote_datasource.dart
     as _i610;
 import 'package:interns_talk_mobile/data/datasources/chat_remote_datasource.dart'
     as _i972;
+import 'package:interns_talk_mobile/data/datasources/language_service.dart'
+    as _i611;
 import 'package:interns_talk_mobile/data/datasources/user_remote_datasource.dart'
     as _i542;
 import 'package:interns_talk_mobile/data/repository/auth_repository.dart'
@@ -53,16 +55,18 @@ extension GetItInjectableX on _i174.GetIt {
         () => registerModule.provideSecureStorage());
     gh.lazySingleton<_i739.AuthLocalDatasource>(
         () => _i739.AuthLocalDatasource(gh<_i558.FlutterSecureStorage>()));
+    gh.lazySingleton<_i611.LanguageService>(
+        () => _i611.LanguageService(gh<_i558.FlutterSecureStorage>()));
     gh.singleton<_i28.SocketService>(
         () => _i28.SocketService(gh<_i739.AuthLocalDatasource>()));
     gh.factory<_i158.DioClient>(() => _i158.DioClient(
           gh<_i361.Dio>(),
           gh<_i558.FlutterSecureStorage>(),
         ));
-    gh.lazySingleton<_i610.AuthRemoteDatasource>(
-        () => _i610.AuthRemoteDatasource(gh<_i158.DioClient>()));
     gh.lazySingleton<_i972.ChatRemoteDatasource>(
         () => _i972.ChatRemoteDatasource(gh<_i158.DioClient>()));
+    gh.lazySingleton<_i610.AuthRemoteDatasource>(
+        () => _i610.AuthRemoteDatasource(gh<_i158.DioClient>()));
     gh.lazySingleton<_i542.UserRemoteDatasource>(
         () => _i542.UserRemoteDatasource(gh<_i158.DioClient>()));
     gh.lazySingleton<_i69.AuthRepository>(() => _i69.AuthRepository(
