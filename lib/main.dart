@@ -9,8 +9,10 @@ import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
 import 'package:interns_talk_mobile/ui/bloc/splash_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/splash_screen.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
+import 'package:flutter_driver/driver_extension.dart';
 
 Future<void> main() async {
+  enableFlutterDriverExtension();
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
