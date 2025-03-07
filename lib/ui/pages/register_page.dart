@@ -120,7 +120,7 @@ class __BodyViewState extends State<_BodyView> {
                       children: [
                         Expanded(
                           child: CustomTextFormField(
-                            key: Key('firt_name_field'),
+                            key: ValueKey('firt_name_field'),
                             controller: _firstNameController,
                             keyboardType: TextInputType.text,
                             autoValidateMode: AutovalidateMode.onUnfocus,
@@ -142,7 +142,7 @@ class __BodyViewState extends State<_BodyView> {
                         ),
                         Expanded(
                           child: CustomTextFormField(
-                            key: Key('last_name_field'),
+                            key: ValueKey('last_name_field'),
                             autoValidateMode: AutovalidateMode.onUnfocus,
                             keyboardType: TextInputType.text,
                             controller: _lastNameController,
@@ -165,7 +165,7 @@ class __BodyViewState extends State<_BodyView> {
                       height: kMarginMedium1x,
                     ),
                     CustomTextFormField(
-                      key: Key('email_field'),
+                      key: ValueKey('email_field'),
                       controller: _emailController,
                       suffixIcon: Image.asset(kEmailIcon),
                       keyboardType: TextInputType.emailAddress,
@@ -185,7 +185,7 @@ class __BodyViewState extends State<_BodyView> {
                       height: kMarginMedium1x,
                     ),
                     CustomTextFormField(
-                      key: Key('password_field'),
+                      key: ValueKey('password_field'),
                       controller: _strongPasswordController,
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: !isVisible,
@@ -212,7 +212,7 @@ class __BodyViewState extends State<_BodyView> {
                       height: kMarginMedium1x,
                     ),
                     CustomTextFormField(
-                      key: Key('confirm_password_field'),
+                      key: ValueKey('confirm_password_field'),
                       controller: _confirmPasswordController,
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: isObscured,
@@ -247,7 +247,7 @@ class __BodyViewState extends State<_BodyView> {
                       height: kMarginMedium1x,
                     ),
                     FilledButton(
-                        key: Key('register_button'),
+                        key: ValueKey('register_button'),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             await _summitForm();
