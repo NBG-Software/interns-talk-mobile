@@ -27,19 +27,4 @@ class MessageModel {
           : DateTime.now(),
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'chat_id': chatId,
-      'sender_id': senderId,
-      'message_text': messageText,
-      'message_media': messageMedia,
-      'created_at': createdAt,
-    };
-  }
-
-  static List<MessageModel> fromJsonList(List<dynamic> jsonList) {
-    return jsonList.map((json) => MessageModel.fromJson(json)).toList();
-  }
 }
