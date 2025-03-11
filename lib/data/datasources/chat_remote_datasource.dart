@@ -78,7 +78,7 @@ class ChatRemoteDatasource {
         'chat_id': message.chatId,
         'sender_id': message.senderId,
         'message_text': message.messageText,
-        'message_media': message.messageMedia,
+        // 'message_media': message.messageMedia,
       });
 
       final statusMessage = response.data['message'];
