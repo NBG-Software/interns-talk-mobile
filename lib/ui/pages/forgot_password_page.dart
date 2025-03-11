@@ -8,7 +8,6 @@ import 'package:interns_talk_mobile/ui/pages/login_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:interns_talk_mobile/utils/dimens.dart';
 import 'package:interns_talk_mobile/utils/images.dart';
-import 'package:interns_talk_mobile/utils/string.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});

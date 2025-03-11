@@ -11,6 +11,7 @@ import 'package:interns_talk_mobile/ui/bloc/splash_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/splash_screen.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
 import 'package:flutter_driver/driver_extension.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   enableFlutterDriverExtension();
