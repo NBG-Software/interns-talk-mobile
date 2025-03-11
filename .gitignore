@@ -147,6 +147,7 @@ unlinked_spec.ds
 **/macos/Flutter/GeneratedPluginRegistrant.swift
 **/macos/Flutter/ephemeral
 **/xcuserdata/
+**/Runner.xcscheme
 
 # Windows
 **/windows/flutter/ephemeral/
@@ -247,3 +248,45 @@ windows/flutter/generated_plugins.cmake
 .python-version
 .gclient_previous_custom_vars
 .gclient_previous_sync_commits
+
+# Flutter/Dart dependencies
+pubspec.lock
+
+# Android build files
+android/.cxx/
+android/app/cxx/
+android/gradle/
+android/app/build/
+android/.gradle/
+android/local.properties
+android/gradlew
+android/gradlew.bat
+
+# Build and Debug files
+*.json
+*.txt
+*.bin
+*.ninja
+*.lock
+*.index
+*.log
+*.keystore
+*.iml
+
+# CMake and Debug-related files
+CMakeLists.txt.user
+android/app/cxx/Debug/
+android/app/cxx/Release/
+cache-*
+cmakeFiles-*
+codemodel-*
+directory-.*
+index-*
+
+# macOS specific files
+.DS_Store
+
+# VS Code settings
+.vscode/
+
+devtools_options.yaml
