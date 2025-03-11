@@ -34,3 +34,11 @@ const kPasswordDigitErrorText = 'Password must contain at least one digit';
 
 // Other Constants
 const kAuthTokenKey = 'authToken';
+
+//Settings Screen Texts
+
+const loadingVersionText = "Loading...";
+
+// Terms Screen Texts
+
+const termsPageTitle = 'Terms and Conditions';

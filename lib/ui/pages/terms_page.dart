@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:interns_talk_mobile/utils/string.dart';
 
 class TermsPage extends StatelessWidget {
   const TermsPage({super.key});
@@ -8,7 +9,10 @@ class TermsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: Text('Terms and Conditions',style: Theme.of(context).textTheme.titleMedium,),
+        title: Text(
+          termsPageTitle,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
