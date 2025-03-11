@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/common/custom_text_form_field.dart';
+import 'package:interns_talk_mobile/common/language_constants.dart';
 import 'package:interns_talk_mobile/common/validators.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/login_page.dart';
@@ -85,7 +86,7 @@ class _BodyViewState extends State<_BodyView> {
                     iconColor: kIconColorGrey,
                     keyboardType: TextInputType.emailAddress,
                     autoValidateMode: AutovalidateMode.onUserInteraction,
-                    hintText: kEmailHintText,
+                    hintText: translation(context).emailHint,
                     validator: Validators.emailValidator,
                     fillColor: kTextFieldContainer,
                     hintTextColor: kHintTextColor,
@@ -118,7 +119,7 @@ class _BodyViewState extends State<_BodyView> {
                     _summitForm();
                   }
                 },
-                child: Text('Send Email')),
+                child: Text(translation(context).sendEmail)),
           ],
         ),
       ),

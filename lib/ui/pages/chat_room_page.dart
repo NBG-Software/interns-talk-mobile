@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/common/date_formatter.dart';
+import 'package:interns_talk_mobile/common/language_constants.dart';
 import 'package:interns_talk_mobile/data/model/chat_model.dart';
 import 'package:interns_talk_mobile/data/model/mentor_model.dart';
 import 'package:interns_talk_mobile/ui/bloc/chat_room_bloc.dart';
@@ -23,7 +24,7 @@ class ChatRoomPage extends StatelessWidget {
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            'Chat room',
+            translation(context).chatRoomTitle,
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:interns_talk_mobile/common/language_constants.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/edit_profile_page.dart';
@@ -62,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: AppBar(
           automaticallyImplyLeading: true,
           title: Text(
-            'Profile',
+            translation(context).profileTitle,
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
@@ -127,24 +128,25 @@ class _ProfileDataViewState extends State<ProfileDataView> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Confirm Upload'),
+            title: Text(translation(context).confirmUpload),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.file(selectedImage,
                     width: 180, height: 180, fit: BoxFit.cover),
                 SizedBox(height: 12),
-                Text("Do you want to upload this image?")
+                Text(translation(context).uploadDescription)
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: Text('Cancel'),
+                child: Text(translation(context).cancel),
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child: Text('Upload', style: TextStyle(color: Colors.blue)),
+                child: Text(translation(context).uploadBtnText,
+                    style: TextStyle(color: Colors.blue)),
               ),
             ],
           );
@@ -210,7 +212,7 @@ class _ProfileDataViewState extends State<ProfileDataView> {
                 children: [
                   Image.asset(kUploadIcon),
                   SizedBox(width: 8),
-                  Text('Upload'),
+                  Text(translation(context).uploadBtnText),
                 ],
               ),
             ),
@@ -235,7 +237,7 @@ class ProfileMenuItems extends StatelessWidget {
             context.read<ProfileBloc>().add(GetUserInfoEvent());
           },
           leading: Icon(CupertinoIcons.person_circle),
-          title: Text('Edit Profile'),
+          title: Text(translation(context).editProfile),
           trailing: Icon(CupertinoIcons.forward),
         ),
         ListTile(
@@ -245,7 +247,7 @@ class ProfileMenuItems extends StatelessWidget {
             context.read<ProfileBloc>().add(GetUserInfoEvent());
           },
           leading: Icon(Icons.settings_outlined),
-          title: Text('Setting'),
+          title: Text(translation(context).settingTitle),
           trailing: Icon(CupertinoIcons.forward),
         ),
       ],
@@ -277,11 +279,11 @@ class LogOutButton extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text('Logging out'),
+                  title: Text(translation(context).loggingOut),
                   content: SingleChildScrollView(
                     child: ListBody(
                       children: [
-                        Text('Are you sure to log out?'),
+                        Text(translation(context).logOutConfirm),
                       ],
                     ),
                   ),
@@ -290,7 +292,7 @@ class LogOutButton extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Cancel'),
+                      child: Text(translation(context).cancel),
                     ),
                     TextButton(
                       onPressed: () {
@@ -298,7 +300,7 @@ class LogOutButton extends StatelessWidget {
                         Navigator.of(context).pop();
                       },
                       child: Text(
-                        'Log out',
+                        translation(context).logoutButton,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.error),
                       ),
@@ -307,7 +309,7 @@ class LogOutButton extends StatelessWidget {
                 );
               });
         },
-        child: Text('Log Out'),
+        child: Text(translation(context).logoutButton),
       ),
     );
   }

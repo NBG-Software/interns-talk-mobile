@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interns_talk_mobile/common/custom_text_form_field.dart';
+import 'package:interns_talk_mobile/common/language_constants.dart';
 import 'package:interns_talk_mobile/common/validators.dart';
 import 'package:interns_talk_mobile/ui/bloc/auth_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/chat_room_page.dart';
@@ -97,14 +98,14 @@ class __BodyViewState extends State<_BodyView> {
               Column(
                 children: [
                   Text(
-                    kRegisterTitle,
+                    translation(context).registerTitle,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   SizedBox(
                     height: 24,
                   ),
                   Text(
-                    kRegisterBodyText,
+                    translation(context).registerBody,
                     style: Theme.of(context).textTheme.bodyMedium,
                   )
                 ],
@@ -130,7 +131,7 @@ class __BodyViewState extends State<_BodyView> {
                               }
                               return null;
                             },
-                            hintText: kFirstNameHint,
+                            hintText: translation(context).firstNameHint,
                             hintTextColor: kHintTextColor,
                             fillColor: kTextFieldContainer,
                             contentPadding: EdgeInsets.symmetric(
@@ -152,7 +153,7 @@ class __BodyViewState extends State<_BodyView> {
                               }
                               return null;
                             },
-                            hintText: kLastNameHint,
+                            hintText: translation(context).lastNameHint,
                             hintTextColor: kHintTextColor,
                             fillColor: kTextFieldContainer,
                             contentPadding: EdgeInsets.symmetric(
@@ -172,7 +173,7 @@ class __BodyViewState extends State<_BodyView> {
                       iconColor: kIconColorGrey,
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       validator: Validators.emailValidator,
-                      hintText: kValidEmailHint,
+                      hintText: translation(context).validEmailHint,
                       fillColor: kTextFieldContainer,
                       hintTextColor: kHintTextColor,
                       contentPadding: EdgeInsets.symmetric(
@@ -204,7 +205,7 @@ class __BodyViewState extends State<_BodyView> {
                       suffixPadding: EdgeInsets.only(right: 12),
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       validator: Validators.passwordValidator,
-                      hintText: kStrongPasswordHint,
+                      hintText: translation(context).strongPasswordHint,
                       fillColor: kTextFieldContainer,
                       hintTextColor: kHintTextColor,
                     ),
@@ -239,7 +240,7 @@ class __BodyViewState extends State<_BodyView> {
                         }
                         return null;
                       },
-                      hintText: kConfirmPasswordHint,
+                      hintText: translation(context).confirmPasswordHint,
                       fillColor: kTextFieldContainer,
                       hintTextColor: kHintTextColor,
                     ),
@@ -261,7 +262,7 @@ class __BodyViewState extends State<_BodyView> {
                             ),
                             minimumSize: WidgetStatePropertyAll(
                                 Size(double.infinity, 52))),
-                        child: Text(kRegisterButtonText)),
+                        child: Text(translation(context).registerButton)),
                   ],
                 ),
               ),
@@ -271,7 +272,7 @@ class __BodyViewState extends State<_BodyView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(kHaveAccountText),
+                  Text(translation(context).haveAccount),
                   SizedBox(
                     width: 8,
                   ),
@@ -284,7 +285,7 @@ class __BodyViewState extends State<_BodyView> {
                             (route) => false);
                       },
                       child: Text(
-                        kLoginButtonText,
+                        translation(context).loginButton,
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Theme.of(context).colorScheme.primary),

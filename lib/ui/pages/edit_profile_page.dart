@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interns_talk_mobile/common/language_constants.dart';
 import 'package:interns_talk_mobile/data/model/user_model.dart';
 import 'package:interns_talk_mobile/ui/bloc/profile_bloc.dart';
 import 'package:interns_talk_mobile/ui/pages/error_screen.dart';
@@ -31,7 +32,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         appBar: AppBar(
           automaticallyImplyLeading: true,
           title: Text(
-            'Edit profile',
+            translation(context).editProfile,
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
@@ -119,13 +120,13 @@ class TitleContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Edit Profile Here',
+          translation(context).editProfileTitle,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         SizedBox(
           height: 20,
         ),
-        Text('Please enter the new profile detail')
+        Text(translation(context).enterNewProfile)
       ],
     );
   }
@@ -227,7 +228,7 @@ class ProfileForm extends StatelessWidget {
                     lastName: lastNameController.text,
                   ));
             },
-            child: Text('Confirm'),
+            child: Text(translation(context).confirmButtonText),
           ),
         ),
       ],
