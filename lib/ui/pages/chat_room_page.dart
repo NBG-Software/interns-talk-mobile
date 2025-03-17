@@ -24,6 +24,7 @@ class ChatRoomPage extends StatelessWidget {
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
+            key: ValueKey('chatroom_text_title'),
             translation(context).chatRoomTitle,
             style: Theme.of(context).textTheme.titleMedium,
           ),
@@ -32,6 +33,7 @@ class ChatRoomPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: IconButton(
+              key: ValueKey('chatroom_iconButton_profile'),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => const ProfilePage()));
