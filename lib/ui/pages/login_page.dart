@@ -121,7 +121,7 @@ class _BodyViewState extends State<_BodyView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CustomTextFormField(
-                        key: Key('email_field'),
+                        key: ValueKey('login_textField_email'),
                         controller: _emailController,
                         suffixIcon: Image.asset(kEmailIcon),
                         iconColor: kIconColorGrey,
@@ -141,7 +141,7 @@ class _BodyViewState extends State<_BodyView> {
                         height: 52,
                       ),
                       CustomTextFormField(
-                        key: Key('password_field'),
+                        key: ValueKey('login_textField_password'),
                         controller: _passwordController,
                         obscureText: !isVisible,
                         suffixIcon: IconButton(
@@ -170,6 +170,7 @@ class _BodyViewState extends State<_BodyView> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton(
+                          key: ValueKey('login_textButton_forgotPassword'),
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -192,7 +193,7 @@ class _BodyViewState extends State<_BodyView> {
                   height: 20,
                 ),
                 FilledButton(
-                    key: Key('login_button'),
+                    key: ValueKey('login_button_logIn'),
                     style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(
                           Theme.of(context).colorScheme.primary),
@@ -221,6 +222,7 @@ class _BodyViewState extends State<_BodyView> {
                       width: 8,
                     ),
                     InkWell(
+                      key: ValueKey('login_textButton_register'),
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
