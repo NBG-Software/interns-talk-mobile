@@ -62,7 +62,13 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
+          leading: IconButton(
+            key: ValueKey('profile_button_back'),
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           title: Text(
+            key: ValueKey('profile_text_title'),
             translation(context).profileTitle,
             style: Theme.of(context).textTheme.titleMedium,
           ),
@@ -231,6 +237,7 @@ class ProfileMenuItems extends StatelessWidget {
     return Column(
       children: [
         ListTile(
+          key: ValueKey('profile_button_editProfile'),
           onTap: () async {
             await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const EditProfilePage()));
@@ -241,6 +248,7 @@ class ProfileMenuItems extends StatelessWidget {
           trailing: Icon(CupertinoIcons.forward),
         ),
         ListTile(
+          key: ValueKey('profile_button_goToSettings'),
           onTap: () async {
             await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const SettingPage()));
@@ -264,6 +272,7 @@ class LogOutButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 64),
       child: OutlinedButton(
+        key: ValueKey('profile_button_logOut'),
         style: OutlinedButton.styleFrom(
           minimumSize: Size(screenWidth / 1.2, 52),
           shape: RoundedRectangleBorder(
@@ -289,12 +298,14 @@ class LogOutButton extends StatelessWidget {
                   ),
                   actions: [
                     TextButton(
+                      key: ValueKey('profile_dialogButton_cancel'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                       child: Text(translation(context).cancel),
                     ),
                     TextButton(
+                      key: ValueKey('profile_dialogButton_confirmLogOut'),
                       onPressed: () {
                         context.read<AuthBloc>().add(AuthLogoutEvent());
                         Navigator.of(context).pop();
