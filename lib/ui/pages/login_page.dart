@@ -222,7 +222,7 @@ class _BodyViewState extends State<_BodyView> {
                       width: 8,
                     ),
                     InkWell(
-                      key: ValueKey('login_textButton_register'),
+                      key: ValueKey('login_textButton_goToRegister'),
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
