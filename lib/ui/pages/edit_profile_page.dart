@@ -31,7 +31,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
+          leading: IconButton(
+            key: ValueKey('editprofile_button_back'),
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           title: Text(
+            key: ValueKey('editprofile_text_title'),
             translation(context).editProfile,
             style: Theme.of(context).textTheme.titleMedium,
           ),

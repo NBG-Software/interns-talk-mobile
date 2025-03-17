@@ -16,7 +16,13 @@ class SettingPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
+        leading: IconButton(
+          key: ValueKey('settings_button_back'),
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Text(
+          key: ValueKey('settings_text_title'),
           translation(context).settingTitle,
           style: Theme.of(context).textTheme.titleMedium,
         ),
