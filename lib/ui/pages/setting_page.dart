@@ -4,6 +4,7 @@ import 'package:interns_talk_mobile/common/language_constants.dart';
 import 'package:interns_talk_mobile/ui/pages/language_page.dart';
 import 'package:interns_talk_mobile/ui/pages/terms_page.dart';
 import 'package:interns_talk_mobile/utils/colors.dart';
+import 'package:interns_talk_mobile/utils/string.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'change_password_page.dart';
 
@@ -15,7 +16,13 @@ class SettingPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
+        leading: IconButton(
+          key: ValueKey('settings_button_back'),
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Text(
+          key: ValueKey('settings_text_title'),
           translation(context).settingTitle,
           style: Theme.of(context).textTheme.titleMedium,
         ),
@@ -50,7 +57,7 @@ class _BodyView extends StatefulWidget {
 
 class _BodyViewState extends State<_BodyView> {
   bool isActive = false;
-  String appVersion = "Loading...";
+  String appVersion = loadingVersionText;
 
   Future<void> loadAppVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();

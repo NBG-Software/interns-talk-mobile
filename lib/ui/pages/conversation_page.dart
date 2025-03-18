@@ -38,6 +38,12 @@ class _ConversationPageState extends State<ConversationPage> {
     _loadUserAndInitController();
   }
 
+  @override
+  void dispose() {
+    BlocProvider.of<ConversationBloc>(context).close();
+    super.dispose();
+  }
+
   Future<void> _loadUserAndInitController() async {
     final userInfo = await authLocalDatasource.loadUserInfo();
     if (userInfo != null) {
@@ -71,6 +77,10 @@ class _ConversationPageState extends State<ConversationPage> {
         } else if (state is ChatHistoryLoaded) {
           print("✅ Messages updated: ${state.messages.length}");
           final messages = state.messages;
+          // _chatController.addMessage(Message(
+          //     message: state.messages.first.messageText ?? "",
+          //     createdAt: state.messages.first.createdAt ?? DateTime.now(),
+          //     sentBy: state.messages.first.senderId.toString()));
           _chatController.loadMoreData(messages
               .map((msg) => Message(
                     id: msg.id.toString(),
@@ -78,14 +88,23 @@ class _ConversationPageState extends State<ConversationPage> {
                         ? MessageType.image
                         : MessageType.text,
                     message: msg.messageMedia ?? msg.messageText ?? '',
-                    createdAt: msg.createdAt?.toLocal() ?? DateTime.now(),
+                    createdAt: msg.createdAt ?? DateTime.now(),
                     sentBy: msg.senderId.toString(),
                   ))
               .toList());
+          if (messages.isEmpty) {
+            setState(() {
+              _chatViewState = ChatViewState.noData;
+            });
+          } else {
+            setState(() {
+              _chatViewState = ChatViewState.hasMessages;
+            });
+          }
+        } else if (state is NewMessageAdded) {
+          _chatController.addMessage(state.message);
           setState(() {
-            _chatViewState = messages.isEmpty
-                ? ChatViewState.noData
-                : ChatViewState.hasMessages;
+            _chatViewState = ChatViewState.hasMessages;
           });
         } else if (state is ConversationError) {
           setState(() {
@@ -248,6 +267,9 @@ class _ConversationPageState extends State<ConversationPage> {
   void _onSendTap(
       String message, ReplyMessage replyMessage, MessageType messageType) {
     if (message.trim().isEmpty) return;
+    if (_chatViewState.noMessages) {
+      _chatViewState = ChatViewState.hasMessages;
+    }
 
     final newMessage = Message(
       createdAt: DateTime.now(),
@@ -256,22 +278,26 @@ class _ConversationPageState extends State<ConversationPage> {
       replyMessage: replyMessage,
       messageType: messageType,
     );
+
+    final event = SendMessageEvent(
+      message: MessageModel(
+        id: int.tryParse(newMessage.id),
+        chatId: widget.chatId,
+        messageText: newMessage.messageType == MessageType.text
+            ? newMessage.message
+            : null,
+        messageMedia: newMessage.messageType == MessageType.image
+            ? newMessage.message
+            : null,
+        createdAt: newMessage.createdAt,
+        senderId: int.parse(currentUserId ?? "0"),
+      ),
+    );
+
+    print("📩 Dispatching SendMessageEvent: $event");
+
+    context.read<ConversationBloc>().add(event);
     print("📝 Adding new message to chat: ${newMessage.message}");
     _chatController.addMessage(newMessage);
-
-    context.read<ConversationBloc>().add(SendMessageEvent(
-          message: MessageModel(
-            id: int.parse(newMessage.id),
-            chatId: widget.chatId,
-            // senderId: int.parse(newMessage.sentBy),
-            messageText: newMessage.messageType == MessageType.text
-                ? newMessage.message
-                : null,
-            messageMedia: newMessage.messageType == MessageType.image
-                ? newMessage.message
-                : null,
-            createdAt: newMessage.createdAt,
-          ),
-        ));
   }
 }

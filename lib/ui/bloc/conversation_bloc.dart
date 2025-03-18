@@ -1,14 +1,19 @@
+import 'dart:async';
+
+import 'package:chatview/chatview.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:interns_talk_mobile/data/model/message_model.dart';
 import 'package:interns_talk_mobile/data/repository/chat_repository.dart';
 import 'package:interns_talk_mobile/data/service/socket_service.dart';
 
-@lazySingleton
+@injectable
 class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   final ChatRepository chatRepository;
   final SocketService socketService;
   int? currentChatId;
+
+  StreamSubscription<MessageModel>? _socketSubscription;
 
   ConversationBloc({
     required this.chatRepository,
@@ -22,55 +27,81 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   Future<void> _onGetChatHistory(
       GetChatHistoryEvent event, Emitter<ConversationState> emit) async {
     emit(ConversationLoading());
-    currentChatId = event.chatId;
+    if (currentChatId != event.chatId) {
+      currentChatId = event.chatId;
+      _subscribeToChat(event.chatId);
+    }
+    // _socketSubscription?.cancel();
+
+    // if (_socketSubscription == null) {
+    //   _socketSubscription = socketService.messageStream.listen(
+    //     (newMessage) {
+    //       add(NewMessageReceived(newMessage));
+    //     },
+    //     onError: (error) {
+    //       emit(ConversationError("Failed to listen for messages: $error"));
+    //     },
+    //     onDone: () {
+    //       emit(ConversationError("WebSocket connection closed unexpectedly."));
+    //     },
+    //   );
+    // }
 
     final result = await chatRepository.getMessageHistory(event.chatId);
 
     if (result.isSuccess) {
       emit(ChatHistoryLoaded(result.data!));
-
-      socketService.listenForMessages(event.chatId, (data) {
-        final newMessage = MessageModel.fromJson(data);
-        add(NewMessageReceived(newMessage));
-      });
     } else {
       emit(ConversationError(result.error ?? "Failed to load chat history"));
     }
   }
 
+  void _subscribeToChat(int chatId) {
+    print("🔄 Subscribing to chat ID: $chatId");
+
+    _socketSubscription?.cancel();
+    socketService.subscribeToChannel(chatId);
+
+    _socketSubscription = socketService.messageStream.listen(
+      (newMessage) {
+        print("📥 Received new message: ${newMessage.id}");
+        add(NewMessageReceived(newMessage));
+      },
+      onError: (error) {
+        print("⚠️ WebSocket error: $error");
+      },
+      onDone: () {
+        print("🛑 WebSocket connection closed.");
+      },
+      cancelOnError: true,
+    );
+  }
+
   void _onNewMessageReceived(
       NewMessageReceived event, Emitter<ConversationState> emit) {
-    if (state is ChatHistoryLoaded) {
-      final updatedMessages =
-          List<MessageModel>.from((state as ChatHistoryLoaded).messages)
-            ..add(event.message);
-      emit(ChatHistoryLoaded(updatedMessages));
-    }
+    print("✅ Handling NewMessageReceived event for ID: ${event.message.id}");
+
+    final newMessage = event.message;
+    final updatedMessage = Message(
+        message: newMessage.messageText ?? '',
+        createdAt: newMessage.createdAt ?? DateTime.now(),
+        sentBy: newMessage.senderId.toString());
+    emit(NewMessageAdded(updatedMessage));
   }
 
   Future<void> _onSendMessage(
       SendMessageEvent event, Emitter<ConversationState> emit) async {
     final result = await chatRepository.sendMessage(event.message);
-
-    if (result.isSuccess) {
-      final newMessage = event.message;
-
-      if (state is ChatHistoryLoaded) {
-        final currentMessages =
-            List<MessageModel>.from((state as ChatHistoryLoaded).messages);
-
-        bool isDuplicate =
-            currentMessages.any((msg) => msg.id == newMessage.id);
-        if (!isDuplicate) {
-          currentMessages.add(newMessage);
-          emit(ChatHistoryLoaded(currentMessages));
-        }
-      } else {
-        emit(ChatHistoryLoaded([newMessage]));
-      }
-    } else {
-      emit(ConversationError(result.error ?? "Failed to send message"));
+    if (result.isError) {
+      print('state : $state');
+      emit(ConversationError(result.error ?? 'Fail to send message'));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _socketSubscription?.cancel();
+    return super.close();
   }
 }
 
@@ -108,6 +139,12 @@ class ChatHistoryLoaded extends ConversationState {
   final List<MessageModel> messages;
 
   ChatHistoryLoaded(this.messages);
+}
+
+class NewMessageAdded extends ConversationState {
+  final Message message;
+
+  NewMessageAdded(this.message);
 }
 
 class ConversationError extends ConversationState {
