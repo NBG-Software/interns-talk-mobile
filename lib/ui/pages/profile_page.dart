@@ -146,10 +146,12 @@ class _ProfileDataViewState extends State<ProfileDataView> {
             ),
             actions: [
               TextButton(
+                key: ValueKey('profile_button_uploadCancel'),
                 onPressed: () => Navigator.of(context).pop(false),
                 child: Text(translation(context).cancel),
               ),
               TextButton(
+                key: ValueKey('profile_button_confirmUpload'),
                 onPressed: () => Navigator.of(context).pop(true),
                 child: Text(translation(context).uploadBtnText,
                     style: TextStyle(color: Colors.blue)),
@@ -213,6 +215,7 @@ class _ProfileDataViewState extends State<ProfileDataView> {
             ),
             SizedBox(height: 8),
             InkWell(
+              key: ValueKey('profile_button_upload'),
               onTap: _pickImage,
               child: Row(
                 children: [
