@@ -192,6 +192,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
           return Padding(
             padding: const EdgeInsets.only(top: 20),
             child: InkWell(
+              key: ValueKey('chatroom_button_chat'),
               onTap: () {
                 _startChatting(
                     chatId: chat.chatId ?? 0,
@@ -313,6 +314,7 @@ class _ChatRoomBodyViewState extends State<ChatRoomBodyView> {
                         ),
                       ),
                       IconButton(
+                          key: ValueKey('chatroom_iconButton_createChat'),
                           onPressed: () {
                             _onChatCreate(mentorId: mentor.id ?? 0);
                           },
