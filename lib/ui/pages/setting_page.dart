@@ -30,6 +30,7 @@ class SettingPage extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextButton(
+                key: ValueKey('settings_button_changeLanguage'),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const ChangeLanguagePage()));
@@ -84,6 +85,7 @@ class _BodyViewState extends State<_BodyView> {
             trailing: Text(appVersion),
           ),
           ListTile(
+            key: ValueKey('settings_button_changePassword'),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ChangePasswordPage(),
@@ -94,6 +96,7 @@ class _BodyViewState extends State<_BodyView> {
             trailing: Icon(CupertinoIcons.forward),
           ),
           ListTile(
+            key: ValueKey('settings_button_terms'),
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const TermsPage()));

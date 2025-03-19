@@ -80,6 +80,7 @@ class _BodyViewState extends State<_BodyView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CustomTextFormField(
+                    key: ValueKey('forgotpassword_textField_email'),
                     controller: _emailController,
                     suffixIcon: Image.asset(kEmailIcon),
                     iconColor: kIconColorGrey,
@@ -102,6 +103,7 @@ class _BodyViewState extends State<_BodyView> {
               height: 52,
             ),
             FilledButton(
+                key: ValueKey('forgotpassword_button_sendEmail'),
                 style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(
                       Theme.of(context).colorScheme.primary),

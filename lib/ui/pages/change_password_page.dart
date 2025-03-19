@@ -41,10 +41,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          leading: IconButton(
+            key: ValueKey('changepassword_button_back'),
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           title: Text(
-        translation(context).changePasswordTitle,
-        style: Theme.of(context).textTheme.titleMedium,
-      )),
+            key: ValueKey('changepassword_text_title'),
+            translation(context).changePasswordTitle,
+            style: Theme.of(context).textTheme.titleMedium,
+          )),
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
@@ -58,6 +64,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomTextFormField(
+                    key: ValueKey('changepassword_textField_currentPassword'),
                     controller: _currentPasswordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: !isVisible,
@@ -81,6 +88,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     hintTextColor: kHintTextColor,
                   ),
                   CustomTextFormField(
+                    key: ValueKey('changepassword_textField_newPassword'),
                     controller: _newPasswordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: isObscured,
@@ -104,6 +112,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     hintTextColor: kHintTextColor,
                   ),
                   CustomTextFormField(
+                    key: ValueKey('changepassword_textField_confirmPassword'),
                     controller: _confirmPasswordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: isObscured,
@@ -152,6 +161,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       }
                     },
                     child: FilledButton(
+                      key: ValueKey('changepassword_button_changePassword'),
                       style: FilledButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         minimumSize:

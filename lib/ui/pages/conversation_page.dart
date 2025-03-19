@@ -77,10 +77,6 @@ class _ConversationPageState extends State<ConversationPage> {
         } else if (state is ChatHistoryLoaded) {
           print("✅ Messages updated: ${state.messages.length}");
           final messages = state.messages;
-          // _chatController.addMessage(Message(
-          //     message: state.messages.first.messageText ?? "",
-          //     createdAt: state.messages.first.createdAt ?? DateTime.now(),
-          //     sentBy: state.messages.first.senderId.toString()));
           _chatController.loadMoreData(messages
               .map((msg) => Message(
                     id: msg.id.toString(),
@@ -162,6 +158,11 @@ class _ConversationPageState extends State<ConversationPage> {
             flashingCircleDarkColor: kPrimaryColor,
           ),
           appBar: ChatViewAppBar(
+            leading: IconButton(
+              key: ValueKey('conversation_button_back'),
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
             elevation: 2,
             backGroundColor: kTextFieldContainer,
             backArrowColor: kAppBlack,
@@ -193,6 +194,7 @@ class _ConversationPageState extends State<ConversationPage> {
             imagePickerIconsConfig: ImagePickerIconsConfiguration(
                 galleryIconColor: kIconColorGrey,
                 galleryImagePickerIcon: Icon(
+                  key: ValueKey('conversaton_button_pickImage'),
                   Icons.add_circle_outline,
                   color: kPrimaryColor,
                 )),
@@ -200,7 +202,9 @@ class _ConversationPageState extends State<ConversationPage> {
             allowRecordingVoice: false,
             defaultSendButtonColor: kPrimaryColor,
             textFieldBackgroundColor: kAppWhite,
-            sendButtonIcon: Icon(CupertinoIcons.paperplane_fill),
+            sendButtonIcon: Icon(
+                key: ValueKey('conversation_button_send'),
+                CupertinoIcons.paperplane_fill),
             closeIconColor: kPrimaryColor,
             textFieldConfig: TextFieldConfiguration(
               padding: EdgeInsets.symmetric(horizontal: 20),

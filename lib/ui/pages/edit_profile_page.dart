@@ -156,6 +156,7 @@ class ProfileForm extends StatelessWidget {
           children: [
             Expanded(
               child: CustomTextFormField(
+                key: ValueKey('editprofile_textField_firstName'),
                 controller: firstNameController,
                 keyboardType: TextInputType.text,
                 validator: (value) {
@@ -174,6 +175,7 @@ class ProfileForm extends StatelessWidget {
             SizedBox(width: 8),
             Expanded(
               child: CustomTextFormField(
+                key: ValueKey('editprofile_textField_lastName'),
                 keyboardType: TextInputType.text,
                 controller: lastNameController,
                 validator: (value) {
@@ -193,6 +195,7 @@ class ProfileForm extends StatelessWidget {
         ),
         SizedBox(height: kMarginMedium1x),
         CustomTextFormField(
+          key: ValueKey('editprofile_textField_email'),
           suffixIcon: Image.asset(kEmailIcon),
           readOnly: true,
           hintText: user?.email ?? '@',
@@ -221,6 +224,7 @@ class ProfileForm extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 100),
           child: FilledButton(
+            key: ValueKey('editprofile_button_confirm'),
             style: FilledButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primary,
               minimumSize: Size(screenWidth / 1.2, 52),
